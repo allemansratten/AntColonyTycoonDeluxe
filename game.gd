@@ -6,7 +6,6 @@ var screen_size
 
 var is_drawing = false # To track if the user is currently drawing
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	screen_size = get_viewport().get_visible_rect().size
@@ -46,4 +45,6 @@ func _input(event: InputEvent) -> void:
 			else:
 				is_drawing = false
 	elif event is InputEventMouseMotion and is_drawing:
-		$PheromoneLayer.draw_pheromone_at_position(event.position)
+		if $PheromoneBar.pheromone_available > 0:
+			var added = $PheromoneLayer.draw_pheromone_at_position(event.position)
+			$PheromoneBar.deplete(added)

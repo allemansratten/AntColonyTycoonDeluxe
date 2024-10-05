@@ -110,7 +110,8 @@ func update_shader():
 	material.set_shader_parameter("screen_size", get_viewport().get_visible_rect().size)
 
 
-func draw_pheromone_at_position(pos: Vector2):
+func draw_pheromone_at_position(pos: Vector2) -> float:
+	"""Returns the total number of pheromone added."""
 	var rect_size: Vector2 = get_viewport_rect().size
 	var grid_x_float: float = pos.x / rect_size.x * grid_size.x - 0.5
 	var grid_y_float: float = pos.y / rect_size.y * grid_size.y - 0.5
@@ -125,19 +126,22 @@ func draw_pheromone_at_position(pos: Vector2):
 
 	var pheromone_value: float = 1.0 # Max pheromone value
 
-	# Apply bilinear interpolation to distribute the pheromone value smoothly
-	grid_data[grid_y_low][grid_x_low] += pheromone_value * (1 - fx) * (1 - fy)
-	grid_data[grid_y_low][grid_x_high] += pheromone_value * fx * (1 - fy)
-	grid_data[grid_y_high][grid_x_low] += pheromone_value * (1 - fx) * fy
-	grid_data[grid_y_high][grid_x_high] += pheromone_value * fx * fy
+	var added_total: float = 0
 
-	# Clamp values to ensure they don't exceed 1.0
-	grid_data[grid_y_low][grid_x_low] = min(grid_data[grid_y_low][grid_x_low], 1.0)
-	grid_data[grid_y_low][grid_x_high] = min(grid_data[grid_y_low][grid_x_high], 1.0)
-	grid_data[grid_y_high][grid_x_low] = min(grid_data[grid_y_high][grid_x_low], 1.0)
-	grid_data[grid_y_high][grid_x_high] = min(grid_data[grid_y_high][grid_x_high], 1.0)
+	for data in [
+		[grid_y_low, grid_x_low, (1 - fx) * (1 - fy)],
+		[grid_y_low, grid_x_high, fx * (1 - fy)],
+		[grid_y_high, grid_x_low, (1 - fx) * fy],
+		[grid_y_high, grid_x_high, fx * fy],
+	]:
+		var new_value = data[2] * pheromone_value
+		var added = new_value - grid_data[data[0]][data[1]]
+		if added > 0:
+			grid_data[data[0]][data[1]] = new_value
+			added_total += added
 
 	update_shader()
+	return added_total
 
 
 func decay_grid(delta: float):
