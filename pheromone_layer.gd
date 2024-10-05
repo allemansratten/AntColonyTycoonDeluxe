@@ -8,8 +8,6 @@ const DECAY_SPEED = 0.03
 @export var overlay_color: Color = Color(1, 0, 0, 0.5)
 
 var grid_data = []
-var is_drawing = false # To track if the user is currently drawing
-
 
 func _ready():
 	material = ShaderMaterial.new()
@@ -112,10 +110,10 @@ func update_shader():
 	material.set_shader_parameter("screen_size", get_viewport().get_visible_rect().size)
 
 
-func draw_pheromone_at_mouse(mouse_pos):
+func draw_pheromone_at_position(pos: Vector2):
 	var rect_size: Vector2 = get_viewport_rect().size
-	var grid_x_float: float = mouse_pos.x / rect_size.x * grid_size.x - 0.5
-	var grid_y_float: float = mouse_pos.y / rect_size.y * grid_size.y - 0.5
+	var grid_x_float: float = pos.x / rect_size.x * grid_size.x - 0.5
+	var grid_y_float: float = pos.y / rect_size.y * grid_size.y - 0.5
 
 	var grid_x_low: int = int(grid_x_float)
 	var grid_y_low: int = int(grid_y_float)
@@ -140,18 +138,6 @@ func draw_pheromone_at_mouse(mouse_pos):
 	grid_data[grid_y_high][grid_x_high] = min(grid_data[grid_y_high][grid_x_high], 1.0)
 
 	update_shader()
-
-
-# Track mouse button input for drawing
-func _input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
-				is_drawing = true
-			else:
-				is_drawing = false
-	elif event is InputEventMouseMotion and is_drawing:
-		draw_pheromone_at_mouse(event.position)
 
 
 func decay_grid(delta: float):
