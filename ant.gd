@@ -6,9 +6,11 @@ extends CharacterBody2D
 @export var max_move_distance: float = 300.0
 @export var min_wait_time: float = 0.3
 @export var max_wait_time: float = 0.6
+@onready var _animated_sprite = $AnimatedSprite2D
 
 var target_position: Vector2
 var is_moving: bool = false
+var rotation_speed: float = 15.0  # Speed of rotation towards target
 
 func _ready():
 	#position = Vector2(200, 200)
@@ -18,17 +20,24 @@ func _ready():
 	await get_tree().create_timer(randf_range(0.0, max_wait_time)).timeout
 	start_new_movement()
 
+
 func _physics_process(_delta):
 	if is_moving:
 		var direction = (target_position - global_position).normalized()
 		var distance = global_position.distance_to(target_position)
-		
-		if distance > 5: # If not close enough to target
+
+		if distance > 5:  # If not close enough to target
 			velocity = direction * randf_range(min_speed, max_speed)
 			move_and_slide()
+			_animated_sprite.play("default")
+				# Smooth rotation towards the target
+			var target_angle = direction.angle() + PI/2
+			rotation = lerp_angle(rotation, target_angle, rotation_speed * _delta)
 		else:
 			is_moving = false
+			_animated_sprite.stop()
 			start_waiting()
+
 
 func start_new_movement():
 	var random_angle = randf() * 2 * PI

@@ -9,9 +9,11 @@ func _ready():
 	material = ShaderMaterial.new()
 	material.shader = preload("res://pheromone.gdshader")
 	
-	# Initialize grid_data with default values
-	grid_data.resize(int(grid_size.x * grid_size.y))
-	grid_data.fill(0.0)
+	# Initialize grid_data with default values as a 2D array
+	for y in range(int(grid_size.y)):
+		grid_data.append([])
+		for x in range(int(grid_size.x)):
+			grid_data[y].append(0.0)
 	
 	# Make sure the ColorRect covers the entire screen
 	anchor_right = 1
@@ -23,16 +25,16 @@ func _ready():
 	update_shader()
 
 func set_random_data():
-	for i in range(grid_data.size()):
-		grid_data[i] = randf()
+	for y in range(int(grid_size.y)):
+		for x in range(int(grid_size.x)):
+			grid_data[y][x] = randf()
 	update_shader()
-
 
 func update_shader():
 	var image = Image.create(int(grid_size.x), int(grid_size.y), false, Image.FORMAT_RF)
 	for y in range(grid_size.y):
 		for x in range(grid_size.x):
-			var value = grid_data[y * int(grid_size.x) + x]
+			var value = grid_data[y][x]
 			image.set_pixel(x, y, Color(value, 0, 0))
 	#
 	var texture = ImageTexture.create_from_image(image)
