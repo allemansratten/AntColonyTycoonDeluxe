@@ -7,6 +7,3 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_fq7nw")
 overlay_color = Color(0.368627, 0.592157, 0.458824, 0.494118)
-
-[node name="DecayTimer" type="Timer" parent="."]
-autostart = true

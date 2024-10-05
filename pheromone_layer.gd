@@ -1,9 +1,11 @@
 extends ColorRect
 
+const BLUR_SPEED = 0.1
+const DECAY_SPEED = 0.03
+
 @export var grid_size_coef: int = 2
 @export var grid_size = Vector2(16 * grid_size_coef, 9 * grid_size_coef)
 @export var overlay_color: Color = Color(1, 0, 0, 0.5)
-@export var decay_rate = 0.02 # Decay by 1%
 
 var grid_data = []
 var is_drawing = false # To track if the user is currently drawing
@@ -27,8 +29,6 @@ func _ready():
 	get_tree().root.connect("size_changed", Callable(self, "update_shader"))
 
 	update_shader()
-	$DecayTimer.connect("timeout", Callable(self, "decay_grid"))
-	$DecayTimer.start()
 
 	connect_pheromone_emitters()
 
@@ -137,7 +137,7 @@ func _input(event):
 		draw_pheromone_at_mouse(event.position)
 
 
-func decay_grid():
+func decay_grid(delta: float):
 	var new_grid = []
 	
 	# Softer 3x3 Gaussian kernel for a very soft blur
@@ -168,10 +168,21 @@ func decay_grid():
 			
 			# Calculate the blurred value and apply decay
 			var blurred_value = sum # No need to divide by kernel sum since it is already normalized
-			new_grid[y].append(max(0, blurred_value * (1 - decay_rate))) # Apply decay
+			new_grid[y].append(blurred_value)
 	
 	# Replace the old grid with the new one
-	grid_data = new_grid
-	
+	var blur_coef: float = 1.0 - (1.0 - BLUR_SPEED) ** delta
+	for y in range(int(grid_size.y)):
+		for x in range(int(grid_size.x)):
+			grid_data[y][x] = lerp(grid_data[y][x], new_grid[y][x], blur_coef)
+
+	var decay_coef: float = (1.0 - DECAY_SPEED) ** delta
+	for y in range(int(grid_size.y)):
+		for x in range(int(grid_size.x)):
+			grid_data[y][x] = max(0.0, grid_data[y][x] * decay_coef)
+
 	# Update the shader with the new grid
 	update_shader()
+
+func _process(delta: float) -> void:
+	decay_grid(delta)
