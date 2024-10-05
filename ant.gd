@@ -52,35 +52,19 @@ func _ready():
 func set_ant_type_properties(ant_type: AntType):
 	match ant_type:
 		AntType.HARVESTER:
-			min_speed = 400.0
-			max_speed = 600.0
+			min_speed = 150.0
+			max_speed = 300.0
 			min_wait_time = 0.5
 			max_wait_time = 0.7
 			_animated_sprite.animation = "harvester"
 		#Other Types have no animation yet
 		AntType.BUILDER:
-			min_speed = 300.0
-			max_speed = 500.0
-			min_wait_time = 0.7
-			max_wait_time = 1.0
 			_animated_sprite.animation = "builder"
 		AntType.WARRIOR:
-			min_speed = 600.0
-			max_speed = 900.0
-			min_wait_time = 0.2
-			max_wait_time = 0.5
 			_animated_sprite.animation = "warrior"
 		AntType.FARMER:
-			min_speed = 350.0
-			max_speed = 550.0
-			min_wait_time = 0.6
-			max_wait_time = 0.8
 			_animated_sprite.animation = "farmer"
 		AntType.EXPLORER:
-			min_speed = 500.0
-			max_speed = 800.0
-			min_wait_time = 0.3
-			max_wait_time = 0.6
 			_animated_sprite.animation = "explorer"
 
 func _physics_process(_delta):
