@@ -110,8 +110,19 @@ func update_shader():
 	material.set_shader_parameter("screen_size", get_viewport().get_visible_rect().size)
 
 
-func draw_pheromone_at_position(pos: Vector2) -> float:
-	"""Returns the total number of pheromone added."""
+func draw_pheromone_at_position(pos: Vector2, value: float, additive: bool = false) -> float:
+	"""Draws pheromone at a position, with bilinear interpolation.
+	
+	Args:
+		pos: The position to draw pheromone at.
+		max_value: The maximum value the pheromone will be set to. Note that
+			we first do bilinear interpolation so the actual value may be lower.
+		additive: If true, will set the value to `old + new` rather than
+			`max(new, old)`.
+	
+	Returns:
+		The total number of pheromone added.
+	"""
 	var rect_size: Vector2 = get_viewport_rect().size
 	var grid_x_float: float = pos.x / rect_size.x * grid_size.x - 0.5
 	var grid_y_float: float = pos.y / rect_size.y * grid_size.y - 0.5
@@ -124,7 +135,6 @@ func draw_pheromone_at_position(pos: Vector2) -> float:
 	var fx: float = grid_x_float - grid_x_low
 	var fy: float = grid_y_float - grid_y_low
 
-	var pheromone_value: float = 1.0 # Max pheromone value
 
 	var added_total: float = 0
 
@@ -134,11 +144,24 @@ func draw_pheromone_at_position(pos: Vector2) -> float:
 		[grid_y_high, grid_x_low, (1 - fx) * fy],
 		[grid_y_high, grid_x_high, fx * fy],
 	]:
-		var new_value = data[2] * pheromone_value
-		var added = new_value - grid_data[data[0]][data[1]]
-		if added > 0:
-			grid_data[data[0]][data[1]] = new_value
-			added_total += added
+		var y = data[0]
+		var x = data[1]
+		var interpolation_value = data[2]
+
+		if x < 0 or x >= grid_size.x or y < 0 or y >= grid_size.y:
+			continue
+
+		if additive:
+			var previous_value = grid_data[y][x]
+			var new_value = min(1.0, previous_value + interpolation_value * value)
+			added_total = new_value - previous_value
+			grid_data[y][x] = new_value
+		else:
+			var new_value = interpolation_value * value
+			var added = new_value - grid_data[y][x]
+			if added > 0:
+				grid_data[y][x] = new_value
+				added_total += added
 
 	update_shader()
 	return added_total

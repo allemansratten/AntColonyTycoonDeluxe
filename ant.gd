@@ -20,15 +20,16 @@ var carried_item_sprite: Sprite2D
 @onready var _animated_sprite = $AnimatedSprite2D
 
 @export var carried_item_scale = 0.25
+@export var pheromone_creation_when_carrying: float = 0.1
 
 # positive = ants will tend to select directions similar to the ones they have
 # 0 = they don't care
 # negative = bigger turns are better
-const ANGLE_CONSISTENCY_REWARD: float = 0.3
+@export var angle_consistency_reward: float = 0.4
 # must be strictly >0.
 # close to 0 = always select the angle that maximizes the score
 # infinite = select completely at random
-const ANGLE_SAMPLING_TEMPERATURE: float = 0.15
+@export var angle_sampling_temperature: float = 0.15
 
 var target_position: Vector2
 var is_moving: bool = false
@@ -70,7 +71,7 @@ func set_ant_type_properties(ant_type: AntType):
 		AntType.EXPLORER:
 			_animated_sprite.animation = "explorer"
 
-func _physics_process(_delta):
+func _physics_process(_delta: float):
 	if is_moving:
 		var direction = (target_position - global_position).normalized()
 		var distance = global_position.distance_to(target_position)
@@ -86,6 +87,9 @@ func _physics_process(_delta):
 			is_moving = false
 			_animated_sprite.stop()
 			start_waiting()
+	
+	if inventory_num_items_carried > 0:
+		pheromone_layer.draw_pheromone_at_position(position, _delta * pheromone_creation_when_carrying, true)
 
 # This method is intended to be overridden by subclasses for unique behaviors
 func perform_special_action():
@@ -137,11 +141,11 @@ func start_new_movement():
 		# Scaled between 0 and 1
 		var angular_difference = abs(angle_difference(angle, rotation)) / PI
 
-		score -= angular_difference * ANGLE_CONSISTENCY_REWARD
+		score -= angular_difference * angle_consistency_reward
 
 		scores.append(score)
 
-	scores = scores.map(func(x): return x / ANGLE_SAMPLING_TEMPERATURE)
+	scores = scores.map(func(x): return x / angle_sampling_temperature)
 	scores = softmax(scores)
 
 	var selected = sample_from_scores(scores)

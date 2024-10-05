@@ -46,5 +46,5 @@ func _input(event: InputEvent) -> void:
 				is_drawing = false
 	elif event is InputEventMouseMotion and is_drawing:
 		if $PheromoneBar.pheromone_available > 0:
-			var added = $PheromoneLayer.draw_pheromone_at_position(event.position)
+			var added = $PheromoneLayer.draw_pheromone_at_position(event.position, 1.0)
 			$PheromoneBar.deplete(added)
