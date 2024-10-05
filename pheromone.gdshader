@@ -5,6 +5,13 @@ uniform vec2 grid_size;
 uniform vec4 overlay_color : source_color;
 uniform vec2 screen_size;
 
+const int NUM_LEVELS = 4;
+
+float discretize_alpha(float alpha) {
+    float step = 1.0 / float(NUM_LEVELS - 1);
+    return floor(alpha * float(NUM_LEVELS - 1) + 0.5) * step;
+}
+
 void fragment() {
     // Calculate the aspect ratio of the grid and the screen
     float grid_aspect = grid_size.x / grid_size.y;
@@ -34,6 +41,7 @@ void fragment() {
         COLOR = vec4(0.0);  // Transparent outside grid bounds
     } else {
         float grid_value = texture(grid_texture, scaled_uv).r;
-        COLOR = vec4(overlay_color.rgb, overlay_color.a * grid_value);
+        float discretized_alpha = discretize_alpha(grid_value);
+        COLOR = vec4(overlay_color.rgb, overlay_color.a * discretized_alpha);
     }
 }
