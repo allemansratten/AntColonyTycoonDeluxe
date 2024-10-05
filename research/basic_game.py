@@ -17,10 +17,13 @@ def move_right(dude: "Dude", game: "Game") -> "Dude":
 
 class Dude:
     def __init__(
-        self, position: tuple[int, int], step_function: DudeStepFunction = do_nothing
+        self,
+        position: tuple[int, int],
+        kind: int = 0,
+        step_function: DudeStepFunction = do_nothing,
     ) -> None:
-        self.kind = 0
         self.position = position
+        self.kind = kind
         self.step_function = step_function
 
     def step(self, game: "Game") -> "Dude":
@@ -34,12 +37,29 @@ class Dude:
             max(0, min(size - 1, self.position[1])),
         )
 
+    def updated(
+        self, new_position: tuple[int, int] | None = None, new_kind: int | None = None
+    ) -> "Dude":
+        return Dude(
+            new_position if new_position is not None else self.position,
+            new_kind if new_kind is not None else self.kind,
+            self.step_function,
+        )
+
 
 class Game:
-    def __init__(self) -> None:
-        self.size = 5
+    def __init__(
+        self,
+        dude_positions: list[tuple[int, int]],
+        dude_step_function: DudeStepFunction,
+        size: int = 5,
+    ) -> None:
+        self.size = size
         self.board = [[0] * self.size for _ in range(self.size)]
-        self.dudes: list[Dude] = []
+        self.dudes: list[Dude] = [
+            Dude(position, step_function=dude_step_function)
+            for position in dude_positions
+        ]
 
     def step(self) -> None:
         new_dudes = []
