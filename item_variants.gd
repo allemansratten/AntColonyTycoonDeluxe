@@ -1,0 +1,4 @@
+enum ItemVariant { 
+    LEAF, 
+    MUSHROOM,
+}
