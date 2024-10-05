@@ -67,14 +67,12 @@ func _physics_process(_delta):
 			velocity = direction * randf_range(min_speed, max_speed)
 			move_and_slide()
 			_animated_sprite.play()
-			
 			# Smooth rotation towards the target
 			var target_angle = direction.angle() + PI / 2
 			rotation = lerp_angle(rotation, target_angle, rotation_speed * _delta)
 		else:
 			is_moving = false
 			_animated_sprite.stop()
-			perform_special_action()
 			start_waiting()
 
 # This method is intended to be overridden by subclasses for unique behaviors
