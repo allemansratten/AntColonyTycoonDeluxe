@@ -19,6 +19,8 @@ var carried_item_sprite: Sprite2D
 @export var wait_probability: float = 0.03
 @onready var _animated_sprite = $AnimatedSprite2D
 
+@export var carried_item_scale = 0.25
+
 # positive = ants will tend to select directions similar to the ones they have
 # 0 = they don't care
 # negative = bigger turns are better
@@ -42,7 +44,7 @@ func _ready():
 
 	carried_item_sprite = Sprite2D.new()
 	carried_item_sprite.position = Vector2(0, -20)
-	carried_item_sprite.scale = Vector2(0.25, 0.25)
+	carried_item_sprite.scale = Vector2(carried_item_scale, carried_item_scale)
 	add_child(carried_item_sprite)
 	
 	# Start after a random delay to desync them at the beginning
@@ -180,6 +182,12 @@ func maybe_deposit_item() -> bool:
 	inventory_num_items_carried -= 1
 	if inventory_num_items_carried == 0:
 		inventory_item_variant = ItemVariant.NONE
-		carried_item_sprite.texture = null
+		var tween = create_tween()
+		tween.tween_property(carried_item_sprite, "scale", Vector2.ZERO, 0.3)
+		tween.tween_callback(reset_carried_item_sprite)
 
 	return true
+
+func reset_carried_item_sprite():
+	carried_item_sprite.texture = null
+	carried_item_sprite.scale = Vector2(carried_item_scale, carried_item_scale)
