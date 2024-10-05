@@ -19,8 +19,6 @@ func _ready() -> void:
 	for i in range(100):
 		spawn_ant(false)
 
-	# pheromone_layer.set_random_data()
-	pheromone_layer.set_demo_data()
 
 
 func spawn_ant(on_anthill: bool) -> void:

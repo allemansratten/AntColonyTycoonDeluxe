@@ -1,12 +1,12 @@
 extends ColorRect
 
-@export var grid_size = Vector2(16 * 5, 9 * 5)
+@export var grid_size_coef: int = 2
+@export var grid_size = Vector2(16 * grid_size_coef, 9 * grid_size_coef)
 @export var overlay_color: Color = Color(1, 0, 0, 0.5)
-@export var decay_rate = 0.02  # Decay by 1%
+@export var decay_rate = 0.02 # Decay by 1%
 
 var grid_data = []
-var is_drawing = false  # To track if the user is currently drawing
-
+var is_drawing = false # To track if the user is currently drawing
 
 
 func _ready():
@@ -52,7 +52,7 @@ func handle_pheromone_emission(position: Vector2, strength: float, radius: float
 
 	# Iterate through all grid points within the bounding box of the circle's diameter
 	for y_offset in range(-int(radius), int(radius) + 1):
-		var max_x_offset = int(sqrt(radius * radius - y_offset * y_offset))  # Calculate the horizontal limit based on the circle equation
+		var max_x_offset = int(sqrt(radius * radius - y_offset * y_offset)) # Calculate the horizontal limit based on the circle equation
 		for x_offset in range(-max_x_offset, max_x_offset + 1):
 			var current_x = grid_x + x_offset
 			var current_y = grid_y + y_offset
@@ -121,7 +121,7 @@ func draw_pheromone_at_mouse(mouse_pos):
 
 	# Make sure the position is within the grid bounds
 	if grid_x >= 0 and grid_x < grid_size.x and grid_y >= 0 and grid_y < grid_size.y:
-		grid_data[grid_y][grid_x] = 1.0  # Set pheromone value to 1.0 (max)
+		grid_data[grid_y][grid_x] = 1.0 # Set pheromone value to 1.0 (max)
 		update_shader()
 
 
@@ -143,9 +143,9 @@ func decay_grid():
 	# Softer 3x3 Gaussian kernel for a very soft blur
 # Properly normalized symmetric 3x3 Gaussian kernel
 	var kernel = [
-	[0.025, 0.05, 0.025],  # Weights for neighboring cells
-	[0.05,  0.7,  0.05],   # 0.7 for the center cell, ensuring it's dominant
-	[0.025, 0.05, 0.025]   # Weights for neighboring cells
+		[0.025, 0.05, 0.025], # Weights for neighboring cells
+		[0.05, 0.7, 0.05], # 0.7 for the center cell, ensuring it's dominant
+		[0.025, 0.05, 0.025] # Weights for neighboring cells
 	]
 
 	
@@ -156,7 +156,7 @@ func decay_grid():
 			var sum = 0.0
 			
 			# Apply Gaussian blur around the current cell
-			for ky in range(-1, 2):  # Iterate over the 3x3 kernel
+			for ky in range(-1, 2): # Iterate over the 3x3 kernel
 				for kx in range(-1, 2):
 					var grid_x = x + kx
 					var grid_y = y + ky
@@ -167,8 +167,8 @@ func decay_grid():
 						sum += grid_data[grid_y][grid_x] * weight
 			
 			# Calculate the blurred value and apply decay
-			var blurred_value = sum  # No need to divide by kernel sum since it is already normalized
-			new_grid[y].append(max(0, blurred_value * (1 - decay_rate)))  # Apply decay
+			var blurred_value = sum # No need to divide by kernel sum since it is already normalized
+			new_grid[y].append(max(0, blurred_value * (1 - decay_rate))) # Apply decay
 	
 	# Replace the old grid with the new one
 	grid_data = new_grid
