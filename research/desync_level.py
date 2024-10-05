@@ -1,24 +1,27 @@
 import random
 
 from basic_game import Dude, Game, InteractiveGameCLI
+from conditions import (
+    coin_flip,
+    does_not_have_hat,
+    has_hat,
+    is_next_to_hat,
+    is_not_next_to_hat,
+    make_step_function,
+)
 
-
-def desync(dude: "Dude", game: "Game") -> "Dude":
-    other_dude = None
-    for d in game.dudes:
-        if d != dude:
-            other_dude = d
-            break
-
-    assert other_dude is not None
-
-    if dude.has_hat != other_dude.has_hat:
-        return dude
-    else:
-        if random.random() < 0.5:
-            return dude.model_copy(update={"has_hat": not dude.has_hat})
-        else:
-            return dude
+desync = make_step_function(
+    [
+        (
+            [is_next_to_hat, has_hat, coin_flip],
+            lambda dude: dude.model_copy(update={"has_hat": False}),
+        ),
+        (
+            [is_not_next_to_hat, does_not_have_hat, coin_flip],
+            lambda dude: dude.model_copy(update={"has_hat": True}),
+        ),
+    ]
+)
 
 
 def main():

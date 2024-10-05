@@ -24,6 +24,13 @@ class Dude(BaseModel):
             max(0, min(size - 1, self.position[1])),
         )
 
+    def is_neighbor(self, other: "Dude") -> bool:
+        return (
+            abs(self.position[0] - other.position[0])
+            + abs(self.position[1] - other.position[1])
+            == 1
+        )
+
 
 class Game:
     def __init__(
