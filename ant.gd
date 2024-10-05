@@ -1,10 +1,17 @@
 extends CharacterBody2D
 
-enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
+const ItemVariant = preload("res://item_variants.gd").ItemVariant
+enum AntType { HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER }
 
 @export var ant_type: AntType = AntType.HARVESTER
 @export var min_speed: float = 500.0
 @export var max_speed: float = 800.0
+
+@export var inventory_num_items_carried: int = 0
+@export var inventory_max_items: int = 1
+@export var inventory_item_variant: ItemVariant = ItemVariant.NONE
+
+var carried_item_sprite: Sprite2D
 @export var min_move_distance: float = 150.0
 @export var max_move_distance: float = 200.0
 @export var min_wait_time: float = 0.15
@@ -30,6 +37,11 @@ var rotation_speed: float = 15.0 # Speed of rotation towards target
 func _ready():
 	randomize()
 	set_ant_type_properties(ant_type)
+
+	carried_item_sprite = Sprite2D.new()
+	carried_item_sprite.position = Vector2(0, -20)
+	carried_item_sprite.scale = Vector2(0.25, 0.25)
+	add_child(carried_item_sprite)
 	
 	# Start after a random delay to desync them at the beginning
 	await get_tree().create_timer(randf_range(0.0, max_wait_time)).timeout
@@ -155,3 +167,18 @@ func start_waiting():
 		var wait_time = randf_range(min_wait_time, max_wait_time)
 		await get_tree().create_timer(wait_time).timeout
 	start_new_movement()
+
+
+func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Texture) -> bool:
+	# If the ant is carrying an item, it can only pick up the same type
+	if inventory_item_variant != ItemVariant.NONE && inventory_item_variant != picked_item_variant:
+		return false
+	# If the ant is not carrying an item, it can pick up any type
+	if inventory_num_items_carried >= inventory_max_items:
+		return false
+
+	inventory_num_items_carried += 1
+	carried_item_sprite.texture = picked_item_texture
+	inventory_item_variant = picked_item_variant
+	print("Picking up item variant: ", picked_item_variant)
+	return true

@@ -1,5 +1,7 @@
 extends Node
 
+const ItemVariant = preload("res://item_variants.gd").ItemVariant
+
 var scene_item: PackedScene
 
 func get_random_position() -> Vector2:
@@ -11,21 +13,21 @@ func get_random_position() -> Vector2:
 
 func _ready():
 	randomize()
-	spawn_item("leaf", get_random_position())
-	spawn_item("leaf", get_random_position())
-	spawn_item("leaf", get_random_position())
-	spawn_item("leaf", get_random_position())
-	spawn_item("mushroom", get_random_position())
-	spawn_item("mushroom", get_random_position())
-	spawn_item("mushroom", get_random_position())
+	spawn_item(ItemVariant.LEAF, get_random_position())
+	spawn_item(ItemVariant.LEAF, get_random_position())
+	spawn_item(ItemVariant.LEAF, get_random_position())
+	spawn_item(ItemVariant.LEAF, get_random_position())
+	spawn_item(ItemVariant.MUSHROOM, get_random_position())
+	spawn_item(ItemVariant.MUSHROOM, get_random_position())
+	spawn_item(ItemVariant.MUSHROOM, get_random_position())
 
 
-# Function to spawn an item (Leaf or Berry)
-func spawn_item(item_type: String, position: Vector2):
+# Function to spawn an item at a given position
+func spawn_item(variant: ItemVariant, position: Vector2):
 	scene_item = load("res://scene_item.tscn")
 
 	var new_item = scene_item.instantiate()
 	new_item.position = position
-	# Add the item to the scene so the variants can be initialised
+	# Add the item to the scene first so the variants can be initialised
 	add_child(new_item)
-	new_item.set_variant(item_type)
+	new_item.set_variant(variant)
