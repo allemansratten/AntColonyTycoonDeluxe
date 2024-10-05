@@ -1,7 +1,7 @@
 extends Node2D
 
 signal emit_pheromones(position: Vector2, strength: float, radius: float)
-@export var emission_strength: float = 1.0
+@export var emission_strength: float = 0.1
 @export var emission_interval_ms: int = 1000
 @export var emission_position: Vector2 = Vector2()
 @export var emission_radius: float = 5.0

@@ -22,11 +22,11 @@ var carried_item_sprite: Sprite2D
 # positive = ants will tend to select directions similar to the ones they have
 # 0 = they don't care
 # negative = bigger turns are better
-const ANGLE_CONSISTENCY_REWARD: float = 0.5
+const ANGLE_CONSISTENCY_REWARD: float = 0.3
 # must be strictly >0.
 # close to 0 = always select the angle that maximizes the score
 # infinite = select completely at random
-const ANGLE_SAMPLING_TEMPERATURE: float = 0.2
+const ANGLE_SAMPLING_TEMPERATURE: float = 0.15
 
 var target_position: Vector2
 var is_moving: bool = false
@@ -38,6 +38,7 @@ func _ready():
 	randomize()
 	rotation = randf() * 2 * PI
 	set_ant_type_properties(ant_type)
+	add_to_group("ants")
 
 	carried_item_sprite = Sprite2D.new()
 	carried_item_sprite.position = Vector2(0, -20)
@@ -169,5 +170,16 @@ func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Te
 	inventory_num_items_carried += 1
 	carried_item_sprite.texture = picked_item_texture
 	inventory_item_variant = picked_item_variant
-	print("Picking up item variant: ", picked_item_variant)
+
+	return true
+
+func maybe_deposit_item() -> bool:
+	if inventory_num_items_carried == 0:
+		return false
+
+	inventory_num_items_carried -= 1
+	if inventory_num_items_carried == 0:
+		inventory_item_variant = ItemVariant.NONE
+		carried_item_sprite.texture = null
+
 	return true
