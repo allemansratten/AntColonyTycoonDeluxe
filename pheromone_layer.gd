@@ -2,9 +2,11 @@ extends ColorRect
 
 @export var grid_size = Vector2(16 * 2, 9 * 2)
 @export var overlay_color: Color = Color(1, 0, 0, 0.5)
+@export var decay_rate = 0.02  # Decay by 1%
 
 var grid_data = []
 var is_drawing = false  # To track if the user is currently drawing
+
 
 
 func _ready():
@@ -25,6 +27,9 @@ func _ready():
 	get_tree().root.connect("size_changed", Callable(self, "update_shader"))
 
 	update_shader()
+	$DecayTimer.connect("timeout", Callable(self, "decay_grid"))
+	$DecayTimer.start()
+
 
 func set_random_data():
 	for y in range(int(grid_size.y)):
@@ -70,3 +75,10 @@ func _input(event):
 				is_drawing = false
 	elif event is InputEventMouseMotion and is_drawing:
 		draw_pheromone_at_mouse(event.position)
+
+
+func decay_grid():
+	for y in range(int(grid_size.y)):
+		for x in range(int(grid_size.x)):
+			grid_data[y][x] = max(0, grid_data[y][x] * (1 - decay_rate))
+	update_shader()
