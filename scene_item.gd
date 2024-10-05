@@ -40,8 +40,8 @@ func set_as_mushroom():
 
 # Collision detection function
 func _on_area_2d_body_entered(ant_body: Node2D) -> void:
-	var picked_up_item = ant_body.maybe_pickup_item(item_variant, sprite_node.texture)
-	if picked_up_item:
+	var did_pickup_item = ant_body.maybe_pickup_item(item_variant, sprite_node.texture)
+	if did_pickup_item:
 		resources_remaining -= 1
 	if resources_remaining <= 0:
 		queue_free() # Remove the item from the scene
