@@ -12,11 +12,11 @@ def desync(dude: "Dude", game: "Game") -> "Dude":
 
     assert other_dude is not None
 
-    if dude.kind != other_dude.kind:
+    if dude.has_hat != other_dude.has_hat:
         return dude
     else:
         if random.random() < 0.5:
-            return dude.updated(new_kind=1 - dude.kind)
+            return dude.model_copy(update={"has_hat": not dude.has_hat})
         else:
             return dude
 

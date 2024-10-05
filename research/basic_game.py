@@ -1,8 +1,7 @@
-import copy
 import curses
-import sys
-from io import StringIO
 from typing import Callable
+
+from pydantic import BaseModel
 
 DudeStepFunction = Callable[["Dude", "Game"], "Dude"]
 
@@ -15,35 +14,14 @@ def move_right(dude: "Dude", game: "Game") -> "Dude":
     return Dude((dude.position[0], dude.position[1] + 1), dude.step_function)
 
 
-class Dude:
-    def __init__(
-        self,
-        position: tuple[int, int],
-        kind: int = 0,
-        step_function: DudeStepFunction = do_nothing,
-    ) -> None:
-        self.position = position
-        self.kind = kind
-        self.step_function = step_function
-
-    def step(self, game: "Game") -> "Dude":
-        dude = self.step_function(self, game)
-        dude.to_bounds(game.size)
-        return dude
+class Dude(BaseModel):
+    position: tuple[int, int]
+    has_hat: bool = False
 
     def to_bounds(self, size: int) -> None:
         self.position = (
             max(0, min(size - 1, self.position[0])),
             max(0, min(size - 1, self.position[1])),
-        )
-
-    def updated(
-        self, new_position: tuple[int, int] | None = None, new_kind: int | None = None
-    ) -> "Dude":
-        return Dude(
-            new_position if new_position is not None else self.position,
-            new_kind if new_kind is not None else self.kind,
-            self.step_function,
         )
 
 
@@ -57,14 +35,14 @@ class Game:
         self.size = size
         self.board = [[0] * self.size for _ in range(self.size)]
         self.dudes: list[Dude] = [
-            Dude(position, step_function=dude_step_function)
-            for position in dude_positions
+            Dude(position=position) for position in dude_positions
         ]
+        self.dude_step_function = dude_step_function
 
     def step(self) -> None:
         new_dudes = []
         for dude in self.dudes:
-            new_dudes.append(dude.step(self))
+            new_dudes.append(self.dude_step_function(dude, self))
 
         self.dudes = new_dudes
 
@@ -78,7 +56,7 @@ class Game:
 
                 for dude in self.dudes:
                     if dude.position == (i, j):
-                        cur += "ABCDE"[dude.kind]
+                        cur += "AB"[int(dude.has_hat)]
 
                 to_print[-1].append(cur)
 
@@ -146,8 +124,6 @@ class InteractiveGameCLI:
 
 def main():
     game = Game()
-    game.dudes.append(Dude((2, 3)))
-    game.dudes.append(Dude((1, 1), step_function=move_right))
 
     cli = InteractiveGameCLI(game)
     cli.run()
