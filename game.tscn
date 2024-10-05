@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cs7o50oaokh2e"]
+[gd_scene load_steps=10 format=3 uid="uid://cs7o50oaokh2e"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c3v4pvxkk33qh" path="res://pheromone_layer.tscn" id="5_dmj4k"]
 [ext_resource type="Shader" path="res://resources/shaders/color_dither_post_2d.gdshader" id="6_8n14l"]
 [ext_resource type="Texture2D" uid="uid://3k3gmhyq1qhe" path="res://resources/palettes/color-graphics-adapter.png" id="7_8k07p"]
+[ext_resource type="PackedScene" uid="uid://bm6ou0h00mv5b" path="res://pheromone_bar.tscn" id="8_ru8sk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6ii3t"]
 shader = ExtResource("6_8n14l")
@@ -46,5 +47,7 @@ color = Color(1, 1, 1, 0)
 
 [node name="PheromoneLayer" parent="." instance=ExtResource("5_dmj4k")]
 top_level = true
+
+[node name="PheromoneBar" parent="." instance=ExtResource("8_ru8sk")]
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
