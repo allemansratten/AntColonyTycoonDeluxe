@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://dcrdhn26hmhva"]
+[gd_scene load_steps=14 format=3 uid="uid://c1w2q7qvmwr8s"]
 
 [ext_resource type="Texture2D" uid="uid://dbaik0wwte6lk" path="res://enemy.png" id="1_ca5vm"]
 [ext_resource type="Script" path="res://ant.gd" id="1_jww2m"]
+[ext_resource type="Texture2D" uid="uid://cgrf025asat7k" path="res://resources/sprites/ant.png" id="2_hbgwd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7r7vd"]
 atlas = ExtResource("1_ca5vm")
@@ -74,7 +75,12 @@ radius = 3.16228
 script = ExtResource("1_jww2m")
 metadata/_edit_group_ = true
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_hbgwd")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false
 sprite_frames = SubResource("SpriteFrames_yq6mw")
 frame_progress = 0.605466
 
