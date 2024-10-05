@@ -29,7 +29,6 @@ animations = [{
 radius = 3.16228
 
 [node name="Ant" type="CharacterBody2D"]
-position = Vector2(0, 2)
 collision_mask = 6
 motion_mode = 1
 script = ExtResource("1_jww2m")
@@ -37,6 +36,7 @@ metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 rotation = 1.5708
+scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_xw4ci")
 animation = &"harvester"
 
