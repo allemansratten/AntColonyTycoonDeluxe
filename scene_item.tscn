@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://e2oax3upl8mj"]
+
+[ext_resource type="Script" path="res://scene_item.gd" id="1_psmy6"]
+
+[node name="SceneItem" type="Node2D"]
+script = ExtResource("1_psmy6")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.2238, 0.544925, 0.172671, 1)
