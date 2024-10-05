@@ -112,17 +112,34 @@ func update_shader():
 	material.set_shader_parameter("screen_size", get_viewport().get_visible_rect().size)
 
 
-# Add pheromone at the mouse position
 func draw_pheromone_at_mouse(mouse_pos):
-	# Convert mouse position to grid position
 	var rect_size: Vector2 = get_viewport_rect().size
-	var grid_x: int = int(mouse_pos.x / rect_size.x * grid_size.x)
-	var grid_y: int = int(mouse_pos.y / rect_size.y * grid_size.y)
+	var grid_x_float: float = mouse_pos.x / rect_size.x * grid_size.x - 0.5
+	var grid_y_float: float = mouse_pos.y / rect_size.y * grid_size.y - 0.5
 
-	# Make sure the position is within the grid bounds
-	if grid_x >= 0 and grid_x < grid_size.x and grid_y >= 0 and grid_y < grid_size.y:
-		grid_data[grid_y][grid_x] = 1.0 # Set pheromone value to 1.0 (max)
-		update_shader()
+	var grid_x_low: int = int(grid_x_float)
+	var grid_y_low: int = int(grid_y_float)
+	var grid_x_high: int = min(grid_x_low + 1, grid_size.x - 1)
+	var grid_y_high: int = min(grid_y_low + 1, grid_size.y - 1)
+
+	var fx: float = grid_x_float - grid_x_low
+	var fy: float = grid_y_float - grid_y_low
+
+	var pheromone_value: float = 1.0 # Max pheromone value
+
+	# Apply bilinear interpolation to distribute the pheromone value smoothly
+	grid_data[grid_y_low][grid_x_low] += pheromone_value * (1 - fx) * (1 - fy)
+	grid_data[grid_y_low][grid_x_high] += pheromone_value * fx * (1 - fy)
+	grid_data[grid_y_high][grid_x_low] += pheromone_value * (1 - fx) * fy
+	grid_data[grid_y_high][grid_x_high] += pheromone_value * fx * fy
+
+	# Clamp values to ensure they don't exceed 1.0
+	grid_data[grid_y_low][grid_x_low] = min(grid_data[grid_y_low][grid_x_low], 1.0)
+	grid_data[grid_y_low][grid_x_high] = min(grid_data[grid_y_low][grid_x_high], 1.0)
+	grid_data[grid_y_high][grid_x_low] = min(grid_data[grid_y_high][grid_x_low], 1.0)
+	grid_data[grid_y_high][grid_x_high] = min(grid_data[grid_y_high][grid_x_high], 1.0)
+
+	update_shader()
 
 
 # Track mouse button input for drawing
