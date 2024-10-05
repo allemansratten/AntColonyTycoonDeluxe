@@ -31,16 +31,16 @@ func set_as_leaf():
 	sprite_node.texture = load("res://resources/sprites/leaf.png")
 	sprite_node.scale = Vector2(0.5, 0.5) # Scale down the leaf
 	sprite_node.rotate(randf_range(-45, 45)) # Random rotation
-	resources_remaining = 3
-	create_pheromone_emitter()
+	resources_remaining = 20
+	# create_pheromone_emitter()
 	
 
 # Define how to visually set up the Berry
 func set_as_mushroom():
 	sprite_node.texture = load("res://resources/sprites/mushroom.png")
 	sprite_node.scale = Vector2(0.5, 0.5) # Scale down the leaf
-	resources_remaining = 5
-	create_pheromone_emitter()
+	resources_remaining = 30
+	# create_pheromone_emitter()
 	
 
 # Collision detection function
