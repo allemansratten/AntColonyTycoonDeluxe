@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3v4pvxkk33qh"]
+
+[ext_resource type="Script" path="res://pheromone_layer.gd" id="1_fq7nw"]
+
+[node name="PheromoneLayer" type="ColorRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_fq7nw")
+overlay_color = Color(0.368627, 0.592157, 0.458824, 0.494118)

@@ -13,6 +13,9 @@ var is_moving: bool = false
 func _ready():
 	#position = Vector2(200, 200)
 	randomize()
+
+	# start after a random delay to desync them at the beginning
+	await get_tree().create_timer(randf_range(0.0, max_wait_time)).timeout
 	start_new_movement()
 
 func _physics_process(_delta):
