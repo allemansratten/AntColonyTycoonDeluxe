@@ -1,14 +1,29 @@
-[gd_scene load_steps=6 format=3 uid="uid://cs7o50oaokh2e"]
+[gd_scene load_steps=9 format=3 uid="uid://cs7o50oaokh2e"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
 [ext_resource type="PackedScene" uid="uid://dcrdhn26hmhva" path="res://ant.tscn" id="2_82cr4"]
 [ext_resource type="PackedScene" uid="uid://tmy1yvfu2r8g" path="res://anthill.tscn" id="4_cw8q0"]
 [ext_resource type="PackedScene" uid="uid://c3v4pvxkk33qh" path="res://pheromone_layer.tscn" id="5_dmj4k"]
+[ext_resource type="Shader" path="res://resources/shaders/color_dither_post_2d.gdshader" id="6_8n14l"]
+[ext_resource type="Texture2D" uid="uid://3k3gmhyq1qhe" path="res://resources/palettes/color-graphics-adapter.png" id="7_8k07p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ii3t"]
+shader = ExtResource("6_8n14l")
+shader_parameter/dither_pixel_size = 1.0
+shader_parameter/dither_pixel_offset = Vector2(0, 0)
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/albedo_strength = 1.0
+shader_parameter/dither_palette = ExtResource("7_8k07p")
 
 [node name="Game" type="Node"]
 script = ExtResource("1_f6hxw")
 ant_scene = ExtResource("2_82cr4")
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+visible = false
+offset_right = 1599.0
+offset_bottom = 901.0
 
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 0.75
@@ -20,6 +35,16 @@ script = ExtResource("1_n0r2e")
 [node name="Anthill" parent="." instance=ExtResource("4_cw8q0")]
 position = Vector2(1228, 677)
 
+[node name="ColorRect" type="ColorRect" parent="."]
+top_level = true
+material = SubResource("ShaderMaterial_6ii3t")
+offset_right = 1597.0
+offset_bottom = 901.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+color = Color(1, 1, 1, 0)
+
 [node name="PheromoneLayer" parent="." instance=ExtResource("5_dmj4k")]
+top_level = true
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
