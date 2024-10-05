@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4ixq6cfl5c64"
-path="res://.godot/imported/leaf.png-06d87f92b08ef5e2e6367ef848e65525.ctex"
+uid="uid://bjojfl6octk2h"
+path="res://.godot/imported/anthill.png-e4ed22ea1071ecfa0f7bac39b4cf2dd3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/sprites/leaf.png"
-dest_files=["res://.godot/imported/leaf.png-06d87f92b08ef5e2e6367ef848e65525.ctex"]
+source_file="res://resources/sprites/anthill.png"
+dest_files=["res://.godot/imported/anthill.png-e4ed22ea1071ecfa0f7bac39b4cf2dd3.ctex"]
 
 [params]
 

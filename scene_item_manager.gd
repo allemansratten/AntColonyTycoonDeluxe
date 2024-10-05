@@ -14,9 +14,10 @@ func _ready():
 	spawn_item("leaf", get_random_position())
 	spawn_item("leaf", get_random_position())
 	spawn_item("leaf", get_random_position())
-	spawn_item("berry", get_random_position())
-	spawn_item("berry", get_random_position())
-	spawn_item("berry", get_random_position())
+	spawn_item("leaf", get_random_position())
+	spawn_item("mushroom", get_random_position())
+	spawn_item("mushroom", get_random_position())
+	spawn_item("mushroom", get_random_position())
 
 
 # Function to spawn an item (Leaf or Berry)
@@ -25,7 +26,6 @@ func spawn_item(item_type: String, position: Vector2):
 
 	var new_item = scene_item.instantiate()
 	new_item.position = position
+	# Add the item to the scene so the variants can be initialised
 	add_child(new_item)
-
-	# Set the variant type (leaf or berry) before adding it to the scene
 	new_item.set_variant(item_type)

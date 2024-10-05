@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://dcrdhn26hmhva"]
+[gd_scene load_steps=7 format=3 uid="uid://dcrdhn26hmhva"]
 
 [ext_resource type="Script" path="res://ant.gd" id="1_jww2m"]
-[ext_resource type="Texture2D" uid="uid://cgrf025asat7k" path="res://resources/sprites/ant.png" id="2_hbgwd"]
 [ext_resource type="Texture2D" uid="uid://c4nnrgf8l3ntd" path="res://resources/sprites/ant_stationary.png" id="2_lsshl"]
 [ext_resource type="Texture2D" uid="uid://wh7pqylywwpk" path="res://resources/sprites/ant_walk1.png" id="3_jnfmw"]
 [ext_resource type="Texture2D" uid="uid://h240vhpniitm" path="res://resources/sprites/ant_walk2.png" id="4_u33sy"]
@@ -22,7 +21,7 @@ animations = [{
 "texture": ExtResource("4_u33sy")
 }],
 "loop": true,
-"name": &"default",
+"name": &"harvester",
 "speed": 12.0
 }]
 
@@ -37,12 +36,7 @@ metadata/_edit_group_ = true
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 rotation = 1.5708
 sprite_frames = SubResource("SpriteFrames_xw4ci")
-frame_progress = 0.248136
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_hbgwd")
+animation = &"harvester"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false

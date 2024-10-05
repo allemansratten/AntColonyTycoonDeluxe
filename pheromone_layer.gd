@@ -2,8 +2,12 @@ extends ColorRect
 
 @export var grid_size = Vector2(16 * 2, 9 * 2)
 @export var overlay_color: Color = Color(1, 0, 0, 0.5)
+@export var decay_rate = 0.02  # Decay by 1%
 
 var grid_data = []
+var is_drawing = false  # To track if the user is currently drawing
+
+
 
 func _ready():
 	material = ShaderMaterial.new()
@@ -23,6 +27,9 @@ func _ready():
 	get_tree().root.connect("size_changed", Callable(self, "update_shader"))
 
 	update_shader()
+	$DecayTimer.connect("timeout", Callable(self, "decay_grid"))
+	$DecayTimer.start()
+
 
 func set_random_data():
 	for y in range(int(grid_size.y)):
@@ -62,3 +69,35 @@ func update_shader():
 	material.set_shader_parameter("grid_size", grid_size)
 	material.set_shader_parameter("overlay_color", overlay_color)
 	material.set_shader_parameter("screen_size", get_viewport().get_visible_rect().size)
+
+
+# Add pheromone at the mouse position
+func draw_pheromone_at_mouse(mouse_pos):
+	# Convert mouse position to grid position
+	var rect_size: Vector2 = get_viewport_rect().size
+	var grid_x: int = int(mouse_pos.x / rect_size.x * grid_size.x)
+	var grid_y: int = int(mouse_pos.y / rect_size.y * grid_size.y)
+
+	# Make sure the position is within the grid bounds
+	if grid_x >= 0 and grid_x < grid_size.x and grid_y >= 0 and grid_y < grid_size.y:
+		grid_data[grid_y][grid_x] = 1.0  # Set pheromone value to 1.0 (max)
+		update_shader()
+
+
+# Track mouse button input for drawing
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				is_drawing = true
+			else:
+				is_drawing = false
+	elif event is InputEventMouseMotion and is_drawing:
+		draw_pheromone_at_mouse(event.position)
+
+
+func decay_grid():
+	for y in range(int(grid_size.y)):
+		for x in range(int(grid_size.x)):
+			grid_data[y][x] = max(0, grid_data[y][x] * (1 - decay_rate))
+	update_shader()
