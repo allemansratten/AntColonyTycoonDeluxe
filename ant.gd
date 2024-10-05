@@ -9,6 +9,7 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @export var max_move_distance: float = 200.0
 @export var min_wait_time: float = 0.15
 @export var max_wait_time: float = 0.3
+@export var wait_probability: float = 0.03
 @onready var _animated_sprite = $AnimatedSprite2D
 
 # positive = ants will tend to select directions similar to the ones they have
@@ -151,6 +152,7 @@ func start_new_movement():
 	is_moving = true
 
 func start_waiting():
-	var wait_time = randf_range(min_wait_time, max_wait_time)
-	await get_tree().create_timer(wait_time).timeout
+	if randf() < wait_probability:
+		var wait_time = randf_range(min_wait_time, max_wait_time)
+		await get_tree().create_timer(wait_time).timeout
 	start_new_movement()
