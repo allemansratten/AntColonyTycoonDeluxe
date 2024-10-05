@@ -5,3 +5,5 @@
 .vscode/
 *.kra
 *.png~
+scene_item.gd
+resources/sprites/leaf.png.import
