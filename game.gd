@@ -17,15 +17,20 @@ func _ready() -> void:
 
 	# spawn 100 ants on random positions
 	for i in range(100):
-		spawn_ant()
+		spawn_ant(false)
 
 	# pheromone_layer.set_random_data()
 	pheromone_layer.set_demo_data()
 
 
-func spawn_ant() -> void:
+func spawn_ant(on_anthill: bool) -> void:
 	var ant = ant_scene.instantiate()
-	ant.position = Vector2(randi() % int(screen_size.x), randi() % int(screen_size.y))
+	
+	if on_anthill:
+		ant.position = $Anthill.position + Vector2(randf_range(-30, 30), randf_range(-30, 30))
+	else:
+		ant.position = Vector2(randf_range(0, screen_size.x), randf_range(0, screen_size.y))
+
 	ant.pheromone_layer = pheromone_layer
 	add_child(ant)
 
@@ -36,4 +41,4 @@ func _process(delta: float) -> void:
 
 
 func _on_spawn_timer_timeout() -> void:
-	spawn_ant()
+	spawn_ant(true)

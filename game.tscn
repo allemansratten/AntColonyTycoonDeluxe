@@ -10,6 +10,7 @@ script = ExtResource("1_f6hxw")
 ant_scene = ExtResource("2_82cr4")
 
 [node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 0.3
 autostart = true
 
 [node name="SceneItemManager" type="Node" parent="."]

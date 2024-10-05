@@ -29,6 +29,7 @@ var rotation_speed: float = 15.0 # Speed of rotation towards target
 
 func _ready():
 	randomize()
+	rotation = randf() * 2 * PI
 	set_ant_type_properties(ant_type)
 	
 	# Start after a random delay to desync them at the beginning
@@ -155,3 +156,7 @@ func start_waiting():
 		var wait_time = randf_range(min_wait_time, max_wait_time)
 		await get_tree().create_timer(wait_time).timeout
 	start_new_movement()
+
+
+func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
+	queue_free()
