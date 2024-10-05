@@ -1,9 +1,9 @@
 extends CharacterBody2D
 
-@export var min_speed: float = 100.0
-@export var max_speed: float = 150.0
-@export var min_move_distance: float = 50.0
-@export var max_move_distance: float = 100.0
+@export var min_speed: float = 500.0
+@export var max_speed: float = 800.0
+@export var min_move_distance: float = 250.0
+@export var max_move_distance: float = 300.0
 @export var min_wait_time: float = 0.3
 @export var max_wait_time: float = 0.6
 
@@ -11,7 +11,7 @@ var target_position: Vector2
 var is_moving: bool = false
 
 func _ready():
-	position = Vector2(200, 200)
+	#position = Vector2(200, 200)
 	randomize()
 	start_new_movement()
 
