@@ -109,35 +109,80 @@ func update_shader():
 	material.set_shader_parameter("overlay_color", overlay_color)
 	material.set_shader_parameter("screen_size", get_viewport().get_visible_rect().size)
 
+func gaussian_density(sigma: float, x: float, y: float) -> float:
+	var exponent = -(x * x + y * y) / (2 * sigma * sigma)
+	return exp(exponent) / (2 * PI * sigma * sigma)
 
-func draw_pheromone_at_position(pos: Vector2):
+
+func get_reasonable_kernel_size(sigma: float) -> int:
+	# Calculate the kernel size to cover 3 standard deviations (99.7% of the distribution)
+	var n = int(ceil(6 * sigma))
+		
+	# Ensure the size is odd (common practice for symmetric kernels)
+	if n % 2 == 0:
+		n += 1
+
+	return n
+
+
+func draw_pheromone_at_position(pos: Vector2, value: float, additive: bool = false, sigma: float = 0.5) -> float:
+	"""Draws pheromone at a position, with a Gaussian blur
+	
+	Args:
+		pos: The position to draw pheromone at.
+		max_value: The maximum value the pheromone will be set to. Note that
+			we first apply Gaussian blur so the actual value will be lower.
+			`max_value` is the total applied.
+		additive: If true, will set the value to `old + new` rather than
+			`max(new, old)`.
+		sigma: The standard deviation of the Gaussian kernel used for interpolation.
+			Bigger = more blurry.
+	
+	Returns:
+		The total number of pheromone added.
+	"""
 	var rect_size: Vector2 = get_viewport_rect().size
 	var grid_x_float: float = pos.x / rect_size.x * grid_size.x - 0.5
 	var grid_y_float: float = pos.y / rect_size.y * grid_size.y - 0.5
 
 	var grid_x_low: int = int(grid_x_float)
 	var grid_y_low: int = int(grid_y_float)
-	var grid_x_high: int = min(grid_x_low + 1, grid_size.x - 1)
-	var grid_y_high: int = min(grid_y_low + 1, grid_size.y - 1)
 
-	var fx: float = grid_x_float - grid_x_low
-	var fy: float = grid_y_float - grid_y_low
+	var kernel_size = get_reasonable_kernel_size(sigma)
 
-	var pheromone_value: float = 1.0 # Max pheromone value
+	var to_update = []
 
-	# Apply bilinear interpolation to distribute the pheromone value smoothly
-	grid_data[grid_y_low][grid_x_low] += pheromone_value * (1 - fx) * (1 - fy)
-	grid_data[grid_y_low][grid_x_high] += pheromone_value * fx * (1 - fy)
-	grid_data[grid_y_high][grid_x_low] += pheromone_value * (1 - fx) * fy
-	grid_data[grid_y_high][grid_x_high] += pheromone_value * fx * fy
+	for y in range(grid_y_low - kernel_size, grid_y_low + kernel_size):
+		for x in range(grid_x_low - kernel_size, grid_x_low + kernel_size):
+			if x < 0 or x >= grid_size.x or y < 0 or y >= grid_size.y:
+				continue
+			var strength = gaussian_density(sigma, x + 0.5 - grid_x_float, y + 0.5 - grid_y_float)
+			to_update.append([y, x, strength])
 
-	# Clamp values to ensure they don't exceed 1.0
-	grid_data[grid_y_low][grid_x_low] = min(grid_data[grid_y_low][grid_x_low], 1.0)
-	grid_data[grid_y_low][grid_x_high] = min(grid_data[grid_y_low][grid_x_high], 1.0)
-	grid_data[grid_y_high][grid_x_low] = min(grid_data[grid_y_high][grid_x_low], 1.0)
-	grid_data[grid_y_high][grid_x_high] = min(grid_data[grid_y_high][grid_x_high], 1.0)
+	var added_total: float = 0
+
+	for data in to_update:
+		var y = data[0]
+		var x = data[1]
+		var interpolation_value = data[2]
+
+		if x < 0 or x >= grid_size.x or y < 0 or y >= grid_size.y:
+			continue
+
+		if additive:
+			var previous_value = grid_data[y][x]
+			var new_value = min(1.0, previous_value + interpolation_value * value)
+			added_total = new_value - previous_value
+			grid_data[y][x] = new_value
+		else:
+			var new_value = interpolation_value * value
+			var added = new_value - grid_data[y][x]
+			if added > 0:
+				grid_data[y][x] = new_value
+				added_total += added
 
 	update_shader()
+	return added_total
 
 
 func decay_grid(delta: float):

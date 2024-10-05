@@ -14,13 +14,15 @@ shader_parameter/alpha_dither_pixel_offset = Vector2(0, 0)
 shader_parameter/dither_palette = ExtResource("3_2g0ub")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_reoor"]
-radius = 20.0
+radius = 74.4312
 
 [node name="SceneItem" type="Node2D"]
 material = SubResource("ShaderMaterial_p2ha6")
 script = ExtResource("1_psmy6")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_46ogs")
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 2
