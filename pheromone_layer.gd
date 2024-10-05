@@ -1,6 +1,6 @@
 extends ColorRect
 
-@export var grid_size = Vector2(16 * 2, 9 * 2)
+@export var grid_size = Vector2(16 * 5, 9 * 5)
 @export var overlay_color: Color = Color(1, 0, 0, 0.5)
 @export var decay_rate = 0.03  # Decay by 1%
 
@@ -29,6 +29,47 @@ func _ready():
 	update_shader()
 	$DecayTimer.connect("timeout", Callable(self, "decay_grid"))
 	$DecayTimer.start()
+
+	connect_pheromone_emitters()
+
+
+func connect_pheromone_emitters():
+	var emitters = get_tree().get_nodes_in_group("pheromone_emitters")
+	for emitter in emitters:
+		emitter.connect("emit_pheromones", Callable(self, "handle_pheromone_emission"))
+
+
+func _notification(what):
+	if what == NOTIFICATION_PARENTED:
+		if is_in_group("pheromone_emitters"):
+			connect("emit_pheromones", Callable(self, "handle_pheromone_emission"))
+
+
+func handle_pheromone_emission(position: Vector2, strength: float, radius: float):
+	var rect_size: Vector2 = get_viewport_rect().size
+	var grid_x: int = int(position.x / rect_size.x * grid_size.x)
+	var grid_y: int = int(position.y / rect_size.y * grid_size.y)
+
+	# Iterate through all grid points within the bounding box of the circle's diameter
+	for y_offset in range(-int(radius), int(radius) + 1):
+		var max_x_offset = int(sqrt(radius * radius - y_offset * y_offset))  # Calculate the horizontal limit based on the circle equation
+		for x_offset in range(-max_x_offset, max_x_offset + 1):
+			var current_x = grid_x + x_offset
+			var current_y = grid_y + y_offset
+
+			# Ensure the position is within grid bounds
+			if current_x >= 0 and current_x < grid_size.x and current_y >= 0 and current_y < grid_size.y:
+				# Calculate the distance from the center of the emission
+				var distance: float = Vector2(x_offset, y_offset).length()
+
+				# Apply pheromones only if within the circle radius
+				if distance <= radius:
+					# Optionally adjust strength based on distance (linear decay)
+					var adjusted_strength: float = strength * (1.0 - (distance / radius))
+					grid_data[current_y][current_x] = min(1.0, grid_data[current_y][current_x] + adjusted_strength)
+
+	# aaa
+	update_shader()
 
 
 func set_random_data():
