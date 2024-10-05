@@ -1,5 +1,8 @@
 extends CharacterBody2D
 
+enum AntType { HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER }
+
+@export var ant_type: AntType = AntType.HARVESTER
 @export var min_speed: float = 500.0
 @export var max_speed: float = 800.0
 @export var min_move_distance: float = 250.0
@@ -13,13 +16,47 @@ var is_moving: bool = false
 var rotation_speed: float = 15.0  # Speed of rotation towards target
 
 func _ready():
-	#position = Vector2(200, 200)
 	randomize()
-
-	# start after a random delay to desync them at the beginning
+	set_ant_type_properties(ant_type)
+	
+	# Start after a random delay to desync them at the beginning
 	await get_tree().create_timer(randf_range(0.0, max_wait_time)).timeout
 	start_new_movement()
 
+# Adjust properties based on the ant type
+func set_ant_type_properties(ant_type: AntType):
+	match ant_type:
+		AntType.HARVESTER:
+			min_speed = 400.0
+			max_speed = 600.0
+			min_wait_time = 0.5
+			max_wait_time = 0.7
+			_animated_sprite.animation = "harvester"
+		#Other Types have no animation yet
+		AntType.BUILDER:
+			min_speed = 300.0
+			max_speed = 500.0
+			min_wait_time = 0.7
+			max_wait_time = 1.0
+			_animated_sprite.animation = "builder"
+		AntType.WARRIOR:
+			min_speed = 600.0
+			max_speed = 900.0
+			min_wait_time = 0.2
+			max_wait_time = 0.5
+			_animated_sprite.animation = "warrior"
+		AntType.FARMER:
+			min_speed = 350.0
+			max_speed = 550.0
+			min_wait_time = 0.6
+			max_wait_time = 0.8
+			_animated_sprite.animation = "farmer"
+		AntType.EXPLORER:
+			min_speed = 500.0
+			max_speed = 800.0
+			min_wait_time = 0.3
+			max_wait_time = 0.6
+			_animated_sprite.animation = "explorer"
 
 func _physics_process(_delta):
 	if is_moving:
@@ -29,15 +66,20 @@ func _physics_process(_delta):
 		if distance > 5:  # If not close enough to target
 			velocity = direction * randf_range(min_speed, max_speed)
 			move_and_slide()
-			_animated_sprite.play("default")
-				# Smooth rotation towards the target
-			var target_angle = direction.angle() + PI/2
+			_animated_sprite.play()
+			
+			# Smooth rotation towards the target
+			var target_angle = direction.angle() + PI / 2
 			rotation = lerp_angle(rotation, target_angle, rotation_speed * _delta)
 		else:
 			is_moving = false
 			_animated_sprite.stop()
+			perform_special_action()
 			start_waiting()
 
+# This method is intended to be overridden by subclasses for unique behaviors
+func perform_special_action():
+	pass  # Each subclass will implement its own action
 
 func start_new_movement():
 	var random_angle = randf() * 2 * PI
