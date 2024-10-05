@@ -173,6 +173,10 @@ func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Te
 	carried_item_sprite.texture = picked_item_texture
 	inventory_item_variant = picked_item_variant
 
+	carried_item_sprite.scale = Vector2.ZERO
+	var tween = create_tween()
+	tween.tween_property(carried_item_sprite, "scale", Vector2(carried_item_scale, carried_item_scale), 0.3)
+
 	return true
 
 func maybe_deposit_item() -> bool:
