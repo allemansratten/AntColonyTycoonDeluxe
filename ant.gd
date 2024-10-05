@@ -97,7 +97,6 @@ func _physics_process(_delta):
 		else:
 			is_moving = false
 			_animated_sprite.stop()
-			perform_special_action()
 			start_waiting()
 
 # This method is intended to be overridden by subclasses for unique behaviors
