@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dcrdhn26hmhva"]
+[gd_scene load_steps=7 format=3 uid="uid://c1w2q7qvmwr8s"]
 
 [ext_resource type="Script" path="res://ant.gd" id="1_jww2m"]
 [ext_resource type="Texture2D" uid="uid://c4nnrgf8l3ntd" path="res://resources/sprites/ant_stationary.png" id="2_lsshl"]
@@ -29,6 +29,8 @@ animations = [{
 radius = 3.16228
 
 [node name="Ant" type="CharacterBody2D"]
+position = Vector2(0, 2)
+collision_mask = 6
 motion_mode = 1
 script = ExtResource("1_jww2m")
 metadata/_edit_group_ = true
@@ -39,7 +41,6 @@ sprite_frames = SubResource("SpriteFrames_xw4ci")
 animation = &"harvester"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 shape = SubResource("CircleShape2D_3jwfc")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]

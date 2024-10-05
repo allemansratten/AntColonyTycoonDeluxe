@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
-[ext_resource type="PackedScene" uid="uid://dcrdhn26hmhva" path="res://ant.tscn" id="2_82cr4"]
-[ext_resource type="PackedScene" uid="uid://tmy1yvfu2r8g" path="res://anthill.tscn" id="4_cw8q0"]
+[ext_resource type="PackedScene" uid="uid://c1w2q7qvmwr8s" path="res://ant.tscn" id="2_82cr4"]
+[ext_resource type="PackedScene" path="res://anthill.tscn" id="4_cw8q0"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_f6hxw")
