@@ -2,7 +2,7 @@ extends ColorRect
 
 @export var grid_size = Vector2(16 * 2, 9 * 2)
 @export var overlay_color: Color = Color(1, 0, 0, 0.5)
-@export var decay_rate = 0.03  # Decay by 1%
+@export var decay_rate = 0.02  # Decay by 1%
 
 var grid_data = []
 var is_drawing = false  # To track if the user is currently drawing
@@ -99,36 +99,34 @@ func _input(event):
 func decay_grid():
 	var new_grid = []
 	
-	# Symmetric 5x5 Gaussian kernel
+	# Softer 3x3 Gaussian kernel for a very soft blur
+# Properly normalized symmetric 3x3 Gaussian kernel
 	var kernel = [
-		[1.0, 4.0, 6.0, 4.0, 1.0],
-		[4.0, 16.0, 24.0, 16.0, 4.0],
-		[6.0, 24.0, 36.0, 24.0, 6.0],
-		[4.0, 16.0, 24.0, 16.0, 4.0],
-		[1.0, 4.0, 6.0, 4.0, 1.0]
+	[0.025, 0.05, 0.025],  # Weights for neighboring cells
+	[0.05,  0.7,  0.05],   # 0.7 for the center cell, ensuring it's dominant
+	[0.025, 0.05, 0.025]   # Weights for neighboring cells
 	]
-	var kernel_sum = 256.0  # Sum of all kernel values
+
 	
 	# Create a new grid to store the blurred and decayed values
 	for y in range(int(grid_size.y)):
 		new_grid.append([])
 		for x in range(int(grid_size.x)):
 			var sum = 0.0
-			var total_weight = 0.0
 			
 			# Apply Gaussian blur around the current cell
-			for ky in range(-2, 3):
-				for kx in range(-2, 3):
+			for ky in range(-1, 2):  # Iterate over the 3x3 kernel
+				for kx in range(-1, 2):
 					var grid_x = x + kx
 					var grid_y = y + ky
 					
 					# Ensure that the kernel doesn't go out of bounds
 					if grid_x >= 0 and grid_x < int(grid_size.x) and grid_y >= 0 and grid_y < int(grid_size.y):
-						var weight = kernel[ky + 2][kx + 2]
+						var weight = kernel[ky + 1][kx + 1]
 						sum += grid_data[grid_y][grid_x] * weight
 			
 			# Calculate the blurred value and apply decay
-			var blurred_value = sum / kernel_sum
+			var blurred_value = sum  # No need to divide by kernel sum since it is already normalized
 			new_grid[y].append(max(0, blurred_value * (1 - decay_rate)))  # Apply decay
 	
 	# Replace the old grid with the new one
