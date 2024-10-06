@@ -32,7 +32,6 @@ func set_as_leaf():
 	sprite_node.texture = load("res://resources/sprites/leaf.png")
 	sprite_node.scale = Vector2(0.5, 0.5) # Scale down the leaf
 	sprite_node.rotate(randf_range(-45, 45)) # Random rotation
-	sprite_node.use_parent_material
 	resources_remaining = 20
 
 
