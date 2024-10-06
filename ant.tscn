@@ -10,7 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://yk3sg8lvcjuk" path="res://resources/sounds/zapsplat_catoon_bite_munch_single_001_56606.mp3" id="6_ijscd"]
 [ext_resource type="AudioStream" uid="uid://bqbtujxpmvnfp" path="res://resources/sounds/wood bark friction 6.wav" id="7_v1lvq"]
 [ext_resource type="AudioStream" uid="uid://dsl81if3mgvnr" path="res://resources/sounds/bushes 11.wav" id="8_cn6ex"]
-[ext_resource type="AudioStream" uid="uid://bbfpvwh8y3xny" path="res://resources/sounds/oof 6.wav" id="11_u100e"]
+[ext_resource type="AudioStream" uid="uid://di6krg33nj18o" path="res://resources/sounds/sfx_deathscream_alien6.wav" id="11_tml1h"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_xw4ci"]
 animations = [{
@@ -78,7 +78,9 @@ stream = ExtResource("7_v1lvq")
 stream = ExtResource("8_cn6ex")
 
 [node name="DeathSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("11_u100e")
+stream = ExtResource("11_tml1h")
+volume_db = -10.0
+pitch_scale = 2.0
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
 [connection signal="timeout" from="LifespanTimer" to="." method="_on_lifespan_timer_timeout"]

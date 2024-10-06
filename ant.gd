@@ -14,8 +14,8 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @export var max_wait_time: float = 0.3
 @export var wait_probability: float = 0.03
 
-@export var lifespan_min_secs: float = 40.0
-@export var lifespan_max_secs: float = 60.0
+@export var lifespan_min_secs: float = 10.0
+@export var lifespan_max_secs: float = 30.0
 
 @onready var _animated_sprite = $AnimatedSprite2D
 @onready var lifespan_timer = get_node("LifespanTimer")
