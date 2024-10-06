@@ -2,6 +2,7 @@ extends Node
 
 
 @export var ant_scene: PackedScene
+@export var is_game_over: bool = false
 var screen_size
 
 var is_drawing = false # To track if the user is currently drawing
@@ -17,6 +18,7 @@ func _ready() -> void:
 
 func spawn_ant(on_anthill: bool) -> void:
 	var ant = ant_scene.instantiate()
+	ant.ant_died.connect(_on_ant_died)
 	
 	if on_anthill:
 		ant.position = $Anthill.position + Vector2(randf_range(-30, 30), randf_range(-30, 30))
@@ -34,7 +36,7 @@ func _process(delta: float) -> void:
 
 func _on_ant_spawn_timer_timeout() -> void:
 	spawn_ant(true)
-
+	pass
 
 # Track mouse button input for drawing
 func _input(event: InputEvent) -> void:
@@ -53,3 +55,14 @@ func _input(event: InputEvent) -> void:
 			var added = $PheromoneLayer.draw_pheromone_at_position(world_position, 1.0)
 			
 			$UILayer/PheromoneBar.deplete(added)
+
+func _on_ant_died() -> void:
+	# This signal is emitted by the ant when it dies, but it's still
+	# in the group at that point. So it's counted even though it's dead.
+	var n_ants_left_plus_1 = get_tree().get_nodes_in_group("ants")
+	if n_ants_left_plus_1.size() == 1:
+		on_game_over()
+
+func on_game_over() -> void:
+	is_game_over = true
+	$UILayer/GameOver.show()

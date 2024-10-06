@@ -4,7 +4,7 @@ extends Area2D
 
 @onready var pheromone_layer = get_node("/root/Game/PheromoneLayer")
 @onready var pheromone_bar = get_node("/root/Game/UILayer/PheromoneBar")
-@onready var ant_spawner = get_node("/root/Game")
+@onready var game = get_node("/root/Game")
 @export var pheromone_per_item = 1.0
 
 var item_count: int = 0
@@ -30,7 +30,8 @@ func _on_body_entered(body: Node2D) -> void:
 			var deposited_item_variant = deposit_result["deposited_item_variant"]
 			
 			if deposited_item_variant == ItemVariant.LEAF or deposited_item_variant == ItemVariant.MUSHROOM:
-				ant_spawner.call_deferred("spawn_ant", true)
+				# game.call_deferred("spawn_ant", true)
+				pass
 			elif deposited_item_variant == ItemVariant.STICK:
 				item_count += 1
 				$RichTextLabel.text = str(item_count)

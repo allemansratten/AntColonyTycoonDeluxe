@@ -17,8 +17,8 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @export var max_wait_time: float = 0.3
 @export var wait_probability: float = 0.03
 
-@export var lifespan_min_secs: float = 5.0
-@export var lifespan_max_secs: float = 10.0
+@export var lifespan_min_secs: float = 20.0
+@export var lifespan_max_secs: float = 30.0
 
 @onready var _animated_sprite = $AnimatedSprite2D
 @onready var lifespan_timer = get_node("LifespanTimer")
@@ -44,6 +44,8 @@ var is_moving: bool = false
 var rotation_speed: float = 15.0 # Speed of rotation towards target
 
 @export var pheromone_layer: ColorRect
+
+signal ant_died
 
 func _ready():
 	randomize()
@@ -217,7 +219,7 @@ func drop_carried_item():
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
 	dropped_item.set_item_properties(inventory_item_variant, {
-		'texture': carried_item_sprite.texture, 
+		'texture': carried_item_sprite.texture,
 		'scale': carried_item_sprite.scale,
 		'position': global_position
 	})
@@ -238,10 +240,10 @@ func die():
 	pheromone_layer.draw_pheromone_at_position(position, pheromone_strength_on_death, true, 1.0)
 	drop_carried_item()
 	# TODO: Create a dead ant item that will be picked up by other ants
-	
-	# Remove the ant from the scene
-	queue_free()
 
+	queue_free() # Remove the ant from the scene
+
+	ant_died.emit()
 
 func _on_lifespan_timer_timeout() -> void:
 	die()
