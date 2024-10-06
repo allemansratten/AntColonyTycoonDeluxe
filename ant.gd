@@ -23,8 +23,8 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @onready var dropped_items_layer = get_node("/root/Game/DroppedItemsLayer")
 @onready var dropped_item_scene = load("res://dropped_item.tscn")
 
-@export var pheromone_creation_when_carrying: float = 0.05
-@export var pheromone_strength_on_death: float = 0.2
+@export var pheromone_creation_when_carrying: float = 0.15
+@export var pheromone_strength_on_death: float = 0.25
 
 ## positive = ants will tend to select directions similar to the ones they have
 ## 0 = they don't care
