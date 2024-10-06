@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dagxoodgs3y7e"]
+[gd_scene load_steps=4 format=3 uid="uid://d3bge7tsyevv"]
 
 [ext_resource type="Script" path="res://dropped_item.gd" id="1_d1w1y"]
 [ext_resource type="Texture2D" uid="uid://vrg6wpy7vowi" path="res://resources/sprites/ant_dead.png" id="2_cyv1v"]

@@ -38,7 +38,6 @@ func _process(_delta: float) -> void:
 
 
 func set_variant(new_variant: ItemVariant) -> void:
-	print("Setting variant to", new_variant)
 	variant = new_variant
 
 	# for None, just keep the texture and scale to 0.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://p2e1j8q3r651"]
+[gd_scene load_steps=3 format=3 uid="uid://bb4tp5o4u5pkc"]
 
 [ext_resource type="Texture2D" uid="uid://o56b6t3ci5p2" path="res://resources/sprites/leaf_piece1.png" id="1_46alr"]
 [ext_resource type="Script" path="res://carried_item.gd" id="2_rc4us"]

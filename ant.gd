@@ -24,8 +24,8 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @onready var dropped_items_layer = get_node("/root/Game/DroppedItemsLayer")
 @onready var dropped_item_scene = load("res://dropped_item.tscn")
 
-@export var pheromone_creation_when_carrying: float = 0.05
-@export var pheromone_strength_on_death: float = 0.2
+@export var pheromone_creation_when_carrying: float = 0.15
+@export var pheromone_strength_on_death: float = 0.25
 
 ## positive = ants will tend to select directions similar to the ones they have
 ## 0 = they don't care
@@ -267,7 +267,6 @@ func die():
 	drop_carried_item()
 	death_sound.play()
 	await get_tree().create_timer(death_sound.stream.get_length()).timeout
-	print("Ant is dying") # Debugging print statement
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
 	dropped_item.set_item_properties(
