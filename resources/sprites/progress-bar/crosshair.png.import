@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://od2esl4gdpnx"
-path="res://.godot/imported/stick.png-566ab5d22a060aec37a7044c3c7f47c5.ctex"
+uid="uid://b8c28txuu4tco"
+path="res://.godot/imported/crosshair.png-676c57528d7a58789484dab4ee7c5d67.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/sprites/stick.png"
-dest_files=["res://.godot/imported/stick.png-566ab5d22a060aec37a7044c3c7f47c5.ctex"]
+source_file="res://resources/sprites/progress-bar/crosshair.png"
+dest_files=["res://.godot/imported/crosshair.png-676c57528d7a58789484dab4ee7c5d67.ctex"]
 
 [params]
 

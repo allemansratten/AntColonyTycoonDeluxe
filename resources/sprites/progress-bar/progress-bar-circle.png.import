@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://od2esl4gdpnx"
-path="res://.godot/imported/stick2.png-84bb00012769debd9e8eb936815723b0.ctex"
+uid="uid://bqa6koxf6hkc4"
+path="res://.godot/imported/progress-bar-circle.png-a583d9ef481f6aff9ddb36c25e35a0b0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/sprites/stick2.png"
-dest_files=["res://.godot/imported/stick2.png-84bb00012769debd9e8eb936815723b0.ctex"]
+source_file="res://resources/sprites/progress-bar/progress-bar-circle.png"
+dest_files=["res://.godot/imported/progress-bar-circle.png-a583d9ef481f6aff9ddb36c25e35a0b0.ctex"]
 
 [params]
 
