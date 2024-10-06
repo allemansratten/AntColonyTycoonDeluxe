@@ -12,8 +12,8 @@ var grid_data = []
 var time_since_last_decay: float = 0.0
 
 func _ready():
-	material = ShaderMaterial.new()
-	material.shader = preload("res://pheromone.gdshader")
+	# material = ShaderMaterial.new()
+	# material.shader = preload("res://pheromone.gdshader")
 	
 	# Initialize grid_data with default values as a 2D array
 	for y in range(int(grid_size.y)):
