@@ -182,10 +182,13 @@ func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Te
 	tween.tween_property(carried_item_sprite, "scale", Vector2(carried_item_scale, carried_item_scale), 0.3)
 
 	return true
-
-func maybe_deposit_item() -> bool:
+	
+func maybe_deposit_item() -> Dictionary:
 	if inventory_num_items_carried == 0:
-		return false
+		return {"success": false, "deposited_item_variant": ItemVariant.NONE}
+
+	# Store the current item variant before resetting it
+	var deposited_item_variant = inventory_item_variant
 
 	inventory_num_items_carried -= 1
 	if inventory_num_items_carried == 0:
@@ -194,7 +197,9 @@ func maybe_deposit_item() -> bool:
 		tween.tween_property(carried_item_sprite, "scale", Vector2.ZERO, 0.3)
 		tween.tween_callback(reset_carried_item_sprite)
 
-	return true
+	# Return a dictionary containing success and deposited item variant
+	return {"success": true, "deposited_item_variant": deposited_item_variant}
+
 
 func reset_carried_item_sprite():
 	carried_item_sprite.texture = null
