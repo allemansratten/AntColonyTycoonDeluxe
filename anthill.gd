@@ -1,6 +1,7 @@
 extends Area2D
 
 @export var pheromone_strength: float = 0.5
+@export var ant_manual_spawn_delay_secs: float = 0.5
 
 @onready var pheromone_layer = get_node("/root/Game/PheromoneLayer")
 @onready var pheromone_bar = get_node("/root/Game/UILayer/PheromoneBar")
@@ -10,7 +11,8 @@ extends Area2D
 @export var pheromone_per_item = 1.0
 
 var item_count: int = 0
-var num_ants_ready: int = 1
+var num_ants_ready: int = 10
+var time_since_manual_spawn_secs: float = 0
 
 signal anthill_empty
 
@@ -27,7 +29,16 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	time_since_manual_spawn_secs += delta
 	pheromone_layer.draw_pheromone_at_position(position, delta * pheromone_strength, true, 1.5)
+	if (
+		Input.is_action_just_pressed("spawn_ant") 
+		and time_since_manual_spawn_secs > ant_manual_spawn_delay_secs
+		and num_ants_ready > 0
+	):
+		game.spawn_ant(true)
+		set_ready_ants_count(num_ants_ready - 1)
+		time_since_manual_spawn_secs = 0
 
 func _on_body_entered(body: Node2D) -> void:
 	if !body.is_in_group("ants"):
