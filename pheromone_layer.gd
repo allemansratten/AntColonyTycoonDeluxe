@@ -4,7 +4,7 @@ const BLUR_SPEED = 0.1
 const DECAY_SPEED = 0.03
 const DECAY_MIN_DELAY_SECS = 0.1
 
-@export var grid_size_coef: int = 4
+@export var grid_size_coef: int = 8
 @export var grid_size = Vector2(16 * grid_size_coef, 9 * grid_size_coef)
 @export var overlay_color: Color = Color(1, 0, 0, 0.5)
 
@@ -88,7 +88,7 @@ func get_reasonable_kernel_size(sigma: float) -> int:
 func draw_pheromone_at_position(
 	pos: Vector2,
 	value: float,
-	additive: bool = false,
+	additive: bool = true,
 	sigma: float = 0.5,
 ) -> float:
 	var rect_size: Vector2 = get_viewport_rect().size
@@ -122,7 +122,8 @@ func draw_pheromone_at_position(
 		if additive:
 			var previous_value = grid_data[y][x]
 			var new_value = min(1.0, previous_value + interpolation_value * value)
-			added_total = new_value - previous_value
+			added_total += new_value - previous_value
+#			print("added_total", added_total)
 			grid_data[y][x] = new_value
 		else:
 			var new_value = interpolation_value * value
@@ -186,4 +187,3 @@ func _process(delta: float) -> void:
 		time_since_last_decay = 0.0
 		# Update the shader with the new grid
 		update_shader()
-
