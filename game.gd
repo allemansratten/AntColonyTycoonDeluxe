@@ -23,7 +23,7 @@ func spawn_ant(on_anthill: bool) -> void:
 		ant.position = Vector2(randf_range(0, screen_size.x), randf_range(0, screen_size.y))
 
 	ant.pheromone_layer = $PheromoneLayer
-	add_child(ant)
+	add_child.call_deferred(ant)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
