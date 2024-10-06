@@ -113,6 +113,7 @@ func _physics_process(_delta: float):
 func perform_special_action():
 	pass # Each subclass will implement its own action
 
+## Normalise probability distribution
 func softmax(x: Array) -> Array:
 	var max_value = x.max() # Find the maximum value in the input array
 	var exp_values = []
@@ -145,32 +146,29 @@ func sample_from_scores(scores: Array) -> int:
 	return scores.size() - 1
 
 
+var potential_movement_angles = range(0, 360, 10).map(func(x): return deg_to_rad(x))
+
 func start_new_movement():
 	var random_distance = randf_range(min_move_distance, max_move_distance)
 
-	var angles = range(0, 360, 10).map(func(x): return deg_to_rad(x))
-	
 	var scores = []
-	for angle in angles:
+	for angle in potential_movement_angles:
 		var direction = Vector2(cos(angle), sin(angle))
 		var target = global_position + direction * random_distance
-		var score = pheromone_layer.get_value_at(target.x, target.y)
-
 		# Scaled between 0 and 1
 		var angular_difference = abs(angle_difference(angle, rotation)) / PI
-
-		score -= angular_difference * angle_consistency_reward
-
+		var score = pheromone_layer.get_value_at(target.x, target.y) - (angular_difference * angle_consistency_reward)
 		scores.append(score)
 
 	scores = scores.map(func(x): return x / angle_sampling_temperature)
 	scores = softmax(scores)
 
 	var selected = sample_from_scores(scores)
-	var angle = angles[selected]
+	var angle = potential_movement_angles[selected]
 
 	target_position = global_position + Vector2(cos(angle), sin(angle)) * random_distance
 	is_moving = true
+
 
 func start_waiting():
 	if randf() < wait_probability:
