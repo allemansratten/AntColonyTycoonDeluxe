@@ -20,7 +20,7 @@ var carried_item_sprite: Sprite2D
 @onready var _animated_sprite = $AnimatedSprite2D
 
 @export var carried_item_scale = 0.25
-@export var pheromone_creation_when_carrying: float = 0.1
+@export var pheromone_creation_when_carrying: float = 0.05
 
 # positive = ants will tend to select directions similar to the ones they have
 # 0 = they don't care

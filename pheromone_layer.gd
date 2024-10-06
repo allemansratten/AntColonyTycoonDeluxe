@@ -84,7 +84,12 @@ func get_reasonable_kernel_size(sigma: float) -> int:
 	return n
 
 
-func draw_pheromone_at_position(pos: Vector2, value: float, additive: bool = false, sigma: float = 0.5) -> float:
+func draw_pheromone_at_position(
+	pos: Vector2,
+	value: float,
+	additive: bool = false,
+	sigma: float = 0.5,
+) -> float:
 	"""Draws pheromone at a position, with a Gaussian blur
 	
 	Args:
@@ -96,7 +101,7 @@ func draw_pheromone_at_position(pos: Vector2, value: float, additive: bool = fal
 			`max(new, old)`.
 		sigma: The standard deviation of the Gaussian kernel used for interpolation.
 			Bigger = more blurry.
-	
+
 	Returns:
 		The total number of pheromone added.
 	"""

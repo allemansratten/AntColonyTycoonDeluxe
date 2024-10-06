@@ -2,7 +2,7 @@ extends Control
 
 @export var pheromone_available: float = 100.0
 @export var depletion_speed: float = 5.0
-@export var regeneration_speed: float = 5.0
+@export var regeneration_speed: float = 0.0
 @onready var progress_bar = $ProgressBar
 
 
@@ -20,3 +20,6 @@ func deplete(amount: float) -> void:
 	# We want to allow negative values here because we don't check the amount before
 	# allowing a depletion, so if we clamp it, we're giving the user free pheromones.
 	pheromone_available -= amount * depletion_speed
+
+func add(amount: float) -> void:
+	pheromone_available = min(100.0, pheromone_available + amount)
