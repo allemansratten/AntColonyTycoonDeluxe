@@ -40,7 +40,7 @@ func set_as_leaf():
 # Define how to visually set up the Berry
 func set_as_mushroom():
 	sprite_node.texture = load("res://resources/sprites/mushroom.png")
-	sprite_node.scale = Vector2(0.125, 0.125)
+	sprite_node.scale = Vector2(0.1, 0.1)
 	resources_remaining = 30
 
 # Define how to visually set up the Stick
@@ -52,12 +52,14 @@ func set_as_stick():
 
 # Collision detection function
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group("ants"):
-		var did_pickup_item = body.maybe_pickup_item(item_variant, sprite_node.texture)
-		if did_pickup_item:
-			resources_remaining -= 1
-		if resources_remaining <= 0:
-			queue_free() # Remove the item from the scene
+	if !body.is_in_group("ants"):
+		return
+
+	var did_pickup_item = body.maybe_pickup_item(item_variant, sprite_node.texture, sprite_node.scale * 0.2)
+	if did_pickup_item:
+		resources_remaining -= 1
+	if resources_remaining <= 0:
+		queue_free() # Remove the item from the scene
 
 func _process(delta: float) -> void:
 	pheromone_layer.draw_pheromone_at_position(position, delta * pheromone_strength, true, 0.25)

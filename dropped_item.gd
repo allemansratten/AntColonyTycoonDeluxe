@@ -21,12 +21,9 @@ func set_item_properties(variant: ItemVariant, sprite_options) -> void:
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	print("Dropped item collided with body")
 	if !body.is_in_group("ants"):
 		return
-	print("Dropped item collided with ant")
 
-	var did_pickup_item = body.maybe_pickup_item(item_variant, sprite_node.texture)
+	var did_pickup_item = body.maybe_pickup_item(item_variant, sprite_node.texture, sprite_node.scale)
 	if did_pickup_item:
-		print("Ant picked up dropped item")
 		queue_free() # Remove the item from the scene
