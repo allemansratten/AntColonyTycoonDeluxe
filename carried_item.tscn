@@ -1,13 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://p2e1j8q3r651"]
+[gd_scene load_steps=6 format=3 uid="uid://p2e1j8q3r651"]
 
+[ext_resource type="Shader" path="res://resources/shaders/color_dither_2d.gdshader" id="1_8gfq4"]
 [ext_resource type="Texture2D" uid="uid://o56b6t3ci5p2" path="res://resources/sprites/leaf_piece1.png" id="1_46alr"]
+[ext_resource type="Texture2D" uid="uid://cp0ok14rv0p6u" path="res://resources/palettes/sweetie-16.png" id="2_ljm0t"]
 [ext_resource type="Script" path="res://carried_item.gd" id="2_rc4us"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_84p8j"]
+shader = ExtResource("1_8gfq4")
+shader_parameter/dither_pixel_size = 1.0
+shader_parameter/dither_pixel_offset = Vector2(0, 0)
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/albedo_strength = 1.0
+shader_parameter/alpha_dither_pixel_offset = Vector2(0, 0)
+shader_parameter/dither_palette = ExtResource("2_ljm0t")
+
 [node name="CarriedItem" type="Sprite2D"]
+material = SubResource("ShaderMaterial_84p8j")
 position = Vector2(3, 0)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_46alr")
 offset = Vector2(20, 0)
 script = ExtResource("2_rc4us")
-variant = null
 metadata/_edit_group_ = true

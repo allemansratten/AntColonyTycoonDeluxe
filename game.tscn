@@ -24,7 +24,6 @@ shader_parameter/dither_palette = ExtResource("7_8k07p")
 
 [node name="Game" type="Node"]
 script = ExtResource("1_f6hxw")
-ant_scene = ExtResource("2_82cr4")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 z_index = -50
@@ -71,6 +70,7 @@ process_mode = 3
 z_index = 300
 
 [node name="DitheringFilter" type="ColorRect" parent="UILayer"]
+visible = false
 top_level = true
 z_index = 100
 material = SubResource("ShaderMaterial_6ii3t")
