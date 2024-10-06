@@ -11,10 +11,6 @@ var is_drawing = false # To track if the user is currently drawing
 func _ready() -> void:
 	screen_size = get_viewport().get_visible_rect().size
 
-	for i in range(100):
-		# Spawning at the anthill because otherwise they get spawned out of bounds
-		spawn_ant(true)
-
 
 func spawn_ant(on_anthill: bool) -> void:
 	var ant = ant_scene.instantiate()
@@ -31,7 +27,7 @@ func spawn_ant(on_anthill: bool) -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 

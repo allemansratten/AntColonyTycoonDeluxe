@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://tmy1yvfu2r8g"]
+[gd_scene load_steps=4 format=3 uid="uid://4n72njshbbvc"]
 
 [ext_resource type="Texture2D" uid="uid://bjojfl6octk2h" path="res://resources/sprites/anthill.png" id="1_6cc8v"]
 [ext_resource type="Script" path="res://anthill.gd" id="1_tmo8a"]
@@ -24,4 +24,8 @@ offset_bottom = -31.0
 theme_override_font_sizes/normal_font_size = 40
 text = "0"
 
+[node name="AntSpawnTimer" type="Timer" parent="."]
+wait_time = 4.0
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="AntSpawnTimer" to="." method="_on_ant_spawn_timer_timeout"]
