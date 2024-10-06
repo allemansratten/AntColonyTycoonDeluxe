@@ -20,6 +20,9 @@ const VARIANT_TO_TEXTURES = {
 		preload("res://resources/sprites/stick_piece1.png"),
 		preload("res://resources/sprites/stick_piece2.png"),
 		preload("res://resources/sprites/stick_piece3.png"),
+	],
+	ItemVariant.ANT: [
+		preload("res://resources/sprites/ant_dead_carried.png"),
 	]
 }
 
@@ -35,6 +38,7 @@ func _process(_delta: float) -> void:
 
 
 func set_variant(new_variant: ItemVariant) -> void:
+	print("Setting variant to", new_variant)
 	variant = new_variant
 
 	# for None, just keep the texture and scale to 0.
@@ -59,4 +63,4 @@ func set_variant(new_variant: ItemVariant) -> void:
 
 func reset_carried_item():
 	texture = null
-	scale = Vector2(1.0, 1.0)
+	scale = Vector2.ONE

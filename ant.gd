@@ -254,11 +254,15 @@ func drop_carried_item():
 
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
-	dropped_item.set_item_properties(carried_item.variant, {
-		'texture': carried_item.texture,
-		'scale': carried_item.scale,
-		'position': global_position + Vector2(randf_range(-15, 15), randf_range(-15, 15))
-	})
+	dropped_item.set_item_properties(
+		carried_item.variant, 
+		{
+			'texture': carried_item.texture,
+			'scale': carried_item.scale,
+			'position': global_position + Vector2(randf_range(-15, 15), randf_range(-15, 15))
+		},
+		60.0, # decay time
+	)
 
 	carried_item.set_variant(ItemVariant.NONE)
 
@@ -272,7 +276,7 @@ func die():
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
 	dropped_item.set_item_properties(
-		carried_item.variant,
+		ItemVariant.ANT,
 		{
 			'texture': load("res://resources/sprites/ant_dead.png"),
 			'scale': Vector2(0.1, 0.1),
