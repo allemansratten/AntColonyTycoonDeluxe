@@ -189,9 +189,24 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 
 ## When the ants are picking up an item, wait for a while and then turn around
 func handle_on_pickup_movement():
+	_animated_sprite.speed_scale = 0.0 # Stop the walking animation
 	is_moving = false
+
+	var original_position = global_position
+	var num_tween_loops = 4
+	var tween_duration = item_pickup_duration_secs / (num_tween_loops * 2)
+	var tween_target_position = target_position.normalized()
+
+	var tween = get_tree().create_tween()
+	for i in range(num_tween_loops):
+		tween.tween_property(self, "global_position", original_position + tween_target_position, tween_duration)
+		tween.tween_property(self, "global_position", original_position, tween_duration)
+
+	# Turn the ant around
 	target_position = global_position + (global_position - target_position)
 	await get_tree().create_timer(item_pickup_duration_secs).timeout
+
+	_animated_sprite.speed_scale = 1.0 # Resume the walking animation
 	is_moving = true
 
 

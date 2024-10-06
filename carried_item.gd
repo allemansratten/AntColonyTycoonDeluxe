@@ -30,7 +30,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 
@@ -50,7 +50,7 @@ func set_variant(new_variant: ItemVariant) -> void:
 			self,
 			"scale",
 			base_scale,
-			0.3
+			1.0,
 		)
 	else:
 		tween.tween_property(self, "scale", Vector2.ZERO, 0.3)
