@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 const ItemVariant = preload("res://item_variants.gd").ItemVariant
+const FoodItems = preload("res://item_variants.gd").foodItemVariants
 enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 
 @export var ant_type: AntType = AntType.HARVESTER
@@ -195,12 +196,7 @@ func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Te
 	carried_item_sprite.texture = picked_item_texture
 	inventory_item_variant = picked_item_variant
 
-		# Play the appropriate pickup sound
-	match picked_item_variant:
-		ItemVariant.LEAF or ItemVariant.MUSHROOM:
-			food_pickup_sound.play()
-		ItemVariant.STICK:
-			stick_pickup_sound.play()
+	play_pickup_sound(picked_item_variant)
 
 	carried_item_sprite.scale = Vector2.ZERO
 	var tween = create_tween()
@@ -227,13 +223,8 @@ func maybe_deposit_item() -> Dictionary:
 		tween.tween_property(carried_item_sprite, "scale", Vector2.ZERO, 0.3)
 		tween.tween_callback(reset_carried_item_sprite)
 
-	# Play the appropriate deposit sound
-	match deposited_item_variant:
-		ItemVariant.LEAF or ItemVariant.MUSHROOM:
-			food_deposit_sound.play()
-		ItemVariant.STICK:
-			stick_deposit_sound.play()
-
+	play_deposit_sound(deposited_item_variant)
+	
 	# Return a dictionary containing success and deposited item variant
 	return {"success": true, "deposited_item_variant": deposited_item_variant}
 
@@ -284,3 +275,21 @@ func die():
 
 func _on_lifespan_timer_timeout() -> void:
 	die()
+
+func play_pickup_sound(inventory_item_variant: ItemVariant) -> void:
+	# Check if the item is in the food item group
+	if inventory_item_variant in FoodItems:
+		food_pickup_sound.play() # Play food sound for food items
+	elif inventory_item_variant == ItemVariant.STICK:
+		stick_pickup_sound.play() # Play stick sound for non-food items
+	else:
+		print("No sound assigned for this item variant.")
+
+func play_deposit_sound(inventory_item_variant: ItemVariant) -> void:
+	# Check if the item is in the food item group
+	if inventory_item_variant in FoodItems:
+		food_deposit_sound.play() # Play food sound for food items
+	elif inventory_item_variant == ItemVariant.STICK:
+		stick_deposit_sound.play() # Play stick sound for non-food items
+	else:
+		print("No sound assigned for this item variant.")
