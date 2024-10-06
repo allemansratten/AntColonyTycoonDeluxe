@@ -17,12 +17,14 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @export var max_wait_time: float = 0.3
 @export var wait_probability: float = 0.03
 
-@export var lifespan_min_secs: float = 20.0
-@export var lifespan_max_secs: float = 30.0
+@export var lifespan_min_secs: float = 5.0
+@export var lifespan_max_secs: float = 10.0
 
 @onready var _animated_sprite = $AnimatedSprite2D
 @onready var lifespan_timer = get_node("LifespanTimer")
 @onready var carried_item_sprite = get_node("CarriedItemSprite")
+@onready var dropped_items_layer = get_node("/root/Game/DroppedItemsLayer")
+@onready var dropped_item_scene = load("res://dropped_item.tscn")
 
 @export var carried_item_scale = 0.25
 @export var pheromone_creation_when_carrying: float = 0.05
@@ -52,7 +54,6 @@ func _ready():
 
 	carried_item_sprite.position = Vector2(0, -20)
 	carried_item_sprite.scale = Vector2(carried_item_scale, carried_item_scale)
-	add_child(carried_item_sprite)
 	
 	# Start after a random delay to desync them at the beginning
 	await get_tree().create_timer(randf_range(0.0, max_wait_time)).timeout
@@ -173,7 +174,7 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 
 func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Texture) -> bool:
 	# If the ant is carrying an item, it can only pick up the same type
-	if inventory_item_variant != ItemVariant.NONE && inventory_item_variant != picked_item_variant:
+	if (inventory_item_variant != ItemVariant.NONE && inventory_item_variant != picked_item_variant):
 		return false
 	# If the ant is not carrying an item, it can pick up any type
 	if inventory_num_items_carried >= inventory_max_items:
@@ -209,7 +210,13 @@ func drop_carried_item():
 	if inventory_num_items_carried == 0 || inventory_item_variant == ItemVariant.NONE:
 		return false
 
-	# TODO: Drop the item at the current position
+	var dropped_item = dropped_item_scene.instantiate()
+	dropped_items_layer.add_child(dropped_item)
+	dropped_item.set_item_properties(inventory_item_variant, {
+		'texture': carried_item_sprite.texture, 
+		'scale': carried_item_sprite.scale,
+		'position': global_position
+	})
 
 	inventory_num_items_carried = 0
 	inventory_item_variant = ItemVariant.NONE
