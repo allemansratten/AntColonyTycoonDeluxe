@@ -33,12 +33,14 @@ func get_random_valid_position() -> Vector2:
 
 func _ready():
 	randomize()
+	await get_tree().create_timer(1).timeout
 	spawn_item(ItemVariant.LEAF, get_random_valid_position())
 	spawn_item(ItemVariant.MUSHROOM, get_random_valid_position())
 
 
 # Function to spawn an item at a given position
 func spawn_item(variant: ItemVariant, position: Vector2):
+	print("Spawning item at", position)
 	scene_item = load("res://scene_item.tscn")
 
 	var new_item = scene_item.instantiate()
