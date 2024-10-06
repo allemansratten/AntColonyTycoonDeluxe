@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cs7o50oaokh2e"]
+[gd_scene load_steps=13 format=3 uid="uid://cs7o50oaokh2e"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bftew88ofmwbw" path="res://resources/palettes/steam-lords.png" id="6_l1q0f"]
 [ext_resource type="PackedScene" uid="uid://bm6ou0h00mv5b" path="res://pheromone_bar.tscn" id="8_ru8sk"]
 [ext_resource type="Script" path="res://camera_2d.gd" id="9_b5tg6"]
+[ext_resource type="AudioStream" uid="uid://dn31f4gf3wuqb" path="res://resources/sounds/runescape-death-sound.mp3" id="11_1okbk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6ii3t"]
 shader = ExtResource("6_8n14l")
@@ -105,6 +106,9 @@ theme_override_font_sizes/font_size = 40
 text = "Play again"
 
 [node name="DroppedItemsLayer" type="Node2D" parent="."]
+
+[node name="GameOverSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_1okbk")
 
 [connection signal="timeout" from="SceneItemManager/ItemSpawnTimer" to="SceneItemManager" method="_on_item_spawn_timer_timeout"]
 [connection signal="pressed" from="UILayer/GameOver/PlayAgainButton" to="." method="_on_play_again_button_pressed"]

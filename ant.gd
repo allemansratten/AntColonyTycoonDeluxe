@@ -14,8 +14,8 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @export var max_wait_time: float = 0.3
 @export var wait_probability: float = 0.03
 
-@export var lifespan_min_secs: float = 10.0
-@export var lifespan_max_secs: float = 30.0
+@export var lifespan_min_secs: float = 40.0
+@export var lifespan_max_secs: float = 60.0
 
 @onready var _animated_sprite = $AnimatedSprite2D
 @onready var lifespan_timer = get_node("LifespanTimer")
@@ -235,8 +235,10 @@ func die():
 		},
 		30.0 # decay time
 	)
+	death_sound.play()
+	await get_tree().create_timer(death_sound.stream.get_length()).timeout
+	queue_free() # Free the node after the sound finishes playing
 
-	queue_free() # Remove the ant from the scene
 	ant_died.emit()
 
 func _on_lifespan_timer_timeout() -> void:

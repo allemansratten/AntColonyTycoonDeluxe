@@ -4,13 +4,14 @@ extends Node
 @export var ant_scene: PackedScene
 @export var is_game_over: bool = false
 var screen_size
+var game_over_sound: AudioStreamPlayer
 
 var is_drawing = false # To track if the user is currently drawing
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	screen_size = get_viewport().get_visible_rect().size
-
+	game_over_sound = $GameOverSound
 
 func spawn_ant(on_anthill: bool) -> void:
 	var ant = ant_scene.instantiate()
@@ -53,13 +54,14 @@ func _on_ant_died() -> void:
 	# This signal is emitted by the ant when it dies, but it's still
 	# in the group at that point. So it's counted even though it's dead.
 	var n_ants_left_plus_1 = get_tree().get_nodes_in_group("ants")
-	if n_ants_left_plus_1.size() == 1:
+	if n_ants_left_plus_1.size() <= 1:
+		game_over_sound.play()
 		on_game_over()
 
 func on_game_over() -> void:
 	is_game_over = true
 	$UILayer/GameOver.show()
 
-
+	
 func _on_play_again_button_pressed() -> void:
 	get_tree().reload_current_scene()
