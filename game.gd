@@ -35,9 +35,6 @@ func _process(delta: float) -> void:
 	pass
 
 
-func _on_ant_spawn_timer_timeout() -> void:
-	spawn_ant(true)
-
 # Track mouse button input for drawing
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:

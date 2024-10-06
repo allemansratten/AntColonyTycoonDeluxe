@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://caeqm2sx0phvi"]
+[gd_scene load_steps=11 format=3 uid="uid://cs7o50oaokh2e"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c3v4pvxkk33qh" path="res://pheromone_layer.tscn" id="5_dmj4k"]
 [ext_resource type="Shader" path="res://resources/shaders/color_dither_post_2d.gdshader" id="6_8n14l"]
 [ext_resource type="Texture2D" uid="uid://bftew88ofmwbw" path="res://resources/palettes/steam-lords.png" id="6_l1q0f"]
-[ext_resource type="PackedScene" path="res://pheromone_bar.tscn" id="8_ru8sk"]
+[ext_resource type="PackedScene" uid="uid://bm6ou0h00mv5b" path="res://pheromone_bar.tscn" id="8_ru8sk"]
 [ext_resource type="Script" path="res://camera_2d.gd" id="9_b5tg6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6ii3t"]
@@ -21,10 +21,6 @@ shader_parameter/dither_palette = ExtResource("6_l1q0f")
 [node name="Game" type="Node"]
 script = ExtResource("1_f6hxw")
 ant_scene = ExtResource("2_82cr4")
-
-[node name="AntSpawnTimer" type="Timer" parent="."]
-wait_time = 0.75
-autostart = true
 
 [node name="SceneItemManager" type="Node" parent="."]
 script = ExtResource("1_n0r2e")
@@ -106,6 +102,5 @@ text = "Play again"
 
 [node name="DroppedItemsLayer" type="Node2D" parent="."]
 
-[connection signal="timeout" from="AntSpawnTimer" to="." method="_on_ant_spawn_timer_timeout"]
 [connection signal="timeout" from="SceneItemManager/ItemSpawnTimer" to="SceneItemManager" method="_on_item_spawn_timer_timeout"]
 [connection signal="pressed" from="UILayer/GameOver/PlayAgainButton" to="." method="_on_play_again_button_pressed"]
