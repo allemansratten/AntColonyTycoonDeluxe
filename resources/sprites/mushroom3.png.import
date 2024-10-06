@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://od2esl4gdpnx"
-path="res://.godot/imported/stick.png-566ab5d22a060aec37a7044c3c7f47c5.ctex"
+uid="uid://bwobaavwotwhe"
+path="res://.godot/imported/mushroom3.png-bffba7c41161b418c717c63b80344fac.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/sprites/stick.png"
-dest_files=["res://.godot/imported/stick.png-566ab5d22a060aec37a7044c3c7f47c5.ctex"]
+source_file="res://resources/sprites/mushroom3.png"
+dest_files=["res://.godot/imported/mushroom3.png-bffba7c41161b418c717c63b80344fac.ctex"]
 
 [params]
 

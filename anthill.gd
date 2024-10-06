@@ -1,7 +1,7 @@
 extends Area2D
 
-@export var pheromone_strength: float = 0.2
-@export var initial_pheromone_strength: float = 12.0
+@export var pheromone_strength: float = 0.3
+@export var initial_pheromone_strength: float = 15.0
 @export var ant_manual_spawn_delay_secs: float = 0.5
 
 @onready var pheromone_layer = get_node("/root/Game/PheromoneLayer")

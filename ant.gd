@@ -101,7 +101,7 @@ func _physics_process(_delta: float):
 			_animated_sprite.stop()
 			start_waiting()
 	
-	if carried_item.variant != ItemVariant.NONE:
+	if carried_item.variant != ItemVariant.NONE && carried_item.variant != ItemVariant.ANT:
 		pheromone_layer.draw_pheromone_at_position(position, _delta * pheromone_creation_when_carrying, true)
 
 ## This method is intended to be overridden by subclasses for unique behaviors
