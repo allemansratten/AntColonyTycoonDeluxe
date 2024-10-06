@@ -22,6 +22,8 @@ func set_variant(variant_to_use: ItemVariant):
 			set_as_leaf()
 		ItemVariant.MUSHROOM:
 			set_as_mushroom()
+		ItemVariant.STICK:
+			set_as_stick()
 		_:
 			print("Unknown variant:", variant_to_use)
 	show() # Show the node after setting the variant
@@ -39,6 +41,12 @@ func set_as_leaf():
 func set_as_mushroom():
 	sprite_node.texture = load("res://resources/sprites/mushroom.png")
 	sprite_node.scale = Vector2(0.125, 0.125)
+	resources_remaining = 30
+
+# Define how to visually set up the Stick
+func set_as_stick():
+	sprite_node.texture = load("res://resources/sprites/stick.png")
+	sprite_node.scale = Vector2(0.5, 0.5) # Scale down the leaf
 	resources_remaining = 30
 	
 

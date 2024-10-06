@@ -55,7 +55,7 @@ func spawn_item(variant: ItemVariant, position: Vector2):
 
 
 func get_random_variant() -> ItemVariant:
-	var variants = [ItemVariant.LEAF, ItemVariant.MUSHROOM]
+	var variants = [ItemVariant.LEAF, ItemVariant.MUSHROOM, ItemVariant.STICK]
 	var random_variant = randi() % len(variants)
 	return variants[random_variant]
 
