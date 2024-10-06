@@ -3,7 +3,7 @@ extends ColorRect
 const BLUR_SPEED = 0.1
 const DECAY_SPEED = 0.03
 
-@export var grid_size_coef: int = 2
+@export var grid_size_coef: int = 4
 @export var grid_size = Vector2(16 * grid_size_coef, 9 * grid_size_coef)
 @export var overlay_color: Color = Color(1, 0, 0, 0.5)
 

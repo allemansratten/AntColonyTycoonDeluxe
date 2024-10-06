@@ -22,6 +22,8 @@ func set_variant(variant_to_use: ItemVariant):
 			set_as_leaf()
 		ItemVariant.MUSHROOM:
 			set_as_mushroom()
+		ItemVariant.STICK:
+			set_as_stick()
 		_:
 			print("Unknown variant:", variant_to_use)
 	show() # Show the node after setting the variant
@@ -30,7 +32,7 @@ func set_variant(variant_to_use: ItemVariant):
 # Define how to visually set up the Leaf
 func set_as_leaf():
 	sprite_node.texture = load("res://resources/sprites/leaf.png")
-	sprite_node.scale = Vector2(0.5, 0.5) # Scale down the leaf
+	sprite_node.scale = Vector2(0.125, 0.125)
 	sprite_node.rotate(randf_range(-45, 45)) # Random rotation
 	resources_remaining = 20
 
@@ -38,6 +40,12 @@ func set_as_leaf():
 # Define how to visually set up the Berry
 func set_as_mushroom():
 	sprite_node.texture = load("res://resources/sprites/mushroom.png")
+	sprite_node.scale = Vector2(0.125, 0.125)
+	resources_remaining = 30
+
+# Define how to visually set up the Stick
+func set_as_stick():
+	sprite_node.texture = load("res://resources/sprites/stick.png")
 	sprite_node.scale = Vector2(0.5, 0.5) # Scale down the leaf
 	resources_remaining = 30
 	
@@ -52,4 +60,4 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 			queue_free() # Remove the item from the scene
 
 func _process(delta: float) -> void:
-	pheromone_layer.draw_pheromone_at_position(position, delta * pheromone_strength, true, 1.0)
+	pheromone_layer.draw_pheromone_at_position(position, delta * pheromone_strength, true, 0.25)

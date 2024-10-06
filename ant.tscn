@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://10xcg3p30pal"]
+[gd_scene load_steps=7 format=3 uid="uid://dcrdhn26hmhva"]
 
 [ext_resource type="Script" path="res://ant.gd" id="1_jww2m"]
 [ext_resource type="Texture2D" uid="uid://b2v0smngboi4r" path="res://resources/sprites/ant_stationary.png" id="2_lsshl"]
@@ -36,7 +36,7 @@ metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 rotation = 1.5708
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.128, 0.128)
 sprite_frames = SubResource("SpriteFrames_xw4ci")
 animation = &"harvester"
 frame_progress = 0.997938

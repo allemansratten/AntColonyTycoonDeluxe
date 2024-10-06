@@ -3,4 +3,5 @@ enum ItemVariant {
     NONE,
     LEAF,
     MUSHROOM,
+    STICK,
 }
