@@ -47,6 +47,7 @@ func set_as_mushroom():
 func set_as_stick():
 	sprite_node.texture = preload("res://resources/sprites/stick.png")
 	sprite_node.scale = Vector2(0.5, 0.5) # Scale down the leaf
+	sprite_node.rotate(randf_range(-45, 45)) # Random rotation
 	resources_remaining = 30
 	
 
