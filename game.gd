@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 	pass
 
 
-func _on_spawn_timer_timeout() -> void:
+func _on_ant_spawn_timer_timeout() -> void:
 	spawn_ant(true)
 
 
