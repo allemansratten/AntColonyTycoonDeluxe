@@ -233,6 +233,8 @@ func drop_carried_item():
 func die():
 	pheromone_layer.draw_pheromone_at_position(position, pheromone_strength_on_death, true, 1.0)
 	drop_carried_item()
+	death_sound.play()
+	await get_tree().create_timer(death_sound.stream.get_length()).timeout
 	print("Ant is dying") # Debugging print statement
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
@@ -245,8 +247,7 @@ func die():
 		},
 		30.0 # decay time
 	)
-	death_sound.play()
-	await get_tree().create_timer(death_sound.stream.get_length()).timeout
+
 	queue_free() # Free the node after the sound finishes playing
 
 
