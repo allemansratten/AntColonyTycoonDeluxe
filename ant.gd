@@ -249,7 +249,6 @@ func die():
 	await get_tree().create_timer(death_sound.stream.get_length()).timeout
 	queue_free() # Free the node after the sound finishes playing
 
-	ant_died.emit()
 
 func _on_lifespan_timer_timeout() -> void:
 	die()
