@@ -24,6 +24,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	if !body.is_in_group("ants"):
 		return
 
-	var did_pickup_item = body.maybe_pickup_item(item_variant, sprite_node.texture, sprite_node.scale)
+	var did_pickup_item = body.maybe_pickup_item(item_variant, sprite_node.texture)
 	if did_pickup_item:
 		queue_free() # Remove the item from the scene
