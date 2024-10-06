@@ -40,6 +40,10 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 var target_position: Vector2
 var is_moving: bool = false
 var rotation_speed: float = 15.0 # Speed of rotation towards target
+var food_pickup_sound: AudioStreamPlayer
+var food_deposit_sound: AudioStreamPlayer
+var stick_pickup_sound: AudioStreamPlayer
+var stick_deposit_sound: AudioStreamPlayer
 
 @export var pheromone_layer: ColorRect
 
@@ -52,6 +56,11 @@ func _ready():
 	add_to_group("ants")
 	lifespan_timer.wait_time = randf_range(lifespan_min_secs, lifespan_max_secs)
 	lifespan_timer.start()
+
+	food_pickup_sound = $FoodPickupSound
+	food_deposit_sound = $FoodDepositSound
+	stick_pickup_sound = $StickPickupSound
+	stick_deposit_sound = $StickDepositSound
 
 	# Start after a random delay to desync them at the beginning
 	await get_tree().create_timer(randf_range(0.0, max_wait_time)).timeout
@@ -181,6 +190,13 @@ func maybe_pickup_item(picked_item_variant: ItemVariant) -> bool:
 	inventory_num_items_carried += 1
 	carried_item.set_variant(picked_item_variant)
 
+	# Play the appropriate pickup sound
+	match picked_item_variant:
+		ItemVariant.LEAF or ItemVariant.MUSHROOM:
+			food_pickup_sound.play()
+		ItemVariant.STICK:
+			stick_pickup_sound.play()
+
 	return true
 	
 func maybe_deposit_item() -> Dictionary:
@@ -193,6 +209,13 @@ func maybe_deposit_item() -> Dictionary:
 	inventory_num_items_carried -= 1
 	if inventory_num_items_carried == 0:
 		carried_item.set_variant(ItemVariant.NONE)
+
+	# Play the appropriate deposit sound
+	match deposited_item_variant:
+		ItemVariant.LEAF or ItemVariant.MUSHROOM:
+			food_deposit_sound.play()
+		ItemVariant.STICK:
+			stick_deposit_sound.play()
 
 	# Return a dictionary containing success and deposited item variant
 	return {"success": true, "deposited_item_variant": deposited_item_variant}
