@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://cs7o50oaokh2e"]
+[gd_scene load_steps=12 format=3 uid="uid://cs7o50oaokh2e"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
 [ext_resource type="PackedScene" uid="uid://dcrdhn26hmhva" path="res://ant.tscn" id="2_82cr4"]
+[ext_resource type="AudioStream" uid="uid://cegpmkvowbuwr" path="res://resources/sounds/slide whistle 14.wav" id="4_0d37m"]
 [ext_resource type="PackedScene" uid="uid://tmy1yvfu2r8g" path="res://anthill.tscn" id="4_cw8q0"]
 [ext_resource type="PackedScene" uid="uid://c3v4pvxkk33qh" path="res://pheromone_layer.tscn" id="5_dmj4k"]
 [ext_resource type="Shader" path="res://resources/shaders/color_dither_post_2d.gdshader" id="6_8n14l"]
@@ -24,6 +25,9 @@ ant_scene = ExtResource("2_82cr4")
 
 [node name="SceneItemManager" type="Node" parent="."]
 script = ExtResource("1_n0r2e")
+
+[node name="SpawnSound" type="AudioStreamPlayer" parent="SceneItemManager"]
+stream = ExtResource("4_0d37m")
 
 [node name="ItemSpawnTimer" type="Timer" parent="SceneItemManager"]
 wait_time = 10.0

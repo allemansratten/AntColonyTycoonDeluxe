@@ -9,6 +9,7 @@ const ItemVariant = preload("res://item_variants.gd").ItemVariant
 
 var sprite_node: Sprite2D = null
 var item_variant: ItemVariant
+var spawn_sound: AudioStreamPlayer
 
 func _ready():
 	sprite_node = get_node("Sprite2D")

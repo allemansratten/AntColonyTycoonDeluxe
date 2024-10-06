@@ -45,6 +45,7 @@ var food_pickup_sound: AudioStreamPlayer
 var food_deposit_sound: AudioStreamPlayer
 var stick_pickup_sound: AudioStreamPlayer
 var stick_deposit_sound: AudioStreamPlayer
+var death_sound: AudioStreamPlayer
 
 @export var pheromone_layer: ColorRect
 
@@ -62,6 +63,7 @@ func _ready():
 	food_deposit_sound = $FoodDepositSound
 	stick_pickup_sound = $StickPickupSound
 	stick_deposit_sound = $StickDepositSound
+	death_sound = $DeathSound
 
 	# Start after a random delay to desync them at the beginning
 	await get_tree().create_timer(randf_range(0.0, max_wait_time)).timeout
@@ -234,7 +236,7 @@ func drop_carried_item():
 func die():
 	pheromone_layer.draw_pheromone_at_position(position, pheromone_strength_on_death, true, 1.0)
 	drop_carried_item()
-
+	print("Ant is dying") # Debugging print statement
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
 	dropped_item.set_item_properties(carried_item.variant, {
@@ -242,8 +244,11 @@ func die():
 		'scale': Vector2(0.1, 0.1),
 		'position': global_position
 	})
+	
+	death_sound.play()
+	await get_tree().create_timer(death_sound.stream.get_length()).timeout
+	queue_free() # Free the node after the sound finishes playing
 
-	queue_free() # Remove the ant from the scene
 
 	ant_died.emit()
 
