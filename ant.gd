@@ -195,12 +195,12 @@ func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Te
 	carried_item_sprite.texture = picked_item_texture
 	inventory_item_variant = picked_item_variant
 
-	    # Play the appropriate pickup sound
-    match picked_item_variant:
-        ItemVariant.LEAF or ItemVariant.MUSHROOM:
-            food_pickup_sound.play()
-        ItemVariant.STICK:
-            stick_pickup_sound.play()
+		# Play the appropriate pickup sound
+	match picked_item_variant:
+		ItemVariant.LEAF or ItemVariant.MUSHROOM:
+			food_pickup_sound.play()
+		ItemVariant.STICK:
+			stick_pickup_sound.play()
 
 	carried_item_sprite.scale = Vector2.ZERO
 	var tween = create_tween()
