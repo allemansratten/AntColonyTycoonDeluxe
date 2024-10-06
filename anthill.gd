@@ -31,7 +31,7 @@ func _on_body_entered(body: Node2D) -> void:
 			
 			if deposited_item_variant == ItemVariant.LEAF or deposited_item_variant == ItemVariant.MUSHROOM:
 				ant_spawner.call_deferred("spawn_ant", true)
-			
-			item_count += 1
-			$RichTextLabel.text = str(item_count)
+			elif deposited_item_variant == ItemVariant.STICK:
+				item_count += 1
+				$RichTextLabel.text = str(item_count)
 			pheromone_bar.add(pheromone_per_item)
