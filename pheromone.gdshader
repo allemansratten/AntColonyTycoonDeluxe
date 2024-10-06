@@ -5,7 +5,7 @@ uniform vec2 grid_size;
 uniform vec4 overlay_color : source_color;
 uniform vec2 screen_size;
 
-const int NUM_LEVELS = 4;
+const int NUM_LEVELS = 5;
 
 float discretize_alpha(float alpha) {
     float step = 1.0 / float(NUM_LEVELS - 1);

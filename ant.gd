@@ -43,7 +43,7 @@ var food_deposit_sound: AudioStreamPlayer
 var stick_pickup_sound: AudioStreamPlayer
 var stick_deposit_sound: AudioStreamPlayer
 
-@export var pheromone_layer: ColorRect
+@onready var pheromone_layer = get_node("/root/Game/PheromoneLayer")
 
 func _ready():
 	randomize()

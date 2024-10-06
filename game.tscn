@@ -1,13 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://caeqm2sx0phvi"]
+[gd_scene load_steps=11 format=3 uid="uid://cs7o50oaokh2e"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
-[ext_resource type="PackedScene" uid="uid://10xcg3p30pal" path="res://ant.tscn" id="2_82cr4"]
-[ext_resource type="PackedScene" uid="uid://4n72njshbbvc" path="res://anthill.tscn" id="4_cw8q0"]
-[ext_resource type="PackedScene" path="res://pheromone_layer.tscn" id="5_dmj4k"]
+[ext_resource type="PackedScene" uid="uid://dcrdhn26hmhva" path="res://ant.tscn" id="2_82cr4"]
+[ext_resource type="PackedScene" uid="uid://tmy1yvfu2r8g" path="res://anthill.tscn" id="4_cw8q0"]
+[ext_resource type="PackedScene" uid="uid://c3v4pvxkk33qh" path="res://pheromone_layer.tscn" id="5_dmj4k"]
 [ext_resource type="Shader" path="res://resources/shaders/color_dither_post_2d.gdshader" id="6_8n14l"]
 [ext_resource type="Texture2D" uid="uid://bftew88ofmwbw" path="res://resources/palettes/steam-lords.png" id="6_l1q0f"]
-[ext_resource type="PackedScene" path="res://pheromone_bar.tscn" id="8_ru8sk"]
+[ext_resource type="PackedScene" uid="uid://bm6ou0h00mv5b" path="res://pheromone_bar.tscn" id="8_ru8sk"]
 [ext_resource type="Script" path="res://camera_2d.gd" id="9_b5tg6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6ii3t"]
@@ -20,7 +20,6 @@ shader_parameter/dither_palette = ExtResource("6_l1q0f")
 
 [node name="Game" type="Node"]
 script = ExtResource("1_f6hxw")
-ant_scene = ExtResource("2_82cr4")
 
 [node name="SceneItemManager" type="Node" parent="."]
 script = ExtResource("1_n0r2e")
@@ -32,6 +31,7 @@ autostart = true
 [node name="Anthill" parent="." instance=ExtResource("4_cw8q0")]
 position = Vector2(895, 494)
 scale = Vector2(0.25, 0.25)
+ant_scene = ExtResource("2_82cr4")
 metadata/_edit_group_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
