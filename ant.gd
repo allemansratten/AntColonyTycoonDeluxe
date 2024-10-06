@@ -55,7 +55,6 @@ func _ready():
 	lifespan_timer.wait_time = randf_range(lifespan_min_secs, lifespan_max_secs)
 	lifespan_timer.start()
 
-	carried_item_sprite.position = Vector2(0, -20)
 	carried_item_sprite.scale = Vector2(carried_item_scale, carried_item_scale)
 	
 	# Start after a random delay to desync them at the beginning
@@ -175,7 +174,7 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 	queue_free()
 
 
-func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Texture, picked_item_scale: Vector2) -> bool:
+func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Texture) -> bool:
 	# If the ant is carrying an item, it can only pick up the same type
 	if (inventory_item_variant != ItemVariant.NONE && inventory_item_variant != picked_item_variant):
 		return false
@@ -190,10 +189,10 @@ func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Te
 	carried_item_sprite.scale = Vector2.ZERO
 	var tween = create_tween()
 	tween.tween_property(
-		carried_item_sprite, 
-		"scale", 
-		Vector2(carried_item_scale, carried_item_scale), 
-		picked_item_scale.x,
+		carried_item_sprite,
+		"scale",
+		Vector2(carried_item_scale, carried_item_scale),
+		0.3
 	)
 
 	return true
@@ -226,7 +225,7 @@ func drop_carried_item():
 	dropped_item.set_item_properties(inventory_item_variant, {
 		'texture': carried_item_sprite.texture,
 		'scale': carried_item_sprite.scale,
-		'position': global_position
+		'position': global_position + Vector2(randf_range(-15, 15), randf_range(-15, 15))
 	})
 
 	inventory_num_items_carried = 0
@@ -244,7 +243,17 @@ func reset_carried_item_sprite():
 func die():
 	pheromone_layer.draw_pheromone_at_position(position, pheromone_strength_on_death, true, 1.0)
 	drop_carried_item()
-	# TODO: Create a dead ant item that will be picked up by other ants
+
+	var dropped_item = dropped_item_scene.instantiate()
+	dropped_items_layer.add_child(dropped_item)
+	dropped_item.set_item_properties(inventory_item_variant, {
+		'texture': load("res://resources/sprites/ant_dead.png"),
+		'scale': Vector2(0.1, 0.1),
+		'position': global_position
+	})
+	
+	# Remove the ant from the scene
+	queue_free()
 
 	queue_free() # Remove the ant from the scene
 

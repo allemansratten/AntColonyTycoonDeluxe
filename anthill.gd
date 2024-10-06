@@ -22,17 +22,19 @@ func _process(delta: float) -> void:
 	pheromone_layer.draw_pheromone_at_position(position, delta * pheromone_strength, true, 1.5)
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.is_in_group("ants"):
-		var deposit_result = body.maybe_deposit_item()
-		
-		# Check the success flag and the deposited item variant from the dictionary
-		if deposit_result["success"]:
-			var deposited_item_variant = deposit_result["deposited_item_variant"]
-			
-			if deposited_item_variant == ItemVariant.LEAF or deposited_item_variant == ItemVariant.MUSHROOM:
-				# game.call_deferred("spawn_ant", true)
-				pass
-			elif deposited_item_variant == ItemVariant.STICK:
-				item_count += 1
-				$RichTextLabel.text = str(item_count)
-			pheromone_bar.add(pheromone_per_item)
+	if !body.is_in_group("ants"):
+		return
+
+	var deposit_result = body.maybe_deposit_item()
+	# Check the success flag and the deposited item variant from the dictionary
+	if !deposit_result["success"]:
+		return
+
+	pheromone_bar.add(pheromone_per_item)
+	
+	match deposit_result["deposited_item_variant"]:
+		ItemVariant.LEAF, ItemVariant.MUSHROOM, ItemVariant.ANT:
+			game.call_deferred("spawn_ant", true)
+		ItemVariant.STICK:
+			item_count += 1
+			$RichTextLabel.text = str(item_count)
