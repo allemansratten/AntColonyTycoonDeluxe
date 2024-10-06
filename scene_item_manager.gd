@@ -6,6 +6,7 @@ const ItemVariant = preload("res://item_variants.gd").ItemVariant
 
 @onready var anthill = get_node("/root/Game/Anthill")
 var scene_item: PackedScene
+var spawn_sound: AudioStreamPlayer
 
 func get_random_position() -> Vector2:
 	# Get the viewport size in pixels
@@ -42,22 +43,27 @@ func get_random_valid_position() -> Vector2:
 func _ready():
 	randomize()
 	await get_tree().create_timer(1).timeout
+	spawn_sound = $SpawnSound
 	spawn_item(ItemVariant.LEAF, get_random_valid_position())
 	spawn_item(ItemVariant.MUSHROOM, get_random_valid_position())
 
 
+
 # Function to spawn an item at a given position
 func spawn_item(variant: ItemVariant, position: Vector2):
-	print("Spawning item at", position)
 	scene_item = load("res://scene_item.tscn")
 
 	var new_item = scene_item.instantiate()
 	new_item.position = position
 	new_item.scale = Vector2.ZERO
 
+	# Play the spawn sound
+	spawn_sound.play()
+
 	# Add the item to the scene first so the variants can be initialised
 	add_child(new_item)
 	new_item.set_variant(variant)
+
 
 	var tween = create_tween()
 	(tween

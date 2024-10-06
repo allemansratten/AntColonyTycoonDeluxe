@@ -1,6 +1,7 @@
 extends Area2D
 
-@export var pheromone_strength: float = 0.5
+@export var pheromone_strength: float = 0.2
+@export var initial_pheromone_strength: float = 12.0
 @export var ant_manual_spawn_delay_secs: float = 0.5
 
 @onready var pheromone_layer = get_node("/root/Game/PheromoneLayer")
@@ -8,7 +9,9 @@ extends Area2D
 @onready var game = get_node("/root/Game")
 @onready var ant_spawn_timer = get_node("AntSpawnTimer")
 @onready var ants_count_label = get_node("AntsCountLabel")
-@export var pheromone_per_item = 1.0
+@export var pheromone_per_item = 0.0
+
+@export var ant_scene: PackedScene
 
 var item_count: int = 0
 var num_ants_ready: int = 10
@@ -27,16 +30,24 @@ func _ready() -> void:
 	debug_spawn_initial_ants()
 	ant_spawn_timer.start()
 
+## Called by Game when it's ready.
+func on_game_ready() -> void:
+	for _i in range(5):
+		spawn_ant()
+	
+	pheromone_layer.draw_pheromone_at_position(position, initial_pheromone_strength, true, 1.0)
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	time_since_manual_spawn_secs += delta
 	pheromone_layer.draw_pheromone_at_position(position, delta * pheromone_strength, true, 1.5)
 	if (
-		Input.is_action_just_pressed("spawn_ant") 
+		Input.is_action_just_pressed("spawn_ant")
 		and time_since_manual_spawn_secs > ant_manual_spawn_delay_secs
 		and num_ants_ready > 0
 	):
-		game.spawn_ant(true)
+		spawn_ant()
 		set_ready_ants_count(num_ants_ready - 1)
 		time_since_manual_spawn_secs = 0
 
@@ -66,8 +77,10 @@ func _on_ant_spawn_timer_timeout() -> void:
 		anthill_empty.emit()
 		return
 	var num_ants_to_spawn = max(num_ants_ready / 20, 1) # always spawn at least 1 ant
+
 	for _n in range(num_ants_to_spawn):
-		game.spawn_ant(true)
+		spawn_ant()
+
 	set_ready_ants_count(num_ants_ready - num_ants_to_spawn)
 
 
@@ -80,4 +93,12 @@ func set_ready_ants_count(count: int) -> void:
 ## TODO: delete this
 func debug_spawn_initial_ants() -> void:
 	for _n in range(20):
-		game.spawn_ant(true)
+		spawn_ant()
+
+
+func spawn_ant() -> void:
+	var ant = ant_scene.instantiate()
+	
+	ant.position = position + Vector2(randf_range(-30, 30), randf_range(-30, 30))
+
+	game.add_child(ant)

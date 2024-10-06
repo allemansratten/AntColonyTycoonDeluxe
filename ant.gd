@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 const ItemVariant = preload("res://item_variants.gd").ItemVariant
+const FoodItems = preload("res://item_variants.gd").foodItemVariants
 enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 
 @export var ant_type: AntType = AntType.HARVESTER
@@ -23,8 +24,8 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @onready var dropped_items_layer = get_node("/root/Game/DroppedItemsLayer")
 @onready var dropped_item_scene = load("res://dropped_item.tscn")
 
-@export var pheromone_creation_when_carrying: float = 0.05
-@export var pheromone_strength_on_death: float = 0.2
+@export var pheromone_creation_when_carrying: float = 0.15
+@export var pheromone_strength_on_death: float = 0.25
 
 ## positive = ants will tend to select directions similar to the ones they have
 ## 0 = they don't care
@@ -42,8 +43,9 @@ var food_pickup_sound: AudioStreamPlayer
 var food_deposit_sound: AudioStreamPlayer
 var stick_pickup_sound: AudioStreamPlayer
 var stick_deposit_sound: AudioStreamPlayer
+var death_sound: AudioStreamPlayer
 
-@export var pheromone_layer: ColorRect
+@onready var pheromone_layer = get_node("/root/Game/PheromoneLayer")
 
 func _ready():
 	randomize()
@@ -57,6 +59,7 @@ func _ready():
 	food_deposit_sound = $FoodDepositSound
 	stick_pickup_sound = $StickPickupSound
 	stick_deposit_sound = $StickDepositSound
+	death_sound = $DeathSound
 
 	# Start after a random delay to desync them at the beginning
 	await get_tree().create_timer(randf_range(0.0, max_wait_time)).timeout
@@ -201,9 +204,24 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 
 ## When the ants are picking up an item, wait for a while and then turn around
 func handle_on_pickup_movement():
+	_animated_sprite.speed_scale = 0.0 # Stop the walking animation
 	is_moving = false
+
+	var original_position = global_position
+	var num_tween_loops = 4
+	var tween_duration = item_pickup_duration_secs / (num_tween_loops * 2)
+	var tween_target_position = target_position.normalized()
+
+	var tween = get_tree().create_tween()
+	for i in range(num_tween_loops):
+		tween.tween_property(self, "global_position", original_position + tween_target_position, tween_duration)
+		tween.tween_property(self, "global_position", original_position, tween_duration)
+
+	# Turn the ant around
 	target_position = global_position + (global_position - target_position)
 	await get_tree().create_timer(item_pickup_duration_secs).timeout
+
+	_animated_sprite.speed_scale = 1.0 # Resume the walking animation
 	is_moving = true
 
 
@@ -215,12 +233,7 @@ func maybe_pickup_item(picked_item_variant: ItemVariant) -> bool:
 	handle_on_pickup_movement()
 	carried_item.set_variant(picked_item_variant)
 
-	# Play the appropriate pickup sound
-	match picked_item_variant:
-		ItemVariant.LEAF or ItemVariant.MUSHROOM:
-			food_pickup_sound.play()
-		ItemVariant.STICK:
-			stick_pickup_sound.play()
+	play_pickup_sound(picked_item_variant)
 
 	return true
 
@@ -234,13 +247,8 @@ func maybe_deposit_item() -> Dictionary:
 
 	carried_item.set_variant(ItemVariant.NONE)
 
-	# Play the appropriate deposit sound
-	match deposited_item_variant:
-		ItemVariant.LEAF or ItemVariant.MUSHROOM:
-			food_deposit_sound.play()
-		ItemVariant.STICK:
-			stick_deposit_sound.play()
-
+	play_deposit_sound(deposited_item_variant)
+	
 	# Return a dictionary containing success and deposited item variant
 	return {"success": true, "deposited_item_variant": deposited_item_variant}
 
@@ -251,11 +259,15 @@ func drop_carried_item():
 
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
-	dropped_item.set_item_properties(carried_item.variant, {
-		'texture': carried_item.texture,
-		'scale': carried_item.scale,
-		'position': global_position + Vector2(randf_range(-15, 15), randf_range(-15, 15))
-	})
+	dropped_item.set_item_properties(
+		carried_item.variant, 
+		{
+			'texture': carried_item.texture,
+			'scale': carried_item.scale,
+			'position': global_position + Vector2(randf_range(-15, 15), randf_range(-15, 15))
+		},
+		60.0, # decay time
+	)
 
 	carried_item.set_variant(ItemVariant.NONE)
 
@@ -265,11 +277,12 @@ func drop_carried_item():
 func die():
 	pheromone_layer.draw_pheromone_at_position(position, pheromone_strength_on_death, true, 1.0)
 	drop_carried_item()
-
+	death_sound.play()
+	await get_tree().create_timer(death_sound.stream.get_length()).timeout
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
 	dropped_item.set_item_properties(
-		carried_item.variant,
+		ItemVariant.ANT,
 		{
 			'texture': load("res://resources/sprites/ant_dead.png"),
 			'scale': Vector2(0.1, 0.1),
@@ -278,7 +291,26 @@ func die():
 		30.0 # decay time
 	)
 
-	queue_free() # Remove the ant from the scene
+	queue_free() # Free the node after the sound finishes playing
+
 
 func _on_lifespan_timer_timeout() -> void:
 	die()
+
+func play_pickup_sound(inventory_item_variant: ItemVariant) -> void:
+	# Check if the item is in the food item group
+	if inventory_item_variant in FoodItems:
+		food_pickup_sound.play() # Play food sound for food items
+	elif inventory_item_variant == ItemVariant.STICK:
+		stick_pickup_sound.play() # Play stick sound for non-food items
+	else:
+		print("No sound assigned for this item variant.")
+
+func play_deposit_sound(inventory_item_variant: ItemVariant) -> void:
+	# Check if the item is in the food item group
+	if inventory_item_variant in FoodItems:
+		food_deposit_sound.play() # Play food sound for food items
+	elif inventory_item_variant == ItemVariant.STICK:
+		stick_deposit_sound.play() # Play stick sound for non-food items
+	else:
+		print("No sound assigned for this item variant.")

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://od2esl4gdpnx"
-path="res://.godot/imported/stick.png-566ab5d22a060aec37a7044c3c7f47c5.ctex"
+uid="uid://uko0mh272qkx"
+path="res://.godot/imported/dirt4dark.png-3f68e547d813f7f4a88d9c13318cb498.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/sprites/stick.png"
-dest_files=["res://.godot/imported/stick.png-566ab5d22a060aec37a7044c3c7f47c5.ctex"]
+source_file="res://resources/sprites/dirt4dark.png"
+dest_files=["res://.godot/imported/dirt4dark.png-3f68e547d813f7f4a88d9c13318cb498.ctex"]
 
 [params]
 

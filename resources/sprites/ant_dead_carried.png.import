@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://od2esl4gdpnx"
-path="res://.godot/imported/stick.png-566ab5d22a060aec37a7044c3c7f47c5.ctex"
+uid="uid://5b1qd8gobvbt"
+path="res://.godot/imported/ant_dead_carried.png-4c6fe5a1872375d3b25c6a52d58017f9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/sprites/stick.png"
-dest_files=["res://.godot/imported/stick.png-566ab5d22a060aec37a7044c3c7f47c5.ctex"]
+source_file="res://resources/sprites/ant_dead_carried.png"
+dest_files=["res://.godot/imported/ant_dead_carried.png-4c6fe5a1872375d3b25c6a52d58017f9.ctex"]
 
 [params]
 

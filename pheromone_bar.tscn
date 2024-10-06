@@ -1,14 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://bm6ou0h00mv5b"]
+[gd_scene load_steps=4 format=3 uid="uid://bm6ou0h00mv5b"]
 
 [ext_resource type="Script" path="res://pheromone_bar.gd" id="1_ahigu"]
+[ext_resource type="Texture2D" uid="uid://bqa6koxf6hkc4" path="res://resources/sprites/progress-bar/progress-bar-circle.png" id="2_0t20t"]
+[ext_resource type="Texture2D" uid="uid://ddxv2qx6a10xw" path="res://resources/sprites/progress-bar/progress-bar-frame.png" id="3_8f1nk"]
 
 [node name="PheromoneBar" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_ahigu")
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
+[node name="ProgressBar" type="TextureProgressBar" parent="."]
 layout_mode = 0
-offset_right = 214.0
-offset_bottom = 40.0
-value = 100.0
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 65.0
+offset_bottom = 64.0
+value = 33.0
+fill_mode = 5
+texture_under = ExtResource("2_0t20t")
+texture_over = ExtResource("3_8f1nk")
+texture_progress = ExtResource("2_0t20t")
+tint_under = Color(0.273873, 0.273873, 0.273873, 1)
+tint_progress = Color(0.461167, 1, 0.39, 1)

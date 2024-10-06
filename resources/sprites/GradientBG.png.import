@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://od2esl4gdpnx"
-path="res://.godot/imported/stick.png-566ab5d22a060aec37a7044c3c7f47c5.ctex"
+uid="uid://b2gyjb0v100jw"
+path="res://.godot/imported/GradientBG.png-bc1678810c2b80db5fc97a6a8293ad84.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/sprites/stick.png"
-dest_files=["res://.godot/imported/stick.png-566ab5d22a060aec37a7044c3c7f47c5.ctex"]
+source_file="res://resources/sprites/GradientBG.png"
+dest_files=["res://.godot/imported/GradientBG.png-bc1678810c2b80db5fc97a6a8293ad84.ctex"]
 
 [params]
 

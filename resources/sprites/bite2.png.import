@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://od2esl4gdpnx"
-path="res://.godot/imported/stick.png-566ab5d22a060aec37a7044c3c7f47c5.ctex"
+uid="uid://b5djeg7fi7nml"
+path="res://.godot/imported/bite2.png-0c71956354d5498202199b0ed744edb8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/sprites/stick.png"
-dest_files=["res://.godot/imported/stick.png-566ab5d22a060aec37a7044c3c7f47c5.ctex"]
+source_file="res://resources/sprites/bite2.png"
+dest_files=["res://.godot/imported/bite2.png-0c71956354d5498202199b0ed744edb8.ctex"]
 
 [params]
 

@@ -1,7 +1,7 @@
 extends ColorRect
 
 const BLUR_SPEED = 0.1
-const DECAY_SPEED = 0.03
+const DECAY_SPEED = 0.015
 const DECAY_MIN_DELAY_SECS = 0.1
 
 @export var grid_size_coef: int = 8
@@ -12,8 +12,8 @@ var grid_data = []
 var time_since_last_decay: float = 0.0
 
 func _ready():
-	material = ShaderMaterial.new()
-	material.shader = preload("res://pheromone.gdshader")
+	# material = ShaderMaterial.new()
+	# material.shader = preload("res://pheromone.gdshader")
 	
 	# Initialize grid_data with default values as a 2D array
 	for y in range(int(grid_size.y)):
@@ -123,7 +123,6 @@ func draw_pheromone_at_position(
 			var previous_value = grid_data[y][x]
 			var new_value = min(1.0, previous_value + interpolation_value * value)
 			added_total += new_value - previous_value
-#			print("added_total", added_total)
 			grid_data[y][x] = new_value
 		else:
 			var new_value = interpolation_value * value

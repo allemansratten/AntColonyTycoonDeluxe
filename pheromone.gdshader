@@ -4,8 +4,16 @@ uniform sampler2D grid_texture;
 uniform vec2 grid_size;
 uniform vec4 overlay_color : source_color;
 uniform vec2 screen_size;
+uniform vec4 overlay_color_1;
+uniform vec4 overlay_color_2;
+uniform vec4 overlay_color_3;
+uniform vec4 overlay_color_4;
 
-const int NUM_LEVELS = 4;
+const int NUM_LEVELS = 5;
+
+float alpha_to_level(float alpha) {
+    return floor(alpha * float(NUM_LEVELS - 1) + 0.5);
+}
 
 float discretize_alpha(float alpha) {
     float step = 1.0 / float(NUM_LEVELS - 1);
@@ -44,7 +52,25 @@ void fragment() {
         COLOR = vec4(0.0);  // Transparent outside grid bounds
     } else {
         float grid_value = texture(grid_texture, scaled_uv).r;
-        float discretized_alpha = discretize_alpha(grid_value);
-        COLOR = vec4(overlay_color.rgb, overlay_color.a * discretized_alpha);
+        int level = int(alpha_to_level(grid_value));
+        switch (level) {
+            case 0:
+                COLOR = vec4(overlay_color.rgb, 0);
+                break;
+            case 1:
+                COLOR = overlay_color_1;
+                break;
+            case 2:
+                COLOR = overlay_color_2;
+                break;
+            case 3:
+                COLOR = overlay_color_3;
+                break;
+            case 4:
+                COLOR = overlay_color_4;
+                break;
+            default:
+                break;
+        }
     }
 }

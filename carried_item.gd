@@ -20,6 +20,9 @@ const VARIANT_TO_TEXTURES = {
 		preload("res://resources/sprites/stick_piece1.png"),
 		preload("res://resources/sprites/stick_piece2.png"),
 		preload("res://resources/sprites/stick_piece3.png"),
+	],
+	ItemVariant.ANT: [
+		preload("res://resources/sprites/ant_dead_carried.png"),
 	]
 }
 
@@ -30,7 +33,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 
@@ -50,7 +53,7 @@ func set_variant(new_variant: ItemVariant) -> void:
 			self,
 			"scale",
 			base_scale,
-			0.3
+			1.0,
 		)
 	else:
 		tween.tween_property(self, "scale", Vector2.ZERO, 0.3)
@@ -59,4 +62,4 @@ func set_variant(new_variant: ItemVariant) -> void:
 
 func reset_carried_item():
 	texture = null
-	scale = Vector2(1.0, 1.0)
+	scale = Vector2.ONE
