@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://10xcg3p30pal"]
+[gd_scene load_steps=13 format=3 uid="uid://10xcg3p30pal"]
 
 [ext_resource type="Script" path="res://ant.gd" id="1_jww2m"]
 [ext_resource type="Texture2D" uid="uid://b2v0smngboi4r" path="res://resources/sprites/ant_stationary.png" id="2_lsshl"]

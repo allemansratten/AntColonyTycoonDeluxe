@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
 [ext_resource type="PackedScene" uid="uid://10xcg3p30pal" path="res://ant.tscn" id="2_82cr4"]
-[ext_resource type="PackedScene" path="res://anthill.tscn" id="4_cw8q0"]
+[ext_resource type="PackedScene" uid="uid://4n72njshbbvc" path="res://anthill.tscn" id="4_cw8q0"]
 [ext_resource type="PackedScene" path="res://pheromone_layer.tscn" id="5_dmj4k"]
 [ext_resource type="Shader" path="res://resources/shaders/color_dither_post_2d.gdshader" id="6_8n14l"]
 [ext_resource type="Texture2D" uid="uid://bftew88ofmwbw" path="res://resources/palettes/steam-lords.png" id="6_l1q0f"]
