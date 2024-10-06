@@ -175,7 +175,7 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 	queue_free()
 
 
-func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Texture) -> bool:
+func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Texture, picked_item_scale: Vector2) -> bool:
 	# If the ant is carrying an item, it can only pick up the same type
 	if (inventory_item_variant != ItemVariant.NONE && inventory_item_variant != picked_item_variant):
 		return false
@@ -189,7 +189,12 @@ func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Te
 
 	carried_item_sprite.scale = Vector2.ZERO
 	var tween = create_tween()
-	tween.tween_property(carried_item_sprite, "scale", Vector2(carried_item_scale, carried_item_scale), 0.3)
+	tween.tween_property(
+		carried_item_sprite, 
+		"scale", 
+		Vector2(carried_item_scale, carried_item_scale), 
+		picked_item_scale.x,
+	)
 
 	return true
 	
