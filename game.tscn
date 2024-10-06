@@ -92,6 +92,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="FinalScoreLabel" type="Label" parent="UILayer/GameOver"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -334.0
+offset_top = -16.0
+offset_right = 364.0
+offset_bottom = 197.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "Your final anthill size is 0.
+
+That's a pretty small anthill..."
+horizontal_alignment = 1
+
 [node name="GameOverLabel" type="Label" parent="UILayer/GameOver"]
 layout_mode = 1
 anchors_preset = 8
@@ -99,14 +118,15 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -295.5
-offset_top = -34.5
-offset_right = 295.5
-offset_bottom = 34.5
+offset_left = -305.0
+offset_top = -292.0
+offset_right = 286.0
+offset_bottom = -223.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 50
-text = "Your anthill is no more :("
+text = "Your anthill is no more :(
+"
 horizontal_alignment = 1
 
 [node name="PlayAgainButton" type="Button" parent="UILayer/GameOver"]
@@ -116,10 +136,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -45.0
-offset_top = 66.0
-offset_right = 42.0
-offset_bottom = 97.0
+offset_left = -110.0
+offset_top = 227.0
+offset_right = 125.0
+offset_bottom = 325.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("10_sp46i")
@@ -149,10 +169,11 @@ offset_top = 317.0
 offset_right = 1114.0
 offset_bottom = 546.0
 theme = ExtResource("10_sp46i")
-text = "Build the biggest anthill. Don't let your ants starve.
+text = "Gather sticks to build the biggest anthill. 
+Don't let your ant colony starve.
 
-Use mouse to pheromone
-Press [space] to ant"
+Use mouse to pheromone.
+Press [space] to ant."
 
 [node name="StartGameButton" type="Button" parent="UILayer/StartGameOverlay"]
 layout_mode = 0

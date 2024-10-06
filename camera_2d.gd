@@ -11,10 +11,6 @@ func _ready():
 	zoom = Vector2(max_zoom, max_zoom)
 
 func _process(delta: float):
-	# `game` might not be ready at first
-	if game and game.is_game_over:
-		return
-
 	# Gradually increase the zoom value.
 	# Multiplicative and not additive increase because otherwise the zoom speeds up.
 	# The time to zoom from 4 to 2 should be the same as from 2 to 1.

@@ -2,9 +2,8 @@ extends Node
 
 @onready var anthill = get_node("Anthill")
 
-@export var is_game_over: bool = false
 @onready var screen_size = get_viewport().get_visible_rect().size
-var game_over_sound: AudioStreamPlayer
+@onready var game_over_sound: AudioStreamPlayer = $GameOverSound
 
 var is_drawing = false # To track if the user is currently drawing
 var is_game_muted = false
@@ -43,21 +42,18 @@ func _input(event: InputEvent) -> void:
 
 
 func maybe_game_over() -> void:
-	if is_game_over: # Game is already over, ignore
-		return
-
 	# This was called when there are no more ants in the anthill, check if there are any living ants left
-	var ants = get_tree().get_nodes_in_group("ants")
-	if ants.size() <= 0:
+	var living_ants = get_tree().get_nodes_in_group("ants")
+	if living_ants.size() <= 0:
 		game_over_sound.play()
 		on_game_over()
 
 
 func on_game_over() -> void:
-	is_game_over = true
 	get_tree().paused = true
 	$UILayer/GameOver.show()
 	$UILayer/GameUIOverlay.hide()
+	show_endgame_score(anthill.anthill_size)
 
 	
 func _on_play_again_button_pressed() -> void:
@@ -91,3 +87,31 @@ func _on_mute_button_pressed() -> void:
 		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), true)
 		$UILayer/PauseOverlay/MuteButton.text = "Unmute"
 	is_game_muted = !is_game_muted
+
+
+## Score milestones to show the player when the game ends
+## TODO: Make these better, more options etc...
+var SCORE_MILESTONES = [
+	{
+		"min_score": 0,
+		"text": "That's barely an anthill...",
+	},
+	{
+		"min_score": 20,
+		"text": "You built a little pile of sticks.",
+	},
+	{
+		"min_score": 50,
+		"text": "That looks like an actual anthill!",
+	},
+	{
+		"min_score": 200,
+		"text": "Wow! That's an ant skyscraper!",
+	},
+]
+
+func show_endgame_score(final_score: int) -> void:
+	var score_milestone_reached = SCORE_MILESTONES.filter(
+		func(milestone): return final_score >= milestone.min_score
+	).front()
+	$UILayer/GameOver/FinalScoreLabel.text = "Your final anthill size is %d.\n\n%s" % [final_score, score_milestone_reached.text]
