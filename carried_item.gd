@@ -5,6 +5,23 @@ const ItemVariant = preload("res://item_variants.gd").ItemVariant
 @export var variant: ItemVariant = ItemVariant.NONE
 var base_scale
 
+const VARIANT_TO_TEXTURES = {
+	ItemVariant.LEAF: [
+		preload("res://resources/sprites/leaf_piece1.png"),
+		preload("res://resources/sprites/leaf_piece2.png"),
+		preload("res://resources/sprites/leaf_piece3.png"),
+	],
+	ItemVariant.MUSHROOM: [
+		preload("res://resources/sprites/mushroom_piece1.png"),
+		preload("res://resources/sprites/mushroom_piece2.png"),
+		preload("res://resources/sprites/mushroom_piece3.png"),
+	],
+	ItemVariant.STICK: [
+		# TODO: stick pieces
+		preload("res://resources/sprites/stick.png"),
+	]
+}
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	base_scale = Vector2(scale.x, scale.y) # copy (not sure if needed)
@@ -19,10 +36,16 @@ func _process(delta: float) -> void:
 func set_variant(new_variant: ItemVariant) -> void:
 	variant = new_variant
 
-	scale = Vector2.ZERO
+	if new_variant != ItemVariant.NONE:
+		var textures = VARIANT_TO_TEXTURES[new_variant]
+		texture = textures[randi() % textures.size()]
+	else:
+		texture = null
+
 	var tween = create_tween()
 
 	if new_variant != ItemVariant.NONE:
+		scale = Vector2.ZERO
 		tween.tween_property(
 			self,
 			"scale",

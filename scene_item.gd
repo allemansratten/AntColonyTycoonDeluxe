@@ -31,7 +31,7 @@ func set_variant(variant_to_use: ItemVariant):
 
 # Define how to visually set up the Leaf
 func set_as_leaf():
-	sprite_node.texture = load("res://resources/sprites/leaf.png")
+	sprite_node.texture = preload("res://resources/sprites/leaf.png")
 	sprite_node.scale = Vector2(0.25, 0.25)
 	sprite_node.rotate(randf_range(-45, 45)) # Random rotation
 	resources_remaining = 20
@@ -39,14 +39,15 @@ func set_as_leaf():
 
 # Define how to visually set up the Berry
 func set_as_mushroom():
-	sprite_node.texture = load("res://resources/sprites/mushroom.png")
+	sprite_node.texture = preload("res://resources/sprites/mushroom.png")
 	sprite_node.scale = Vector2(0.25, 0.25)
 	resources_remaining = 30
 
 # Define how to visually set up the Stick
 func set_as_stick():
-	sprite_node.texture = load("res://resources/sprites/stick.png")
+	sprite_node.texture = preload("res://resources/sprites/stick.png")
 	sprite_node.scale = Vector2(0.5, 0.5) # Scale down the leaf
+	sprite_node.rotate(randf_range(-45, 45)) # Random rotation
 	resources_remaining = 30
 	
 

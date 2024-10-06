@@ -7,9 +7,6 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @export var min_speed: float = 125.0
 @export var max_speed: float = 200.0
 
-@export var inventory_num_items_carried: int = 0
-@export var inventory_max_items: int = 1
-
 @export var min_move_distance: float = 35.
 @export var max_move_distance: float = 50.
 @export var min_wait_time: float = 0.15
@@ -102,7 +99,7 @@ func _physics_process(_delta: float):
 			_animated_sprite.stop()
 			start_waiting()
 	
-	if inventory_num_items_carried > 0:
+	if carried_item.variant != ItemVariant.NONE:
 		pheromone_layer.draw_pheromone_at_position(position, _delta * pheromone_creation_when_carrying, true)
 
 ## This method is intended to be overridden by subclasses for unique behaviors
@@ -181,11 +178,7 @@ func maybe_pickup_item(picked_item_variant: ItemVariant) -> bool:
 	# If the ant is carrying an item, it can only pick up the same type
 	if (carried_item.variant != ItemVariant.NONE && carried_item.variant != picked_item_variant):
 		return false
-	# If the ant is not carrying an item, it can pick up any type
-	if inventory_num_items_carried >= inventory_max_items:
-		return false
 
-	inventory_num_items_carried += 1
 	carried_item.set_variant(picked_item_variant)
 
 	# Play the appropriate pickup sound
@@ -198,15 +191,13 @@ func maybe_pickup_item(picked_item_variant: ItemVariant) -> bool:
 	return true
 	
 func maybe_deposit_item() -> Dictionary:
-	if inventory_num_items_carried == 0:
+	if carried_item.variant == ItemVariant.NONE:
 		return {"success": false, "deposited_item_variant": ItemVariant.NONE}
 
 	# Store the current item variant before resetting it
 	var deposited_item_variant = carried_item.variant
 
-	inventory_num_items_carried -= 1
-	if inventory_num_items_carried == 0:
-		carried_item.set_variant(ItemVariant.NONE)
+	carried_item.set_variant(ItemVariant.NONE)
 
 	# Play the appropriate deposit sound
 	match deposited_item_variant:
@@ -220,8 +211,7 @@ func maybe_deposit_item() -> Dictionary:
 
 
 func drop_carried_item():
-	# Sanity check: checking both conditions
-	if inventory_num_items_carried == 0 || carried_item.variant == ItemVariant.NONE:
+	if carried_item.variant == ItemVariant.NONE:
 		return false
 
 	var dropped_item = dropped_item_scene.instantiate()
@@ -232,7 +222,6 @@ func drop_carried_item():
 		'position': global_position + Vector2(randf_range(-15, 15), randf_range(-15, 15))
 	})
 
-	inventory_num_items_carried = 0
 	carried_item.set_variant(ItemVariant.NONE)
 
 	return true
