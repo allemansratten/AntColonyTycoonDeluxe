@@ -1,11 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://dcrdhn26hmhva"]
+[gd_scene load_steps=14 format=3 uid="uid://10xcg3p30pal"]
 
 [ext_resource type="Script" path="res://ant.gd" id="1_jww2m"]
 [ext_resource type="Texture2D" uid="uid://b2v0smngboi4r" path="res://resources/sprites/ant_stationary.png" id="2_lsshl"]
 [ext_resource type="Texture2D" uid="uid://des1x0jrmgr2y" path="res://resources/sprites/ant_walk1.png" id="3_jnfmw"]
 [ext_resource type="Texture2D" uid="uid://c3jdojucncav6" path="res://resources/sprites/ant_walk2.png" id="4_u33sy"]
-[ext_resource type="Texture2D" uid="uid://o56b6t3ci5p2" path="res://resources/sprites/leaf_piece1.png" id="5_6edao"]
-[ext_resource type="Script" path="res://carried_item.gd" id="5_6o5gs"]
+[ext_resource type="PackedScene" uid="uid://b5lnwaqqbpd0v" path="res://carried_item.tscn" id="5_cwwn3"]
 [ext_resource type="AudioStream" uid="uid://thhm8xf0dr0x" path="res://resources/sounds/bushes 21.wav" id="5_e667s"]
 [ext_resource type="AudioStream" uid="uid://yk3sg8lvcjuk" path="res://resources/sounds/zapsplat_catoon_bite_munch_single_001_56606.mp3" id="6_ijscd"]
 [ext_resource type="AudioStream" uid="uid://bqbtujxpmvnfp" path="res://resources/sounds/wood bark friction 6.wav" id="7_v1lvq"]
@@ -55,15 +54,6 @@ visible = false
 scale = Vector2(8, 8)
 
 [node name="LifespanTimer" type="Timer" parent="."]
-
-[node name="CarriedItem" type="Sprite2D" parent="."]
-position = Vector2(3, 0)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("5_6edao")
-offset = Vector2(20, 0)
-script = ExtResource("5_6o5gs")
-variant = null
-metadata/_edit_group_ = true
 
 [node name="FoodPickupSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_e667s")

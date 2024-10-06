@@ -37,11 +37,10 @@ func _process(delta: float) -> void:
 func set_variant(new_variant: ItemVariant) -> void:
 	variant = new_variant
 
+	# for None, just keep the texture and scale to 0.
 	if new_variant != ItemVariant.NONE:
 		var textures = VARIANT_TO_TEXTURES[new_variant]
 		texture = textures[randi() % textures.size()]
-	else:
-		texture = null
 
 	var tween = create_tween()
 
