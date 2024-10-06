@@ -72,7 +72,6 @@ offset_top = 2.0
 offset_bottom = 2.0
 
 [node name="DitheringFilter" type="ColorRect" parent="UILayer"]
-visible = false
 top_level = true
 z_index = 100
 material = SubResource("ShaderMaterial_6ii3t")
