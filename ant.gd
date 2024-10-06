@@ -45,6 +45,8 @@ var rotation_speed: float = 15.0 # Speed of rotation towards target
 
 @export var pheromone_layer: ColorRect
 
+signal ant_died
+
 func _ready():
 	randomize()
 	rotation = randf() * 2 * PI
@@ -253,6 +255,9 @@ func die():
 	# Remove the ant from the scene
 	queue_free()
 
+	queue_free() # Remove the ant from the scene
+
+	ant_died.emit()
 
 func _on_lifespan_timer_timeout() -> void:
 	die()
