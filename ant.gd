@@ -12,6 +12,7 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @export var min_wait_time: float = 0.15
 @export var max_wait_time: float = 0.3
 @export var wait_probability: float = 0.03
+@export var item_pickup_duration_secs: float = 1.5
 
 @export var lifespan_min_secs: float = 40.0
 @export var lifespan_max_secs: float = 60.0
@@ -163,9 +164,10 @@ func start_new_movement():
 	is_moving = true
 
 
-func start_waiting():
-	if randf() < wait_probability:
-		var wait_time = randf_range(min_wait_time, max_wait_time)
+func start_waiting(time_to_wait: float = 0.0):
+	if time_to_wait > 0 || randf() < wait_probability:
+		# Use the provided time if its provided
+		var wait_time: float = time_to_wait if time_to_wait > 0 else randf_range(min_wait_time, max_wait_time)
 		await get_tree().create_timer(wait_time).timeout
 	start_new_movement()
 
@@ -174,11 +176,20 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 	queue_free()
 
 
+## When the ants are picking up an item, wait for a while and then turn around
+func handle_on_pickup_movement():
+	is_moving = false
+	target_position = global_position + (global_position - target_position)
+	await get_tree().create_timer(item_pickup_duration_secs).timeout
+	is_moving = true
+
+
 func maybe_pickup_item(picked_item_variant: ItemVariant) -> bool:
 	# If the ant is carrying an item, it can only pick up the same type
 	if carried_item.variant != ItemVariant.NONE:
 		return false
 
+	handle_on_pickup_movement()
 	carried_item.set_variant(picked_item_variant)
 
 	# Play the appropriate pickup sound
@@ -189,7 +200,8 @@ func maybe_pickup_item(picked_item_variant: ItemVariant) -> bool:
 			stick_pickup_sound.play()
 
 	return true
-	
+
+
 func maybe_deposit_item() -> Dictionary:
 	if carried_item.variant == ItemVariant.NONE:
 		return {"success": false, "deposited_item_variant": ItemVariant.NONE}
