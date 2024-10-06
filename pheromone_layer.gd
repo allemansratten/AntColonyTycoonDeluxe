@@ -2,12 +2,14 @@ extends ColorRect
 
 const BLUR_SPEED = 0.1
 const DECAY_SPEED = 0.03
+const DECAY_MIN_DELAY_SECS = 0.1
 
-@export var grid_size_coef: int = 4
+@export var grid_size_coef: int = 8
 @export var grid_size = Vector2(16 * grid_size_coef, 9 * grid_size_coef)
 @export var overlay_color: Color = Color(1, 0, 0, 0.5)
 
 var grid_data = []
+var time_since_last_decay: float = 0.0
 
 func _ready():
 	material = ShaderMaterial.new()
@@ -26,21 +28,6 @@ func _ready():
 	# Connect to the viewport size changed signal
 	get_tree().root.connect("size_changed", Callable(self, "update_shader"))
 
-	update_shader()
-
-
-func set_random_data():
-	for y in range(int(grid_size.y)):
-		for x in range(int(grid_size.x)):
-			grid_data[y][x] = randf()
-	update_shader()
-
-func set_demo_data():
-	for y in range(int(grid_size.y)):
-		for x in range(int(grid_size.x)):
-			grid_data[y][x] = (sin(0.5 + y * 1) * 0.5 + 0.5) ** 3
-	
-	update_shader()
 
 func get_value_at(x: float, y: float) -> float:
 	# TODO: something smarter
@@ -53,13 +40,13 @@ func get_value_at(x: float, y: float) -> float:
 		return 0.0
 	return grid_data[int(y)][int(x)]
 
+
 func update_shader():
 	var image = Image.create(int(grid_size.x), int(grid_size.y), false, Image.FORMAT_RF)
 	for y in range(grid_size.y):
 		for x in range(grid_size.x):
 			var value = grid_data[y][x]
 			image.set_pixel(x, y, Color(value, 0, 0))
-	
 
 	var texture = ImageTexture.create_from_image(image)
 
@@ -67,6 +54,7 @@ func update_shader():
 	material.set_shader_parameter("grid_size", grid_size)
 	material.set_shader_parameter("overlay_color", overlay_color)
 	material.set_shader_parameter("screen_size", get_viewport().get_visible_rect().size)
+
 
 func gaussian_density(sigma: float, x: float, y: float) -> float:
 	var exponent = -(x * x + y * y) / (2 * sigma * sigma)
@@ -83,28 +71,26 @@ func get_reasonable_kernel_size(sigma: float) -> int:
 
 	return n
 
-
+## Draws pheromone at a position, with a Gaussian blur
+## 
+## 	Args:
+## 		pos: The position to draw pheromone at.
+## 		max_value: The maximum value the pheromone will be set to. Note that
+## 			we first apply Gaussian blur so the actual value will be lower.
+## 			`max_value` is the total applied.
+## 		additive: If true, will set the value to `old + new` rather than
+## 			`max(new, old)`.
+## 		sigma: The standard deviation of the Gaussian kernel used for interpolation.
+## 			Bigger = more blurry.
+## 
+## 	Returns:
+## 		The total number of pheromone added.
 func draw_pheromone_at_position(
 	pos: Vector2,
 	value: float,
-	additive: bool = false,
+	additive: bool = true,
 	sigma: float = 0.5,
 ) -> float:
-	"""Draws pheromone at a position, with a Gaussian blur
-	
-	Args:
-		pos: The position to draw pheromone at.
-		max_value: The maximum value the pheromone will be set to. Note that
-			we first apply Gaussian blur so the actual value will be lower.
-			`max_value` is the total applied.
-		additive: If true, will set the value to `old + new` rather than
-			`max(new, old)`.
-		sigma: The standard deviation of the Gaussian kernel used for interpolation.
-			Bigger = more blurry.
-
-	Returns:
-		The total number of pheromone added.
-	"""
 	var rect_size: Vector2 = get_viewport_rect().size
 	var grid_x_float: float = pos.x / rect_size.x * grid_size.x - 0.5
 	var grid_y_float: float = pos.y / rect_size.y * grid_size.y - 0.5
@@ -136,7 +122,8 @@ func draw_pheromone_at_position(
 		if additive:
 			var previous_value = grid_data[y][x]
 			var new_value = min(1.0, previous_value + interpolation_value * value)
-			added_total = new_value - previous_value
+			added_total += new_value - previous_value
+#			print("added_total", added_total)
 			grid_data[y][x] = new_value
 		else:
 			var new_value = interpolation_value * value
@@ -145,7 +132,6 @@ func draw_pheromone_at_position(
 				grid_data[y][x] = new_value
 				added_total += added
 
-	update_shader()
 	return added_total
 
 
@@ -153,7 +139,7 @@ func decay_grid(delta: float):
 	var new_grid = []
 	
 	# Softer 3x3 Gaussian kernel for a very soft blur
-# Properly normalized symmetric 3x3 Gaussian kernel
+	# Properly normalized symmetric 3x3 Gaussian kernel
 	var kernel = [
 		[0.025, 0.05, 0.025], # Weights for neighboring cells
 		[0.05, 0.7, 0.05], # 0.7 for the center cell, ensuring it's dominant
@@ -193,8 +179,11 @@ func decay_grid(delta: float):
 		for x in range(int(grid_size.x)):
 			grid_data[y][x] = max(0.0, grid_data[y][x] * decay_coef)
 
-	# Update the shader with the new grid
-	update_shader()
 
 func _process(delta: float) -> void:
-	decay_grid(delta)
+	time_since_last_decay += delta
+	if time_since_last_decay > DECAY_MIN_DELAY_SECS:
+		decay_grid(time_since_last_decay)
+		time_since_last_decay = 0.0
+		# Update the shader with the new grid
+		update_shader()
