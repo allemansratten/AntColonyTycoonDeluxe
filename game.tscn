@@ -67,7 +67,9 @@ overlay_color = Color(0.207843, 0.501961, 1, 0.521569)
 process_mode = 3
 
 [node name="PheromoneBar" parent="UILayer" instance=ExtResource("8_ru8sk")]
-z_index = 300
+z_index = 50
+offset_top = 2.0
+offset_bottom = 2.0
 
 [node name="DitheringFilter" type="ColorRect" parent="UILayer"]
 visible = false
