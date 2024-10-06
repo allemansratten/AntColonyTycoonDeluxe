@@ -7,9 +7,11 @@ extends Node
 var game_over_sound: AudioStreamPlayer
 
 var is_drawing = false # To track if the user is currently drawing
+var is_game_muted = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$UILayer/StartGameOverlay.show()
 	get_tree().paused = true
 	screen_size = get_viewport().get_visible_rect().size
 	anthill.anthill_empty.connect(maybe_game_over)
@@ -55,12 +57,37 @@ func on_game_over() -> void:
 	is_game_over = true
 	get_tree().paused = true
 	$UILayer/GameOver.show()
+	$UILayer/GameUIOverlay.hide()
 
 	
 func _on_play_again_button_pressed() -> void:
 	get_tree().reload_current_scene()
+	$UILayer/GameUIOverlay.show()
 
 
 func _on_start_game_button_pressed() -> void:
 	get_tree().paused = false
-	$UILayer/StartGameInterface.hide()
+	$UILayer/StartGameOverlay.hide()
+	$UILayer/GameUIOverlay.show()
+
+
+func _on_resume_button_pressed() -> void:
+	get_tree().paused = false
+	$UILayer/PauseOverlay.hide()
+	$UILayer/GameUIOverlay.show()
+
+
+func _on_pause_button_pressed() -> void:
+	get_tree().paused = true
+	$UILayer/PauseOverlay.show()
+	$UILayer/GameUIOverlay.hide()
+
+
+func _on_mute_button_pressed() -> void:
+	if is_game_muted:
+		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), false)
+		$UILayer/PauseOverlay/MuteButton.text = "Mute"
+	else:
+		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), true)
+		$UILayer/PauseOverlay/MuteButton.text = "Unmute"
+	is_game_muted = !is_game_muted
