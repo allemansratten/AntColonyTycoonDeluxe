@@ -16,7 +16,7 @@ void fragment() {
     // Calculate the aspect ratio of the grid and the screen
     float grid_aspect = grid_size.x / grid_size.y;
     float screen_aspect = screen_size.x / screen_size.y;
-    
+
     vec2 scaled_uv;
     if (screen_aspect > grid_aspect) {
         // Screen is wider, fit to height
@@ -35,7 +35,7 @@ void fragment() {
             (UV.y * screen_size.y - (screen_size.y - adjusted_height) * 0.5) / adjusted_height
         );
     }
-    
+
     // Check if we're outside the grid bounds
     if (scaled_uv.x < 0.0 || scaled_uv.x > 1.0 || scaled_uv.y < 0.0 || scaled_uv.y > 1.0) {
         COLOR = vec4(0.0);  // Transparent outside grid bounds

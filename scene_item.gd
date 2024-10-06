@@ -4,9 +4,10 @@ const ItemVariant = preload("res://item_variants.gd").ItemVariant
 
 ## The number of resources remaining in the item
 @export var resources_remaining: int
+@export var pheromone_strength: float = 0.1
+@onready var pheromone_layer = get_node("/root/Game/PheromoneLayer")
 
 var sprite_node: Sprite2D = null
-var pheromone_emitter: Node = null
 var item_variant: ItemVariant
 
 func _ready():
@@ -33,15 +34,13 @@ func set_as_leaf():
 	sprite_node.rotate(randf_range(-45, 45)) # Random rotation
 	sprite_node.use_parent_material
 	resources_remaining = 20
-	# create_pheromone_emitter()
-	
+
 
 # Define how to visually set up the Berry
 func set_as_mushroom():
 	sprite_node.texture = load("res://resources/sprites/mushroom.png")
 	sprite_node.scale = Vector2(0.5, 0.5) # Scale down the leaf
 	resources_remaining = 30
-	# create_pheromone_emitter()
 	
 
 # Collision detection function
@@ -53,16 +52,5 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		if resources_remaining <= 0:
 			queue_free() # Remove the item from the scene
 
-# Function to create and attach a pheromone emitter
-func create_pheromone_emitter():
-	# Preload the PheromoneEmitter scene (make sure it's correctly referenced)
-	var emitter_scene: PackedScene = preload("res://pheromone_emitter.tscn")
-
-	# Instance the PheromoneEmitter
-	pheromone_emitter = emitter_scene.instantiate()
-
-	# Set the emitter's initial position to match the leaf's position
-	pheromone_emitter.position = self.position
-
-	add_child(pheromone_emitter)
-	pheromone_emitter.start_emission(self.position)
+func _process(delta: float) -> void:
+	pheromone_layer.draw_pheromone_at_position(position, delta * pheromone_strength, true, 1.0)
