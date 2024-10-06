@@ -151,6 +151,8 @@ func start_new_movement():
 		# Scaled between 0 and 1
 		var angular_difference = abs(angle_difference(angle, rotation)) / PI
 		var score = pheromone_layer.get_value_at(target.x, target.y) - (angular_difference * angle_consistency_reward)
+		if !is_on_screen(target):
+			score = -100
 		scores.append(score)
 
 	scores = scores.map(func(x): return x / angle_sampling_temperature)
@@ -161,6 +163,18 @@ func start_new_movement():
 
 	target_position = global_position + Vector2(cos(angle), sin(angle)) * random_distance
 	is_moving = true
+
+
+func to_world_position(screen_position: Vector2) -> Vector2:
+	return get_viewport().canvas_transform.affine_inverse() * screen_position
+
+func is_on_screen(point: Vector2) -> bool:
+	var screen_rect: Rect2 = get_viewport().get_visible_rect()
+	var top_left: Vector2 = to_world_position(screen_rect.position)
+	var bottom_right: Vector2 = to_world_position(screen_rect.position + screen_rect.size)
+	var world_rect: Rect2 = Rect2(top_left, bottom_right - top_left)
+		
+	return world_rect.has_point(point)
 
 
 func start_waiting():
