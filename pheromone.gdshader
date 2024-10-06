@@ -36,6 +36,9 @@ void fragment() {
         );
     }
 
+    // kinda fixes a +/-1 error, don't ask me why this works
+     scaled_uv += vec2(1) / grid_size;
+
     // Check if we're outside the grid bounds
     if (scaled_uv.x < 0.0 || scaled_uv.x > 1.0 || scaled_uv.y < 0.0 || scaled_uv.y > 1.0) {
         COLOR = vec4(0.0);  // Transparent outside grid bounds
