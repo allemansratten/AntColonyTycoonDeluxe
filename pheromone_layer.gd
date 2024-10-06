@@ -186,4 +186,3 @@ func _process(delta: float) -> void:
 		time_since_last_decay = 0.0
 		# Update the shader with the new grid
 		update_shader()
-
