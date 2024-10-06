@@ -22,10 +22,6 @@ shader_parameter/dither_palette = ExtResource("6_l1q0f")
 script = ExtResource("1_f6hxw")
 ant_scene = ExtResource("2_82cr4")
 
-[node name="AntSpawnTimer" type="Timer" parent="."]
-wait_time = 0.75
-autostart = true
-
 [node name="SceneItemManager" type="Node" parent="."]
 script = ExtResource("1_n0r2e")
 
@@ -62,5 +58,49 @@ size_flags_vertical = 4
 color = Color(1, 1, 1, 0)
 metadata/_edit_lock_ = true
 
-[connection signal="timeout" from="AntSpawnTimer" to="." method="_on_ant_spawn_timer_timeout"]
+[node name="GameOver" type="Control" parent="UILayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameOverLabel" type="Label" parent="UILayer/GameOver"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -295.5
+offset_top = -34.5
+offset_right = 295.5
+offset_bottom = 34.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "Your anthill is no more :("
+horizontal_alignment = 1
+
+[node name="PlayAgainButton" type="Button" parent="UILayer/GameOver"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = 66.0
+offset_right = 42.0
+offset_bottom = 97.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "Play again"
+
+[node name="DroppedItemsLayer" type="Node2D" parent="."]
+
 [connection signal="timeout" from="SceneItemManager/ItemSpawnTimer" to="SceneItemManager" method="_on_item_spawn_timer_timeout"]
+[connection signal="pressed" from="UILayer/GameOver/PlayAgainButton" to="." method="_on_play_again_button_pressed"]
