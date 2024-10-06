@@ -11,9 +11,9 @@ var is_drawing = false # To track if the user is currently drawing
 func _ready() -> void:
 	screen_size = get_viewport().get_visible_rect().size
 
-	# spawn 100 ants on random positions
 	for i in range(100):
-		spawn_ant(false)
+		# Spawning at the anthill because otherwise they get spawned out of bounds
+		spawn_ant(true)
 
 
 func spawn_ant(on_anthill: bool) -> void:
@@ -23,6 +23,7 @@ func spawn_ant(on_anthill: bool) -> void:
 	if on_anthill:
 		ant.position = $Anthill.position + Vector2(randf_range(-30, 30), randf_range(-30, 30))
 	else:
+		# TODO(va): only spawn on screen
 		ant.position = Vector2(randf_range(0, screen_size.x), randf_range(0, screen_size.y))
 
 	ant.pheromone_layer = $PheromoneLayer
@@ -36,7 +37,6 @@ func _process(delta: float) -> void:
 
 func _on_ant_spawn_timer_timeout() -> void:
 	spawn_ant(true)
-	pass
 
 # Track mouse button input for drawing
 func _input(event: InputEvent) -> void:
@@ -66,3 +66,7 @@ func _on_ant_died() -> void:
 func on_game_over() -> void:
 	is_game_over = true
 	$UILayer/GameOver.show()
+
+
+func _on_play_again_button_pressed() -> void:
+	get_tree().reload_current_scene()

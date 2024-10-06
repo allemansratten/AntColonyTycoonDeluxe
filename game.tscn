@@ -71,7 +71,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="UILayer/GameOver"]
+[node name="GameOverLabel" type="Label" parent="UILayer/GameOver"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -88,7 +88,7 @@ theme_override_font_sizes/font_size = 50
 text = "Your anthill is no more :("
 horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="UILayer/GameOver"]
+[node name="PlayAgainButton" type="Button" parent="UILayer/GameOver"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -108,3 +108,4 @@ text = "Play again"
 
 [connection signal="timeout" from="AntSpawnTimer" to="." method="_on_ant_spawn_timer_timeout"]
 [connection signal="timeout" from="SceneItemManager/ItemSpawnTimer" to="SceneItemManager" method="_on_item_spawn_timer_timeout"]
+[connection signal="pressed" from="UILayer/GameOver/PlayAgainButton" to="." method="_on_play_again_button_pressed"]
