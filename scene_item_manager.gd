@@ -8,16 +8,18 @@ const ItemVariant = preload("res://item_variants.gd").ItemVariant
 var scene_item: PackedScene
 
 func get_random_position() -> Vector2:
-	# TODO(va): Properly get the visible rectangle area
-	var corner1 = get_viewport().canvas_transform * Vector2.ZERO
-	var corner2 = get_viewport().canvas_transform * Vector2(get_viewport().size)
-	corner1 = Vector2(400, 300)
-	corner2 = Vector2(800, 600)
-	
-	var random_x = randf_range(corner1.x, corner2.x)
-	var random_y = randf_range(corner1.y, corner2.y)
+	# Get the viewport size in pixels
+	var viewport_size: Vector2 = get_viewport().size
 
-	return Vector2(random_x, random_y)
+	# Generate a random position within the viewport (screen space)
+	var random_screen_x: float = randf_range(0, viewport_size.x)
+	var random_screen_y: float = randf_range(0, viewport_size.y)
+	var random_screen_position: Vector2 = Vector2(random_screen_x, random_screen_y)
+
+	# Convert the random screen position to world coordinates using the canvas transform
+	var world_position: Vector2 = get_viewport().canvas_transform.affine_inverse() * random_screen_position
+
+	return world_position
 
 func get_random_valid_position() -> Vector2:
 	while true:
