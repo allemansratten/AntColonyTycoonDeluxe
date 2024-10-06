@@ -35,6 +35,7 @@ offset_bottom = 164.0
 theme_override_font_sizes/normal_font_size = 40
 bbcode_enabled = true
 text = "[center]0[/center]"
+scroll_active = false
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="AntSpawnTimer" to="." method="_on_ant_spawn_timer_timeout"]
