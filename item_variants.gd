@@ -1,8 +1,11 @@
-## NOTE: get_random_variant() must be updated if new types are added.
+# Define the enum for item variants
 enum ItemVariant {
 	NONE,
 	LEAF,
 	MUSHROOM,
 	STICK,
-	ANT,
+	ANT
 }
+
+# Group food item variants
+const foodItemVariants = [ItemVariant.LEAF, ItemVariant.MUSHROOM, ItemVariant.ANT]

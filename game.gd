@@ -4,6 +4,7 @@ extends Node
 
 @export var is_game_over: bool = false
 @onready var screen_size = get_viewport().get_visible_rect().size
+var game_over_sound: AudioStreamPlayer
 
 var is_drawing = false # To track if the user is currently drawing
 
@@ -45,7 +46,8 @@ func maybe_game_over() -> void:
 
 	# This was called when there are no more ants in the anthill, check if there are any living ants left
 	var ants = get_tree().get_nodes_in_group("ants")
-	if ants.size() == 0:
+	if ants.size() <= 0:
+		game_over_sound.play()
 		on_game_over()
 
 
@@ -54,7 +56,7 @@ func on_game_over() -> void:
 	get_tree().paused = true
 	$UILayer/GameOver.show()
 
-
+	
 func _on_play_again_button_pressed() -> void:
 	get_tree().reload_current_scene()
 

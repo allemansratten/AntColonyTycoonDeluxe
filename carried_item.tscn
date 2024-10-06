@@ -9,5 +9,4 @@ scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_46alr")
 offset = Vector2(20, 0)
 script = ExtResource("2_rc4us")
-variant = null
 metadata/_edit_group_ = true

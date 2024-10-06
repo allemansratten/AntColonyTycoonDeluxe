@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 const ItemVariant = preload("res://item_variants.gd").ItemVariant
+const FoodItems = preload("res://item_variants.gd").foodItemVariants
 enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 
 @export var ant_type: AntType = AntType.HARVESTER
@@ -42,6 +43,7 @@ var food_pickup_sound: AudioStreamPlayer
 var food_deposit_sound: AudioStreamPlayer
 var stick_pickup_sound: AudioStreamPlayer
 var stick_deposit_sound: AudioStreamPlayer
+var death_sound: AudioStreamPlayer
 
 @onready var pheromone_layer = get_node("/root/Game/PheromoneLayer")
 
@@ -57,6 +59,7 @@ func _ready():
 	food_deposit_sound = $FoodDepositSound
 	stick_pickup_sound = $StickPickupSound
 	stick_deposit_sound = $StickDepositSound
+	death_sound = $DeathSound
 
 	# Start after a random delay to desync them at the beginning
 	await get_tree().create_timer(randf_range(0.0, max_wait_time)).timeout
@@ -218,12 +221,7 @@ func maybe_pickup_item(picked_item_variant: ItemVariant) -> bool:
 	handle_on_pickup_movement()
 	carried_item.set_variant(picked_item_variant)
 
-	# Play the appropriate pickup sound
-	match picked_item_variant:
-		ItemVariant.LEAF or ItemVariant.MUSHROOM:
-			food_pickup_sound.play()
-		ItemVariant.STICK:
-			stick_pickup_sound.play()
+	play_pickup_sound(picked_item_variant)
 
 	return true
 
@@ -237,13 +235,8 @@ func maybe_deposit_item() -> Dictionary:
 
 	carried_item.set_variant(ItemVariant.NONE)
 
-	# Play the appropriate deposit sound
-	match deposited_item_variant:
-		ItemVariant.LEAF or ItemVariant.MUSHROOM:
-			food_deposit_sound.play()
-		ItemVariant.STICK:
-			stick_deposit_sound.play()
-
+	play_deposit_sound(deposited_item_variant)
+	
 	# Return a dictionary containing success and deposited item variant
 	return {"success": true, "deposited_item_variant": deposited_item_variant}
 
@@ -272,7 +265,9 @@ func drop_carried_item():
 func die():
 	pheromone_layer.draw_pheromone_at_position(position, pheromone_strength_on_death, true, 1.0)
 	drop_carried_item()
-
+	death_sound.play()
+	await get_tree().create_timer(death_sound.stream.get_length()).timeout
+	print("Ant is dying") # Debugging print statement
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
 	dropped_item.set_item_properties(
@@ -285,7 +280,26 @@ func die():
 		30.0 # decay time
 	)
 
-	queue_free() # Remove the ant from the scene
+	queue_free() # Free the node after the sound finishes playing
+
 
 func _on_lifespan_timer_timeout() -> void:
 	die()
+
+func play_pickup_sound(inventory_item_variant: ItemVariant) -> void:
+	# Check if the item is in the food item group
+	if inventory_item_variant in FoodItems:
+		food_pickup_sound.play() # Play food sound for food items
+	elif inventory_item_variant == ItemVariant.STICK:
+		stick_pickup_sound.play() # Play stick sound for non-food items
+	else:
+		print("No sound assigned for this item variant.")
+
+func play_deposit_sound(inventory_item_variant: ItemVariant) -> void:
+	# Check if the item is in the food item group
+	if inventory_item_variant in FoodItems:
+		food_deposit_sound.play() # Play food sound for food items
+	elif inventory_item_variant == ItemVariant.STICK:
+		stick_deposit_sound.play() # Play stick sound for non-food items
+	else:
+		print("No sound assigned for this item variant.")

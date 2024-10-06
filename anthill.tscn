@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://tmy1yvfu2r8g"]
+[gd_scene load_steps=4 format=3 uid="uid://4n72njshbbvc"]
 
 [ext_resource type="Texture2D" uid="uid://bjojfl6octk2h" path="res://resources/sprites/anthill.png" id="1_6cc8v"]
 [ext_resource type="Script" path="res://anthill.gd" id="1_tmo8a"]
