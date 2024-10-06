@@ -2,7 +2,7 @@ extends Control
 
 @export var pheromone_available: float = 100.0
 @export var depletion_speed: float = 5.0
-@export var regeneration_speed: float = 0.0
+@export var regeneration_speed: float = 3.0
 @onready var progress_bar = $ProgressBar
 
 
