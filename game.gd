@@ -45,6 +45,11 @@ func _input(event: InputEvent) -> void:
 			else:
 				is_drawing = false
 	elif event is InputEventMouseMotion and is_drawing:
-		if $PheromoneBar.pheromone_available > 0:
-			var added = $PheromoneLayer.draw_pheromone_at_position(event.position, 1.0)
-			$PheromoneBar.deplete(added)
+		if $UILayer/PheromoneBar.pheromone_available > 0:
+			# Camera2D changes the viewport's `canvas_transform` so we need to convert
+			# the mouse position to world position.
+			var world_position = get_viewport().canvas_transform.affine_inverse() * event.position
+
+			var added = $PheromoneLayer.draw_pheromone_at_position(world_position, 1.0)
+			
+			$UILayer/PheromoneBar.deplete(added)

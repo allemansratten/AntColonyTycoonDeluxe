@@ -3,7 +3,7 @@ extends Area2D
 @export var pheromone_strength: float = 0.5
 
 @onready var pheromone_layer = get_node("/root/Game/PheromoneLayer")
-@onready var pheromone_bar = get_node("/root/Game/PheromoneBar")
+@onready var pheromone_bar = get_node("/root/Game/UILayer/PheromoneBar")
 @onready var ant_spawner = get_node("/root/Game")
 @export var pheromone_per_item = 1.0
 

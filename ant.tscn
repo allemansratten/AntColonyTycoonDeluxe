@@ -36,7 +36,7 @@ metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 rotation = 1.5708
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.128, 0.128)
 sprite_frames = SubResource("SpriteFrames_xw4ci")
 animation = &"harvester"
 frame_progress = 0.997938
