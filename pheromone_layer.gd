@@ -123,7 +123,6 @@ func draw_pheromone_at_position(
 			var previous_value = grid_data[y][x]
 			var new_value = min(1.0, previous_value + interpolation_value * value)
 			added_total += new_value - previous_value
-#			print("added_total", added_total)
 			grid_data[y][x] = new_value
 		else:
 			var new_value = interpolation_value * value

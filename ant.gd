@@ -267,7 +267,6 @@ func die():
 	drop_carried_item()
 	death_sound.play()
 	await get_tree().create_timer(death_sound.stream.get_length()).timeout
-	print("Ant is dying") # Debugging print statement
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
 	dropped_item.set_item_properties(
