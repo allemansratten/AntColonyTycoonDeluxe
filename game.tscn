@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://caeqm2sx0phvi"]
+[gd_scene load_steps=17 format=3 uid="uid://cs7o50oaokh2e"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
@@ -11,8 +11,19 @@
 [ext_resource type="Texture2D" uid="uid://3k3gmhyq1qhe" path="res://resources/palettes/color-graphics-adapter.png" id="7_8k07p"]
 [ext_resource type="PackedScene" path="res://pheromone_bar.tscn" id="8_ru8sk"]
 [ext_resource type="Script" path="res://camera_2d.gd" id="9_b5tg6"]
+[ext_resource type="Shader" path="res://pheromone.gdshader" id="9_luj6i"]
 [ext_resource type="Theme" uid="uid://btv1akpmqnmv8" path="res://resources/themes/default_theme.tres" id="10_sp46i"]
 [ext_resource type="AudioStream" uid="uid://dn31f4gf3wuqb" path="res://resources/sounds/runescape-death-sound.mp3" id="11_1okbk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nb5i8"]
+shader = ExtResource("9_luj6i")
+shader_parameter/grid_size = null
+shader_parameter/overlay_color = null
+shader_parameter/screen_size = null
+shader_parameter/overlay_color_1 = Vector4(0.2, 0, 1, 0.3)
+shader_parameter/overlay_color_2 = Vector4(0.4, 0, 0.8, 0.4)
+shader_parameter/overlay_color_3 = Vector4(0.6, 0, 0.6, 0.5)
+shader_parameter/overlay_color_4 = Vector4(0.9, 0.2, 0.4, 0.6)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6ii3t"]
 shader = ExtResource("6_8n14l")
@@ -61,6 +72,7 @@ script = ExtResource("9_b5tg6")
 [node name="PheromoneLayer" parent="." instance=ExtResource("5_dmj4k")]
 top_level = true
 z_index = 200
+material = SubResource("ShaderMaterial_nb5i8")
 overlay_color = Color(0.207843, 0.501961, 1, 0.521569)
 
 [node name="UILayer" type="CanvasLayer" parent="."]
@@ -70,17 +82,6 @@ process_mode = 3
 z_index = 50
 offset_top = 2.0
 offset_bottom = 2.0
-
-[node name="DitheringFilter" type="ColorRect" parent="UILayer"]
-top_level = true
-z_index = 100
-material = SubResource("ShaderMaterial_6ii3t")
-offset_right = 1597.0
-offset_bottom = 901.0
-size_flags_horizontal = 4
-size_flags_vertical = 4
-color = Color(1, 1, 1, 0)
-metadata/_edit_lock_ = true
 
 [node name="GameOver" type="Control" parent="UILayer"]
 visible = false
@@ -213,6 +214,17 @@ text = "II"
 
 [node name="GameOverSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_1okbk")
+
+[node name="DitheringFilter" type="ColorRect" parent="."]
+top_level = true
+z_index = 100
+material = SubResource("ShaderMaterial_6ii3t")
+offset_right = 1597.0
+offset_bottom = 901.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+color = Color(1, 1, 1, 0)
+metadata/_edit_lock_ = true
 
 [connection signal="timeout" from="SceneItemManager/ItemSpawnTimer" to="SceneItemManager" method="_on_item_spawn_timer_timeout"]
 [connection signal="pressed" from="UILayer/GameOver/PlayAgainButton" to="." method="_on_play_again_button_pressed"]
