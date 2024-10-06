@@ -112,12 +112,12 @@ offset_bottom = 40.0
 
 [node name="GameTitleLabel" type="Label" parent="UILayer/StartGameInterface"]
 layout_mode = 0
-offset_left = 131.0
-offset_top = 4.0
-offset_right = 743.0
-offset_bottom = 334.0
-theme_override_font_sizes/font_size = 128
-text = "World of Antcraft"
+offset_left = 75.0
+offset_top = -4.0
+offset_right = 1685.0
+offset_bottom = 326.0
+theme_override_font_sizes/font_size = 100
+text = "Ant Colony Tycoon Deluxe"
 vertical_alignment = 1
 
 [node name="InstructionsLabel" type="Label" parent="UILayer/StartGameInterface"]
