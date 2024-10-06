@@ -61,6 +61,7 @@ scale = Vector2(0.2, 0.2)
 texture = ExtResource("5_6edao")
 offset = Vector2(20, 0)
 script = ExtResource("5_6o5gs")
+variant = null
 metadata/_edit_group_ = true
 
 [node name="FoodPickupSound" type="AudioStreamPlayer" parent="."]

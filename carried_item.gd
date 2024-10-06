@@ -17,8 +17,9 @@ const VARIANT_TO_TEXTURES = {
 		preload("res://resources/sprites/mushroom_piece3.png"),
 	],
 	ItemVariant.STICK: [
-		# TODO: stick pieces
-		preload("res://resources/sprites/stick.png"),
+		preload("res://resources/sprites/stick_piece1.png"),
+		preload("res://resources/sprites/stick_piece2.png"),
+		preload("res://resources/sprites/stick_piece3.png"),
 	]
 }
 
