@@ -176,7 +176,7 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 
 func maybe_pickup_item(picked_item_variant: ItemVariant) -> bool:
 	# If the ant is carrying an item, it can only pick up the same type
-	if (carried_item.variant != ItemVariant.NONE && carried_item.variant != picked_item_variant):
+	if carried_item.variant != ItemVariant.NONE:
 		return false
 
 	carried_item.set_variant(picked_item_variant)
@@ -233,14 +233,17 @@ func die():
 
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
-	dropped_item.set_item_properties(carried_item.variant, {
-		'texture': load("res://resources/sprites/ant_dead.png"),
-		'scale': Vector2(0.1, 0.1),
-		'position': global_position
-	})
+	dropped_item.set_item_properties(
+		carried_item.variant,
+		{
+			'texture': load("res://resources/sprites/ant_dead.png"),
+			'scale': Vector2(0.1, 0.1),
+			'position': global_position
+		},
+		30.0 # decay time
+	)
 
 	queue_free() # Remove the ant from the scene
-
 	ant_died.emit()
 
 func _on_lifespan_timer_timeout() -> void:
