@@ -9,7 +9,6 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 
 @export var inventory_num_items_carried: int = 0
 @export var inventory_max_items: int = 1
-@export var inventory_item_variant: ItemVariant = ItemVariant.NONE
 
 @export var min_move_distance: float = 35.
 @export var max_move_distance: float = 50.
@@ -22,11 +21,10 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 
 @onready var _animated_sprite = $AnimatedSprite2D
 @onready var lifespan_timer = get_node("LifespanTimer")
-@onready var carried_item_sprite = get_node("CarriedItemSprite")
+@onready var carried_item = get_node("CarriedItem")
 @onready var dropped_items_layer = get_node("/root/Game/DroppedItemsLayer")
 @onready var dropped_item_scene = load("res://dropped_item.tscn")
 
-@export var carried_item_scale = 0.25 / 4
 @export var pheromone_creation_when_carrying: float = 0.05
 @export var pheromone_strength_on_death: float = 0.2
 
@@ -59,8 +57,6 @@ func _ready():
 	lifespan_timer.wait_time = randf_range(lifespan_min_secs, lifespan_max_secs)
 	lifespan_timer.start()
 
-	carried_item_sprite.scale = Vector2(carried_item_scale, carried_item_scale)
-	
 	food_pickup_sound = $FoodPickupSound
 	food_deposit_sound = $FoodDepositSound
 	stick_pickup_sound = $StickPickupSound
@@ -183,33 +179,23 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 	queue_free()
 
 
-func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Texture) -> bool:
+func maybe_pickup_item(picked_item_variant: ItemVariant) -> bool:
 	# If the ant is carrying an item, it can only pick up the same type
-	if (inventory_item_variant != ItemVariant.NONE && inventory_item_variant != picked_item_variant):
+	if (carried_item.variant != ItemVariant.NONE && carried_item.variant != picked_item_variant):
 		return false
 	# If the ant is not carrying an item, it can pick up any type
 	if inventory_num_items_carried >= inventory_max_items:
 		return false
 
 	inventory_num_items_carried += 1
-	carried_item_sprite.texture = picked_item_texture
-	inventory_item_variant = picked_item_variant
+	carried_item.set_variant(picked_item_variant)
 
-		# Play the appropriate pickup sound
+	# Play the appropriate pickup sound
 	match picked_item_variant:
 		ItemVariant.LEAF or ItemVariant.MUSHROOM:
 			food_pickup_sound.play()
 		ItemVariant.STICK:
 			stick_pickup_sound.play()
-
-	carried_item_sprite.scale = Vector2.ZERO
-	var tween = create_tween()
-	tween.tween_property(
-		carried_item_sprite,
-		"scale",
-		Vector2(carried_item_scale, carried_item_scale),
-		0.3
-	)
 
 	return true
 	
@@ -218,14 +204,11 @@ func maybe_deposit_item() -> Dictionary:
 		return {"success": false, "deposited_item_variant": ItemVariant.NONE}
 
 	# Store the current item variant before resetting it
-	var deposited_item_variant = inventory_item_variant
+	var deposited_item_variant = carried_item.variant
 
 	inventory_num_items_carried -= 1
 	if inventory_num_items_carried == 0:
-		inventory_item_variant = ItemVariant.NONE
-		var tween = create_tween()
-		tween.tween_property(carried_item_sprite, "scale", Vector2.ZERO, 0.3)
-		tween.tween_callback(reset_carried_item_sprite)
+		carried_item.set_variant(ItemVariant.NONE)
 
 	# Play the appropriate deposit sound
 	match deposited_item_variant:
@@ -240,27 +223,21 @@ func maybe_deposit_item() -> Dictionary:
 
 func drop_carried_item():
 	# Sanity check: checking both conditions
-	if inventory_num_items_carried == 0 || inventory_item_variant == ItemVariant.NONE:
+	if inventory_num_items_carried == 0 || carried_item.variant == ItemVariant.NONE:
 		return false
 
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
-	dropped_item.set_item_properties(inventory_item_variant, {
-		'texture': carried_item_sprite.texture,
-		'scale': carried_item_sprite.scale,
+	dropped_item.set_item_properties(carried_item.variant, {
+		'texture': carried_item.texture,
+		'scale': carried_item.scale,
 		'position': global_position + Vector2(randf_range(-15, 15), randf_range(-15, 15))
 	})
 
 	inventory_num_items_carried = 0
-	inventory_item_variant = ItemVariant.NONE
-	reset_carried_item_sprite()
+	carried_item.set_variant(ItemVariant.NONE)
 
 	return true
-
-
-func reset_carried_item_sprite():
-	carried_item_sprite.texture = null
-	carried_item_sprite.scale = Vector2(carried_item_scale, carried_item_scale)
 
 
 func die():
@@ -269,14 +246,11 @@ func die():
 
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
-	dropped_item.set_item_properties(inventory_item_variant, {
+	dropped_item.set_item_properties(carried_item.variant, {
 		'texture': load("res://resources/sprites/ant_dead.png"),
 		'scale': Vector2(0.1, 0.1),
 		'position': global_position
 	})
-	
-	# Remove the ant from the scene
-	queue_free()
 
 	queue_free() # Remove the ant from the scene
 
