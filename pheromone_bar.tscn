@@ -9,6 +9,6 @@ script = ExtResource("1_ahigu")
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
 layout_mode = 0
-offset_right = 214.0
+offset_right = 148.0
 offset_bottom = 40.0
 value = 100.0
