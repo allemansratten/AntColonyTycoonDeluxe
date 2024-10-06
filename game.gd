@@ -49,7 +49,7 @@ func _input(event: InputEvent) -> void:
 			# the mouse position to world position.
 			var world_position = get_viewport().canvas_transform.affine_inverse() * event.position
 
-			var added = $PheromoneLayer.draw_pheromone_at_position(world_position, 1.0)
+			var added = $PheromoneLayer.draw_pheromone_at_position(world_position, 0.1)
 			
 			$UILayer/PheromoneBar.deplete(added)
 
