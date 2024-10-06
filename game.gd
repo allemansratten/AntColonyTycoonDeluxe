@@ -1,5 +1,6 @@
 extends Node
 
+@onready var anthill = get_node("Anthill")
 
 @export var ant_scene: PackedScene
 @export var is_game_over: bool = false
@@ -10,11 +11,11 @@ var is_drawing = false # To track if the user is currently drawing
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	screen_size = get_viewport().get_visible_rect().size
+	anthill.anthill_empty.connect(maybe_game_over)
 
 
 func spawn_ant(on_anthill: bool) -> void:
 	var ant = ant_scene.instantiate()
-	ant.ant_died.connect(_on_ant_died)
 	
 	if on_anthill:
 		ant.position = $Anthill.position + Vector2(randf_range(-30, 30), randf_range(-30, 30))
@@ -49,12 +50,16 @@ func _input(event: InputEvent) -> void:
 			
 			$UILayer/PheromoneBar.deplete(added)
 
-func _on_ant_died() -> void:
-	# This signal is emitted by the ant when it dies, but it's still
-	# in the group at that point. So it's counted even though it's dead.
-	var n_ants_left_plus_1 = get_tree().get_nodes_in_group("ants")
-	if n_ants_left_plus_1.size() == 1:
+
+func maybe_game_over() -> void:
+	if is_game_over: # Game is already over, ignore
+		return
+
+	# This was called when there are no more ants in the anthill, check if there are any living ants left
+	var ants = get_tree().get_nodes_in_group("ants")
+	if ants.size() == 0:
 		on_game_over()
+
 
 func on_game_over() -> void:
 	is_game_over = true

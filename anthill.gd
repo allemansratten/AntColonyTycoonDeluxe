@@ -10,7 +10,9 @@ extends Area2D
 @export var pheromone_per_item = 1.0
 
 var item_count: int = 0
-var num_ants_ready: int = 100
+var num_ants_ready: int = 1
+
+signal anthill_empty
 
 # Preload ItemVariant enum from item_variants.gd
 const ItemVariant = preload("res://item_variants.gd").ItemVariant
@@ -50,6 +52,7 @@ func _on_body_entered(body: Node2D) -> void:
 @warning_ignore("integer_division")
 func _on_ant_spawn_timer_timeout() -> void:
 	if num_ants_ready <= 0:
+		anthill_empty.emit()
 		return
 	var num_ants_to_spawn = max(num_ants_ready / 20, 1) # always spawn at least 1 ant
 	for _n in range(num_ants_to_spawn):
