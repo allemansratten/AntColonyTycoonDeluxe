@@ -23,9 +23,17 @@ func get_random_position() -> Vector2:
 
 func get_random_valid_position() -> Vector2:
 	while true:
-		var position = get_random_position()
-		if position.distance_to(anthill.position) > min_distance_from_anthill:
-			return position
+		var position: Vector2 = get_random_position()
+		if position.distance_to(anthill.position) < min_distance_from_anthill:
+			continue
+		var rock_conflict = false
+		for rock in get_tree().get_nodes_in_group("rocks"):
+			if position.distance_to(rock.position) < 64:
+				rock_conflict = true
+				break
+		if rock_conflict:
+			continue
+		return position
 	
 	# raise an error if no valid position is found
 	assert(false, "No valid position found")

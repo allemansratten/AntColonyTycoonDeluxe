@@ -150,18 +150,30 @@ func start_new_movement():
 		# Scaled between 0 and 1
 		var angular_difference = abs(angle_difference(angle, rotation)) / PI
 		var score = pheromone_layer.get_value_at(target.x, target.y) - (angular_difference * angle_consistency_reward)
-		if !is_on_screen(target):
+		if !is_on_screen(target) or collides_with_anything(target):
 			score = -100
 		scores.append(score)
 
 	scores = scores.map(func(x): return x / angle_sampling_temperature)
 	scores = softmax(scores)
 
-	var selected = sample_from_scores(scores)
+	var selected: int = sample_from_scores(scores)
 	var angle = potential_movement_angles[selected]
 
 	target_position = global_position + Vector2(cos(angle), sin(angle)) * random_distance
 	is_moving = true
+
+
+
+func collides_with_anything(point: Vector2) -> bool:
+	var parameters = PhysicsPointQueryParameters2D.new()
+	parameters.position = point
+	parameters.collide_with_areas = false
+	parameters.collide_with_bodies = true
+	parameters.collision_mask = 4
+	
+	var collision: Array[Dictionary] = get_world_2d().direct_space_state.intersect_point(parameters)
+	return collision.size() > 0
 
 
 func start_waiting(time_to_wait: float = 0.0):

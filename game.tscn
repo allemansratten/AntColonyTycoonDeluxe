@@ -1,14 +1,15 @@
-[gd_scene load_steps=11 format=3 uid="uid://caeqm2sx0phvi"]
+[gd_scene load_steps=12 format=3 uid="uid://cs7o50oaokh2e"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
 [ext_resource type="PackedScene" uid="uid://10xcg3p30pal" path="res://ant.tscn" id="2_82cr4"]
 [ext_resource type="PackedScene" uid="uid://4n72njshbbvc" path="res://anthill.tscn" id="4_cw8q0"]
-[ext_resource type="PackedScene" path="res://pheromone_layer.tscn" id="5_dmj4k"]
+[ext_resource type="PackedScene" uid="uid://c3v4pvxkk33qh" path="res://pheromone_layer.tscn" id="5_dmj4k"]
 [ext_resource type="Shader" path="res://resources/shaders/color_dither_post_2d.gdshader" id="6_8n14l"]
 [ext_resource type="Texture2D" uid="uid://bftew88ofmwbw" path="res://resources/palettes/steam-lords.png" id="6_l1q0f"]
 [ext_resource type="PackedScene" path="res://pheromone_bar.tscn" id="8_ru8sk"]
 [ext_resource type="Script" path="res://camera_2d.gd" id="9_b5tg6"]
+[ext_resource type="Script" path="res://obstacle_generator.gd" id="10_n5ty1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6ii3t"]
 shader = ExtResource("6_8n14l")
@@ -101,6 +102,9 @@ theme_override_font_sizes/font_size = 40
 text = "Play again"
 
 [node name="DroppedItemsLayer" type="Node2D" parent="."]
+
+[node name="ObstacleGenerator" type="Node" parent="."]
+script = ExtResource("10_n5ty1")
 
 [connection signal="timeout" from="SceneItemManager/ItemSpawnTimer" to="SceneItemManager" method="_on_item_spawn_timer_timeout"]
 [connection signal="pressed" from="UILayer/GameOver/PlayAgainButton" to="." method="_on_play_again_button_pressed"]

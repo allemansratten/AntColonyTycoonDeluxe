@@ -36,6 +36,7 @@ radius = 3.16228
 [node name="Ant" type="CharacterBody2D"]
 collision_mask = 6
 motion_mode = 1
+wall_min_slide_angle = 0.0
 script = ExtResource("1_jww2m")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
