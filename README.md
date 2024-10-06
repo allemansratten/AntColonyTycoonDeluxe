@@ -1,4 +1,4 @@
 # LD56
 Ludum Dare 56 game. Theme: Tiny creatures
 
-test
+Progress bar resources: https://www.youtube.com/watch?v=kWWrf0_aVNI

@@ -47,7 +47,9 @@ z_index = 200
 process_mode = 3
 
 [node name="PheromoneBar" parent="UILayer" instance=ExtResource("8_ru8sk")]
-z_index = 300
+z_index = 50
+offset_top = 2.0
+offset_bottom = 2.0
 
 [node name="DitheringFilter" type="ColorRect" parent="UILayer"]
 top_level = true
