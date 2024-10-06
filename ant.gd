@@ -176,7 +176,7 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 
 func maybe_pickup_item(picked_item_variant: ItemVariant) -> bool:
 	# If the ant is carrying an item, it can only pick up the same type
-	if (carried_item.variant != ItemVariant.NONE && carried_item.variant != picked_item_variant):
+	if carried_item.variant != ItemVariant.NONE:
 		return false
 
 	carried_item.set_variant(picked_item_variant)
