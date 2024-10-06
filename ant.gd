@@ -26,6 +26,7 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 
 @export var carried_item_scale = 0.25 / 4
 @export var pheromone_creation_when_carrying: float = 0.05
+@export var pheromone_strength_on_death: float = 0.2
 
 ## positive = ants will tend to select directions similar to the ones they have
 ## 0 = they don't care
@@ -227,7 +228,7 @@ func reset_carried_item_sprite():
 
 
 func die():
-	pheromone_layer.draw_pheromone_at_position(position, 1.0, true, 1.0)
+	pheromone_layer.draw_pheromone_at_position(position, pheromone_strength_on_death, true, 1.0)
 	drop_carried_item()
 	# TODO: Create a dead ant item that will be picked up by other ants
 	
