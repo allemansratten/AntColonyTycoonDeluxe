@@ -4,13 +4,14 @@ extends Node
 
 @export var ant_scene: PackedScene
 @export var is_game_over: bool = false
-var screen_size
+@onready var screen_size = get_viewport().get_visible_rect().size
 var game_over_sound: AudioStreamPlayer
 
 var is_drawing = false # To track if the user is currently drawing
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	get_tree().paused = true
 	screen_size = get_viewport().get_visible_rect().size
 	anthill.anthill_empty.connect(maybe_game_over)
 	game_over_sound = $GameOverSound
@@ -65,8 +66,14 @@ func maybe_game_over() -> void:
 
 func on_game_over() -> void:
 	is_game_over = true
+	get_tree().paused = true
 	$UILayer/GameOver.show()
 
 	
 func _on_play_again_button_pressed() -> void:
 	get_tree().reload_current_scene()
+
+
+func _on_start_game_button_pressed() -> void:
+	get_tree().paused = false
+	$UILayer/StartGameInterface.hide()
