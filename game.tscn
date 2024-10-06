@@ -6,14 +6,14 @@
 [ext_resource type="Texture2D" uid="uid://dvf47g2lrfi3" path="res://resources/sprites/dirt4Darklowcontrast.png" id="3_ochmi"]
 [ext_resource type="AudioStream" uid="uid://cegpmkvowbuwr" path="res://resources/sounds/slide whistle 14.wav" id="4_0d37m"]
 [ext_resource type="PackedScene" uid="uid://4n72njshbbvc" path="res://anthill.tscn" id="4_cw8q0"]
-[ext_resource type="PackedScene" path="res://pheromone_layer.tscn" id="5_dmj4k"]
+[ext_resource type="PackedScene" uid="uid://c3v4pvxkk33qh" path="res://pheromone_layer.tscn" id="5_dmj4k"]
 [ext_resource type="Shader" path="res://resources/shaders/color_dither_post_2d.gdshader" id="6_8n14l"]
-[ext_resource type="Texture2D" uid="uid://3k3gmhyq1qhe" path="res://resources/palettes/color-graphics-adapter.png" id="7_8k07p"]
-[ext_resource type="PackedScene" path="res://pheromone_bar.tscn" id="8_ru8sk"]
+[ext_resource type="PackedScene" uid="uid://bm6ou0h00mv5b" path="res://pheromone_bar.tscn" id="8_ru8sk"]
 [ext_resource type="Script" path="res://camera_2d.gd" id="9_b5tg6"]
 [ext_resource type="Shader" path="res://pheromone.gdshader" id="9_luj6i"]
 [ext_resource type="Theme" uid="uid://btv1akpmqnmv8" path="res://resources/themes/default_theme.tres" id="10_sp46i"]
 [ext_resource type="AudioStream" uid="uid://dn31f4gf3wuqb" path="res://resources/sounds/runescape-death-sound.mp3" id="11_1okbk"]
+[ext_resource type="Texture2D" uid="uid://cp0ok14rv0p6u" path="res://resources/palettes/sweetie-16.png" id="14_el4de"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nb5i8"]
 shader = ExtResource("9_luj6i")
@@ -31,7 +31,7 @@ shader_parameter/dither_pixel_size = 1.0
 shader_parameter/dither_pixel_offset = Vector2(0, 0)
 shader_parameter/albedo = Color(1, 1, 1, 1)
 shader_parameter/albedo_strength = 1.0
-shader_parameter/dither_palette = ExtResource("7_8k07p")
+shader_parameter/dither_palette = ExtResource("14_el4de")
 
 [node name="Game" type="Node"]
 script = ExtResource("1_f6hxw")
@@ -180,6 +180,7 @@ theme_override_font_sizes/font_size = 100
 text = "Ants paused"
 
 [node name="MuteButton" type="Button" parent="UILayer/PauseOverlay"]
+layout_mode = 0
 offset_left = 839.0
 offset_top = 725.0
 offset_right = 1098.0
@@ -188,6 +189,7 @@ theme = ExtResource("10_sp46i")
 text = "Mute"
 
 [node name="ResumeButton" type="Button" parent="UILayer/PauseOverlay"]
+layout_mode = 0
 offset_left = 537.0
 offset_top = 723.0
 offset_right = 796.0
@@ -203,6 +205,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PauseButton" type="Button" parent="UILayer/GameUIOverlay"]
+layout_mode = 0
 offset_left = 1505.0
 offset_top = 10.0
 offset_right = 1588.0

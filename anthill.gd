@@ -101,4 +101,4 @@ func spawn_ant() -> void:
 	
 	ant.position = position + Vector2(randf_range(-30, 30), randf_range(-30, 30))
 
-	game.add_child(ant)
+	game.add_child.call_deferred(ant)
