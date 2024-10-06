@@ -21,7 +21,6 @@ material = SubResource("ShaderMaterial_p2ha6")
 script = ExtResource("1_psmy6")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.5, 0.5)
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 2

@@ -4,22 +4,22 @@ const ItemVariant = preload("res://item_variants.gd").ItemVariant
 enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 
 @export var ant_type: AntType = AntType.HARVESTER
-@export var min_speed: float = 500.0
-@export var max_speed: float = 800.0
+@export var min_speed: float = 125.0
+@export var max_speed: float = 200.0
 
 @export var inventory_num_items_carried: int = 0
 @export var inventory_max_items: int = 1
 @export var inventory_item_variant: ItemVariant = ItemVariant.NONE
 
 var carried_item_sprite: Sprite2D
-@export var min_move_distance: float = 150.0
-@export var max_move_distance: float = 200.0
+@export var min_move_distance: float = 35.
+@export var max_move_distance: float = 50.
 @export var min_wait_time: float = 0.15
 @export var max_wait_time: float = 0.3
 @export var wait_probability: float = 0.03
 @onready var _animated_sprite = $AnimatedSprite2D
 
-@export var carried_item_scale = 0.25
+@export var carried_item_scale = 0.25 / 4
 @export var pheromone_creation_when_carrying: float = 0.05
 
 # positive = ants will tend to select directions similar to the ones they have
@@ -56,8 +56,8 @@ func _ready():
 func set_ant_type_properties(ant_type: AntType):
 	match ant_type:
 		AntType.HARVESTER:
-			min_speed = 150.0
-			max_speed = 300.0
+			min_speed = 35.0
+			max_speed = 75.0
 			min_wait_time = 0.5
 			max_wait_time = 0.7
 			_animated_sprite.animation = "harvester"
