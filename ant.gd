@@ -11,24 +11,29 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @export var inventory_max_items: int = 1
 @export var inventory_item_variant: ItemVariant = ItemVariant.NONE
 
-var carried_item_sprite: Sprite2D
 @export var min_move_distance: float = 35.
 @export var max_move_distance: float = 50.
 @export var min_wait_time: float = 0.15
 @export var max_wait_time: float = 0.3
 @export var wait_probability: float = 0.03
+
+@export var lifespan_min_secs: float = 20.0
+@export var lifespan_max_secs: float = 30.0
+
 @onready var _animated_sprite = $AnimatedSprite2D
+@onready var lifespan_timer = get_node("LifespanTimer")
+@onready var carried_item_sprite = get_node("CarriedItemSprite")
 
 @export var carried_item_scale = 0.25 / 4
 @export var pheromone_creation_when_carrying: float = 0.05
 
-# positive = ants will tend to select directions similar to the ones they have
-# 0 = they don't care
-# negative = bigger turns are better
+## positive = ants will tend to select directions similar to the ones they have
+## 0 = they don't care
+## negative = bigger turns are better
 @export var angle_consistency_reward: float = 0.4
-# must be strictly >0.
-# close to 0 = always select the angle that maximizes the score
-# infinite = select completely at random
+## must be strictly >0.
+## close to 0 = always select the angle that maximizes the score
+## infinite = select completely at random
 @export var angle_sampling_temperature: float = 0.15
 
 var target_position: Vector2
@@ -42,8 +47,9 @@ func _ready():
 	rotation = randf() * 2 * PI
 	set_ant_type_properties(ant_type)
 	add_to_group("ants")
+	lifespan_timer.wait_time = randf_range(lifespan_min_secs, lifespan_max_secs)
+	lifespan_timer.start()
 
-	carried_item_sprite = Sprite2D.new()
 	carried_item_sprite.position = Vector2(0, -20)
 	carried_item_sprite.scale = Vector2(carried_item_scale, carried_item_scale)
 	add_child(carried_item_sprite)
@@ -52,9 +58,9 @@ func _ready():
 	await get_tree().create_timer(randf_range(0.0, max_wait_time)).timeout
 	start_new_movement()
 
-# Adjust properties based on the ant type
-func set_ant_type_properties(ant_type: AntType):
-	match ant_type:
+## Adjust properties based on the ant type
+func set_ant_type_properties(ant_type_to_Set: AntType):
+	match ant_type_to_Set:
 		AntType.HARVESTER:
 			min_speed = 35.0
 			max_speed = 75.0
@@ -91,7 +97,7 @@ func _physics_process(_delta: float):
 	if inventory_num_items_carried > 0:
 		pheromone_layer.draw_pheromone_at_position(position, _delta * pheromone_creation_when_carrying, true)
 
-# This method is intended to be overridden by subclasses for unique behaviors
+## This method is intended to be overridden by subclasses for unique behaviors
 func perform_special_action():
 	pass # Each subclass will implement its own action
 
@@ -182,10 +188,13 @@ func maybe_pickup_item(picked_item_variant: ItemVariant, picked_item_texture: Te
 	tween.tween_property(carried_item_sprite, "scale", Vector2(carried_item_scale, carried_item_scale), 0.3)
 
 	return true
-
-func maybe_deposit_item() -> bool:
+	
+func maybe_deposit_item() -> Dictionary:
 	if inventory_num_items_carried == 0:
-		return false
+		return {"success": false, "deposited_item_variant": ItemVariant.NONE}
+
+	# Store the current item variant before resetting it
+	var deposited_item_variant = inventory_item_variant
 
 	inventory_num_items_carried -= 1
 	if inventory_num_items_carried == 0:
@@ -194,8 +203,37 @@ func maybe_deposit_item() -> bool:
 		tween.tween_property(carried_item_sprite, "scale", Vector2.ZERO, 0.3)
 		tween.tween_callback(reset_carried_item_sprite)
 
+	# Return a dictionary containing success and deposited item variant
+	return {"success": true, "deposited_item_variant": deposited_item_variant}
+
+
+func drop_carried_item():
+	# Sanity check: checking both conditions
+	if inventory_num_items_carried == 0 || inventory_item_variant == ItemVariant.NONE:
+		return false
+
+	# TODO: Drop the item at the current position
+
+	inventory_num_items_carried = 0
+	inventory_item_variant = ItemVariant.NONE
+	reset_carried_item_sprite()
+
 	return true
+
 
 func reset_carried_item_sprite():
 	carried_item_sprite.texture = null
 	carried_item_sprite.scale = Vector2(carried_item_scale, carried_item_scale)
+
+
+func die():
+	pheromone_layer.draw_pheromone_at_position(position, 1.0, true, 1.0)
+	drop_carried_item()
+	# TODO: Create a dead ant item that will be picked up by other ants
+	
+	# Remove the ant from the scene
+	queue_free()
+
+
+func _on_lifespan_timer_timeout() -> void:
+	die()
