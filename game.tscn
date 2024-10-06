@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cs7o50oaokh2e"]
+[gd_scene load_steps=12 format=3 uid="uid://caeqm2sx0phvi"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bftew88ofmwbw" path="res://resources/palettes/steam-lords.png" id="6_l1q0f"]
 [ext_resource type="PackedScene" uid="uid://bm6ou0h00mv5b" path="res://pheromone_bar.tscn" id="8_ru8sk"]
 [ext_resource type="Script" path="res://camera_2d.gd" id="9_b5tg6"]
+[ext_resource type="Theme" uid="uid://btv1akpmqnmv8" path="res://resources/themes/default_theme.tres" id="10_sp46i"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6ii3t"]
 shader = ExtResource("6_8n14l")
@@ -43,6 +44,7 @@ top_level = true
 z_index = 200
 
 [node name="UILayer" type="CanvasLayer" parent="."]
+process_mode = 3
 
 [node name="PheromoneBar" parent="UILayer" instance=ExtResource("8_ru8sk")]
 z_index = 300
@@ -97,10 +99,48 @@ offset_right = 42.0
 offset_bottom = 97.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 40
+theme = ExtResource("10_sp46i")
 text = "Play again"
+
+[node name="StartGameInterface" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GameTitleLabel" type="Label" parent="UILayer/StartGameInterface"]
+layout_mode = 0
+offset_left = 131.0
+offset_top = 4.0
+offset_right = 743.0
+offset_bottom = 334.0
+theme_override_font_sizes/font_size = 128
+text = "World of Antcraft"
+vertical_alignment = 1
+
+[node name="InstructionsLabel" type="Label" parent="UILayer/StartGameInterface"]
+layout_mode = 0
+offset_left = 137.0
+offset_top = 317.0
+offset_right = 1114.0
+offset_bottom = 546.0
+theme = ExtResource("10_sp46i")
+text = "Build the biggest anthill. Don't let your ants starve.
+
+Use mouse to pheromone
+Press [space] to ant"
+
+[node name="StartGameButton" type="Button" parent="UILayer/StartGameInterface"]
+layout_mode = 0
+offset_left = 696.0
+offset_top = 687.0
+offset_right = 955.0
+offset_bottom = 785.0
+theme = ExtResource("10_sp46i")
+text = "Let's ant"
 
 [node name="DroppedItemsLayer" type="Node2D" parent="."]
 
 [connection signal="timeout" from="SceneItemManager/ItemSpawnTimer" to="SceneItemManager" method="_on_item_spawn_timer_timeout"]
 [connection signal="pressed" from="UILayer/GameOver/PlayAgainButton" to="." method="_on_play_again_button_pressed"]
+[connection signal="pressed" from="UILayer/StartGameInterface/StartGameButton" to="." method="_on_start_game_button_pressed"]
