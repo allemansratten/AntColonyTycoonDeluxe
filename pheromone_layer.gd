@@ -1,7 +1,7 @@
 extends ColorRect
 
 const BLUR_SPEED = 0.1
-const DECAY_SPEED = 0.03
+const DECAY_SPEED = 0.01
 const DECAY_MIN_DELAY_SECS = 0.1
 
 @export var grid_size_coef: int = 8

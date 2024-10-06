@@ -45,7 +45,7 @@ var stick_pickup_sound: AudioStreamPlayer
 var stick_deposit_sound: AudioStreamPlayer
 var death_sound: AudioStreamPlayer
 
-@export var pheromone_layer: ColorRect
+@onready var pheromone_layer = get_node("/root/Game/PheromoneLayer")
 
 func _ready():
 	randomize()
@@ -192,9 +192,24 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 
 ## When the ants are picking up an item, wait for a while and then turn around
 func handle_on_pickup_movement():
+	_animated_sprite.speed_scale = 0.0 # Stop the walking animation
 	is_moving = false
+
+	var original_position = global_position
+	var num_tween_loops = 4
+	var tween_duration = item_pickup_duration_secs / (num_tween_loops * 2)
+	var tween_target_position = target_position.normalized()
+
+	var tween = get_tree().create_tween()
+	for i in range(num_tween_loops):
+		tween.tween_property(self, "global_position", original_position + tween_target_position, tween_duration)
+		tween.tween_property(self, "global_position", original_position, tween_duration)
+
+	# Turn the ant around
 	target_position = global_position + (global_position - target_position)
 	await get_tree().create_timer(item_pickup_duration_secs).timeout
+
+	_animated_sprite.speed_scale = 1.0 # Resume the walking animation
 	is_moving = true
 
 
@@ -232,11 +247,15 @@ func drop_carried_item():
 
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
-	dropped_item.set_item_properties(carried_item.variant, {
-		'texture': carried_item.texture,
-		'scale': carried_item.scale,
-		'position': global_position + Vector2(randf_range(-15, 15), randf_range(-15, 15))
-	})
+	dropped_item.set_item_properties(
+		carried_item.variant, 
+		{
+			'texture': carried_item.texture,
+			'scale': carried_item.scale,
+			'position': global_position + Vector2(randf_range(-15, 15), randf_range(-15, 15))
+		},
+		60.0, # decay time
+	)
 
 	carried_item.set_variant(ItemVariant.NONE)
 
@@ -252,7 +271,7 @@ func die():
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
 	dropped_item.set_item_properties(
-		carried_item.variant,
+		ItemVariant.ANT,
 		{
 			'texture': load("res://resources/sprites/ant_dead.png"),
 			'scale': Vector2(0.1, 0.1),

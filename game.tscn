@@ -52,6 +52,7 @@ autostart = true
 [node name="Anthill" parent="." instance=ExtResource("4_cw8q0")]
 position = Vector2(895, 494)
 scale = Vector2(0.25, 0.25)
+ant_scene = ExtResource("2_82cr4")
 metadata/_edit_group_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]

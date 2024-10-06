@@ -43,7 +43,6 @@ func _ready():
 
 # Function to spawn an item at a given position
 func spawn_item(variant: ItemVariant, position: Vector2):
-	print("Spawning item at", position)
 	scene_item = load("res://scene_item.tscn")
 
 	var new_item = scene_item.instantiate()
