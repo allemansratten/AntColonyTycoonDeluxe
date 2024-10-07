@@ -201,15 +201,6 @@ offset_bottom = 214.0
 theme_override_font_sizes/font_size = 100
 text = "Ants paused"
 
-[node name="MuteButton" type="Button" parent="UILayer/PauseOverlay"]
-layout_mode = 0
-offset_left = 839.0
-offset_top = 725.0
-offset_right = 1098.0
-offset_bottom = 823.0
-theme = ExtResource("10_sp46i")
-text = "Mute"
-
 [node name="ResumeButton" type="Button" parent="UILayer/PauseOverlay"]
 layout_mode = 0
 offset_left = 537.0
@@ -218,6 +209,25 @@ offset_right = 796.0
 offset_bottom = 821.0
 theme = ExtResource("10_sp46i")
 text = "Ant again"
+
+[node name="VolumeSlider" type="HSlider" parent="UILayer/PauseOverlay"]
+layout_mode = 0
+offset_left = 839.0
+offset_top = 767.0
+offset_right = 1095.0
+offset_bottom = 831.0
+min_value = -50.0
+max_value = 5.0
+value = -25.0
+
+[node name="Label2" type="Label" parent="UILayer/PauseOverlay"]
+layout_mode = 0
+offset_left = 899.0
+offset_top = 726.0
+offset_right = 1017.0
+offset_bottom = 771.0
+theme_override_font_sizes/font_size = 32
+text = "Volume"
 
 [node name="GameUIOverlay" type="Control" parent="UILayer"]
 visible = false
@@ -257,6 +267,5 @@ metadata/_edit_lock_ = true
 [connection signal="timeout" from="SceneItemManager/ItemSpawnTimer" to="SceneItemManager" method="_on_item_spawn_timer_timeout"]
 [connection signal="pressed" from="UILayer/GameOver/PlayAgainButton" to="." method="_on_play_again_button_pressed"]
 [connection signal="pressed" from="UILayer/StartGameOverlay/StartGameButton" to="." method="_on_start_game_button_pressed"]
-[connection signal="pressed" from="UILayer/PauseOverlay/MuteButton" to="." method="_on_mute_button_pressed"]
 [connection signal="pressed" from="UILayer/PauseOverlay/ResumeButton" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="UILayer/GameUIOverlay/PauseButton" to="." method="_on_pause_button_pressed"]
