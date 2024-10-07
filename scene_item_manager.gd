@@ -76,7 +76,7 @@ func get_random_variant() -> ItemVariant:
 	if randf() < stick_spawn_probability:
 		return ItemVariant.STICK
 	else:
-		var food_variants = [ItemVariant.LEAF, ItemVariant.MUSHROOM, ItemVariant.STICK]
+		var food_variants = [ItemVariant.LEAF, ItemVariant.MUSHROOM]
 		return food_variants[randi() % len(food_variants)]
 
 func _on_item_spawn_timer_timeout() -> void:
