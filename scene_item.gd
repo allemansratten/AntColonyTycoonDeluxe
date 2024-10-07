@@ -18,7 +18,7 @@ const VARIANT_CONFIGS = {
 			preload("res://resources/sprites/leaf2.png"),
 		],
 		"can_rotate": true,
-		"resources": 20,
+		"resources": 15,
 	},
 	ItemVariant.MUSHROOM: {
 		"textures": [
@@ -27,7 +27,7 @@ const VARIANT_CONFIGS = {
 			preload("res://resources/sprites/mushroom3.png"),
 		],
 		"can_rotate": false,
-		"resources": 30,
+		"resources": 20,
 	},
 	ItemVariant.STICK: {
 		"textures": [
@@ -36,7 +36,7 @@ const VARIANT_CONFIGS = {
 			preload("res://resources/sprites/stick2.png"),
 		],
 		"can_rotate": true,
-		"resources": 30,
+		"resources": 20,
 	},
 }
 
@@ -79,7 +79,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		queue_free() # Remove the item from the scene
 
 func _process(delta: float) -> void:
-	pheromone_layer.draw_pheromone_at_position(position, delta * pheromone_strength, true, 0.5)
+	pheromone_layer.draw_pheromone_at_position(position, delta * pheromone_strength, true, 0.8)
 
 func update_shader():
 	var max_resources = VARIANT_CONFIGS[item_variant]["resources"]

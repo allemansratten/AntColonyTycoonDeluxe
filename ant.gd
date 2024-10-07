@@ -14,7 +14,7 @@ const FoodItems = preload("res://item_variants.gd").foodItemVariants
 @export var item_pickup_duration_secs: float = 1.5
 
 @export var lifespan_min_secs: float = 30.0
-@export var lifespan_max_secs: float = 50.0
+@export var lifespan_max_secs: float = 60.0
 ## The probability of dropping a dead ant when it dies
 @export var dead_ant_drop_item_probability: float = 0.5
 
@@ -24,17 +24,17 @@ const FoodItems = preload("res://item_variants.gd").foodItemVariants
 @onready var dropped_items_layer = get_node("/root/Game/DroppedItemsLayer")
 @onready var dropped_item_scene = load("res://dropped_item.tscn")
 
-@export var pheromone_creation_when_carrying: float = 0.06
+@export var pheromone_creation_when_carrying: float = 0.02
 @export var pheromone_strength_on_death: float = 0.05
 
 ## positive = ants will tend to select directions similar to the ones they have
 ## 0 = they don't care
 ## negative = bigger turns are better
-@export var angle_consistency_reward: float = 0.4
+@export var angle_consistency_reward: float = 0.5
 ## must be strictly >0.
 ## close to 0 = always select the angle that maximizes the score
 ## infinite = select completely at random
-@export var angle_sampling_temperature: float = 0.15
+@export var angle_sampling_temperature: float = 0.2
 
 var target_position: Vector2
 var is_moving: bool = false

@@ -1,6 +1,6 @@
 extends Camera2D
 
-@export var zoom_speed: float = 0.004 # Adjust this to control zoom speed
+@export var zoom_speed: float = 0.006 # Adjust this to control zoom speed
 @export var min_zoom: float = 1.0 # Minimum zoom level
 @export var max_zoom: float = 4.0 # Maximum zoom level
 
