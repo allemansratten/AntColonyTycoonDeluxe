@@ -5,8 +5,8 @@ const ItemVariant = preload("res://item_variants.gd").ItemVariant
 @export var min_distance_from_anthill = 100
 
 @onready var anthill = get_node("/root/Game/Anthill")
+@onready var spawn_sound: AudioStreamPlayer = $SpawnSound
 var scene_item: PackedScene
-var spawn_sound: AudioStreamPlayer
 
 func get_random_position() -> Vector2:
 	# Get the viewport size in pixels
@@ -40,13 +40,12 @@ func get_random_valid_position() -> Vector2:
 	assert(false, "No valid position found")
 	return Vector2.ZERO # unreachable, but the linter is dumb
 
+
 func _ready():
 	randomize()
 	await get_tree().create_timer(1).timeout
-	spawn_sound = $SpawnSound
 	spawn_item(ItemVariant.LEAF, get_random_valid_position())
 	spawn_item(ItemVariant.MUSHROOM, get_random_valid_position())
-
 
 
 # Function to spawn an item at a given position

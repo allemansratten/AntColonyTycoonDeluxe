@@ -35,7 +35,7 @@ animations = [{
 radius = 3.16228
 
 [node name="Ant" type="CharacterBody2D"]
-z_index = 300
+z_index = 50
 collision_mask = 6
 motion_mode = 1
 wall_min_slide_angle = 0.0

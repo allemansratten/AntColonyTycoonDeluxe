@@ -1,7 +1,7 @@
 extends Area2D
 
-@export var pheromone_strength: float = 0.2
-@export var initial_pheromone_strength: float = 12.0
+@export var pheromone_strength: float = 0.3
+@export var initial_pheromone_strength: float = 15.0
 @export var ant_manual_spawn_delay_secs: float = 0.5
 
 @onready var pheromone_layer = get_node("/root/Game/PheromoneLayer")
@@ -13,8 +13,8 @@ extends Area2D
 
 @export var ant_scene: PackedScene
 
-var item_count: int = 0
-var num_ants_ready: int = 10
+var anthill_size: int = 0
+var num_ants_ready: int = 1
 var time_since_manual_spawn_secs: float = 0
 
 signal anthill_empty
@@ -66,8 +66,8 @@ func _on_body_entered(body: Node2D) -> void:
 		ItemVariant.LEAF, ItemVariant.MUSHROOM, ItemVariant.ANT:
 			set_ready_ants_count(num_ants_ready + 1)
 		ItemVariant.STICK:
-			item_count += 1
-			$RichTextLabel.text = str(item_count)
+			anthill_size += 1
+			$RichTextLabel.text = str(anthill_size)
 
 
 ## Spawn a batch of ants on every timeout
@@ -101,4 +101,4 @@ func spawn_ant() -> void:
 	
 	ant.position = position + Vector2(randf_range(-30, 30), randf_range(-30, 30))
 
-	game.add_child(ant)
+	game.add_child.call_deferred(ant)

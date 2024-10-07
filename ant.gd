@@ -15,8 +15,10 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @export var wait_probability: float = 0.03
 @export var item_pickup_duration_secs: float = 1.5
 
-@export var lifespan_min_secs: float = 40.0
-@export var lifespan_max_secs: float = 60.0
+@export var lifespan_min_secs: float = 30.0
+@export var lifespan_max_secs: float = 50.0
+## The probability of dropping a dead ant when it dies
+@export var dead_ant_drop_item_probability: float = 0.5
 
 @onready var _animated_sprite = $AnimatedSprite2D
 @onready var lifespan_timer = get_node("LifespanTimer")
@@ -101,7 +103,7 @@ func _physics_process(_delta: float):
 			_animated_sprite.stop()
 			start_waiting()
 	
-	if carried_item.variant != ItemVariant.NONE:
+	if carried_item.variant != ItemVariant.NONE && carried_item.variant != ItemVariant.ANT:
 		pheromone_layer.draw_pheromone_at_position(position, _delta * pheromone_creation_when_carrying, true)
 
 ## This method is intended to be overridden by subclasses for unique behaviors
@@ -274,11 +276,7 @@ func drop_carried_item():
 	return true
 
 
-func die():
-	pheromone_layer.draw_pheromone_at_position(position, pheromone_strength_on_death, true, 1.0)
-	drop_carried_item()
-	death_sound.play()
-	await get_tree().create_timer(death_sound.stream.get_length()).timeout
+func drop_dead_ant():
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
 	dropped_item.set_item_properties(
@@ -288,9 +286,17 @@ func die():
 			'scale': Vector2(0.1, 0.1),
 			'position': global_position
 		},
-		30.0 # decay time
+		25.0 # decay time
 	)
 
+
+func die():
+	pheromone_layer.draw_pheromone_at_position(position, pheromone_strength_on_death, true, 1.0)
+	drop_carried_item()
+	if(randf() < dead_ant_drop_item_probability):
+		drop_dead_ant()
+	death_sound.play()
+	await get_tree().create_timer(death_sound.stream.get_length()).timeout
 	queue_free() # Free the node after the sound finishes playing
 
 

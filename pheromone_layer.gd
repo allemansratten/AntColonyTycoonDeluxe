@@ -1,6 +1,6 @@
 extends ColorRect
 
-const BLUR_SPEED = 0.1
+const BLUR_SPEED = 0.125
 const DECAY_SPEED = 0.015
 const DECAY_MIN_DELAY_SECS = 0.1
 
@@ -169,14 +169,11 @@ func decay_grid(delta: float):
 	
 	# Replace the old grid with the new one
 	var blur_coef: float = 1.0 - (1.0 - BLUR_SPEED) ** delta
-	for y in range(int(grid_size.y)):
-		for x in range(int(grid_size.x)):
-			grid_data[y][x] = lerp(grid_data[y][x], new_grid[y][x], blur_coef)
-
 	var decay_coef: float = (1.0 - DECAY_SPEED) ** delta
 	for y in range(int(grid_size.y)):
 		for x in range(int(grid_size.x)):
-			grid_data[y][x] = max(0.0, grid_data[y][x] * decay_coef)
+			var blurred_value = lerp(grid_data[y][x], new_grid[y][x], blur_coef)
+			grid_data[y][x] = max(0.0, blurred_value * decay_coef)
 
 
 func _process(delta: float) -> void:

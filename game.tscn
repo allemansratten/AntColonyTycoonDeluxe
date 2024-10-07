@@ -1,20 +1,20 @@
-[gd_scene load_steps=17 format=3 uid="uid://cs7o50oaokh2e"]
+[gd_scene load_steps=17 format=3 uid="uid://caeqm2sx0phvi"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
-[ext_resource type="PackedScene" uid="uid://dcrdhn26hmhva" path="res://ant.tscn" id="2_82cr4"]
-[ext_resource type="Texture2D" uid="uid://dvf47g2lrfi3" path="res://resources/sprites/dirt4Darklowcontrast.png" id="3_ochmi"]
+[ext_resource type="PackedScene" uid="uid://10xcg3p30pal" path="res://ant.tscn" id="2_82cr4"]
+[ext_resource type="Texture2D" uid="uid://de63lqriqyqc3" path="res://resources/sprites/dirt.png" id="2_wv20r"]
 [ext_resource type="AudioStream" uid="uid://cegpmkvowbuwr" path="res://resources/sounds/slide whistle 14.wav" id="4_0d37m"]
 [ext_resource type="PackedScene" uid="uid://4n72njshbbvc" path="res://anthill.tscn" id="4_cw8q0"]
-[ext_resource type="PackedScene" uid="uid://c3v4pvxkk33qh" path="res://pheromone_layer.tscn" id="5_dmj4k"]
+[ext_resource type="PackedScene" path="res://pheromone_layer.tscn" id="5_dmj4k"]
 [ext_resource type="Shader" path="res://resources/shaders/color_dither_post_2d.gdshader" id="6_8n14l"]
-[ext_resource type="Texture2D" uid="uid://3k3gmhyq1qhe" path="res://resources/palettes/color-graphics-adapter.png" id="7_8k07p"]
-[ext_resource type="PackedScene" uid="uid://bm6ou0h00mv5b" path="res://pheromone_bar.tscn" id="8_ru8sk"]
+[ext_resource type="PackedScene" path="res://pheromone_bar.tscn" id="8_ru8sk"]
 [ext_resource type="Script" path="res://camera_2d.gd" id="9_b5tg6"]
 [ext_resource type="Script" path="res://obstacle_generator.gd" id="10_n5ty1"]
 [ext_resource type="Shader" path="res://pheromone.gdshader" id="9_luj6i"]
 [ext_resource type="Theme" uid="uid://btv1akpmqnmv8" path="res://resources/themes/default_theme.tres" id="10_sp46i"]
 [ext_resource type="AudioStream" uid="uid://dn31f4gf3wuqb" path="res://resources/sounds/runescape-death-sound.mp3" id="11_1okbk"]
+[ext_resource type="Texture2D" uid="uid://cp0ok14rv0p6u" path="res://resources/palettes/sweetie-16.png" id="14_el4de"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nb5i8"]
 shader = ExtResource("9_luj6i")
@@ -32,7 +32,7 @@ shader_parameter/dither_pixel_size = 1.0
 shader_parameter/dither_pixel_offset = Vector2(0, 0)
 shader_parameter/albedo = Color(1, 1, 1, 1)
 shader_parameter/albedo_strength = 1.0
-shader_parameter/dither_palette = ExtResource("7_8k07p")
+shader_parameter/dither_palette = ExtResource("14_el4de")
 
 [node name="Game" type="Node"]
 script = ExtResource("1_f6hxw")
@@ -46,7 +46,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource("3_ochmi")
+texture = ExtResource("2_wv20r")
 expand_mode = 1
 stretch_mode = 1
 
@@ -93,6 +93,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="FinalScoreLabel" type="Label" parent="UILayer/GameOver"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -334.0
+offset_top = -16.0
+offset_right = 364.0
+offset_bottom = 197.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "Your final anthill size is 0.
+
+That's a pretty small anthill..."
+horizontal_alignment = 1
+
 [node name="GameOverLabel" type="Label" parent="UILayer/GameOver"]
 layout_mode = 1
 anchors_preset = 8
@@ -100,14 +119,15 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -295.5
-offset_top = -34.5
-offset_right = 295.5
-offset_bottom = 34.5
+offset_left = -305.0
+offset_top = -292.0
+offset_right = 286.0
+offset_bottom = -223.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 50
-text = "Your anthill is no more :("
+text = "Your anthill is no more :(
+"
 horizontal_alignment = 1
 
 [node name="PlayAgainButton" type="Button" parent="UILayer/GameOver"]
@@ -117,22 +137,23 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -45.0
-offset_top = 66.0
-offset_right = 42.0
-offset_bottom = 97.0
+offset_left = -110.0
+offset_top = 227.0
+offset_right = 125.0
+offset_bottom = 325.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("10_sp46i")
 text = "Play again"
 
-[node name="StartGameInterface" type="Control" parent="UILayer"]
+[node name="StartGameOverlay" type="Control" parent="UILayer"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="GameTitleLabel" type="Label" parent="UILayer/StartGameInterface"]
+[node name="GameTitleLabel" type="Label" parent="UILayer/StartGameOverlay"]
 layout_mode = 0
 offset_left = 75.0
 offset_top = -4.0
@@ -142,19 +163,20 @@ theme_override_font_sizes/font_size = 100
 text = "Ant Colony Tycoon Deluxe"
 vertical_alignment = 1
 
-[node name="InstructionsLabel" type="Label" parent="UILayer/StartGameInterface"]
+[node name="InstructionsLabel" type="Label" parent="UILayer/StartGameOverlay"]
 layout_mode = 0
 offset_left = 137.0
 offset_top = 317.0
 offset_right = 1114.0
 offset_bottom = 546.0
 theme = ExtResource("10_sp46i")
-text = "Build the biggest anthill. Don't let your ants starve.
+text = "Gather sticks to build the biggest anthill. 
+Don't let your ant colony starve.
 
-Use mouse to pheromone
-Press [space] to ant"
+Use mouse to pheromone.
+Press [space] to ant."
 
-[node name="StartGameButton" type="Button" parent="UILayer/StartGameInterface"]
+[node name="StartGameButton" type="Button" parent="UILayer/StartGameOverlay"]
 layout_mode = 0
 offset_left = 696.0
 offset_top = 687.0
@@ -162,6 +184,56 @@ offset_right = 955.0
 offset_bottom = 785.0
 theme = ExtResource("10_sp46i")
 text = "Let's ant"
+
+[node name="PauseOverlay" type="Control" parent="UILayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="UILayer/PauseOverlay"]
+layout_mode = 0
+offset_left = 486.0
+offset_top = 77.0
+offset_right = 1082.0
+offset_bottom = 214.0
+theme_override_font_sizes/font_size = 100
+text = "Ants paused"
+
+[node name="MuteButton" type="Button" parent="UILayer/PauseOverlay"]
+layout_mode = 0
+offset_left = 839.0
+offset_top = 725.0
+offset_right = 1098.0
+offset_bottom = 823.0
+theme = ExtResource("10_sp46i")
+text = "Mute"
+
+[node name="ResumeButton" type="Button" parent="UILayer/PauseOverlay"]
+layout_mode = 0
+offset_left = 537.0
+offset_top = 723.0
+offset_right = 796.0
+offset_bottom = 821.0
+theme = ExtResource("10_sp46i")
+text = "Ant again"
+
+[node name="GameUIOverlay" type="Control" parent="UILayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PauseButton" type="Button" parent="UILayer/GameUIOverlay"]
+layout_mode = 0
+offset_left = 1505.0
+offset_top = 10.0
+offset_right = 1588.0
+offset_bottom = 95.0
+theme = ExtResource("10_sp46i")
+text = "II"
 
 [node name="DroppedItemsLayer" type="Node2D" parent="."]
 
@@ -184,4 +256,7 @@ metadata/_edit_lock_ = true
 
 [connection signal="timeout" from="SceneItemManager/ItemSpawnTimer" to="SceneItemManager" method="_on_item_spawn_timer_timeout"]
 [connection signal="pressed" from="UILayer/GameOver/PlayAgainButton" to="." method="_on_play_again_button_pressed"]
-[connection signal="pressed" from="UILayer/StartGameInterface/StartGameButton" to="." method="_on_start_game_button_pressed"]
+[connection signal="pressed" from="UILayer/StartGameOverlay/StartGameButton" to="." method="_on_start_game_button_pressed"]
+[connection signal="pressed" from="UILayer/PauseOverlay/MuteButton" to="." method="_on_mute_button_pressed"]
+[connection signal="pressed" from="UILayer/PauseOverlay/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="UILayer/GameUIOverlay/PauseButton" to="." method="_on_pause_button_pressed"]
