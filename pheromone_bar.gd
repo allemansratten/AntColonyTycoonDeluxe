@@ -11,6 +11,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if get_tree().paused:
+		return
 	var t = progress_bar.value / progress_bar.max_value
 	var color = lerp(Color.GRAY, Color.GREEN, t)
 	progress_bar.modulate = color
