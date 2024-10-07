@@ -3,6 +3,7 @@ extends Node
 const ItemVariant = preload("res://item_variants.gd").ItemVariant
 
 @export var min_distance_from_anthill = 100
+@export var stick_spawn_probability = 0.5
 
 @onready var anthill = get_node("/root/Game/Anthill")
 @onready var spawn_sound: AudioStreamPlayer = $SpawnSound
@@ -72,9 +73,11 @@ func spawn_item(variant: ItemVariant, position: Vector2):
 
 
 func get_random_variant() -> ItemVariant:
-	var variants = [ItemVariant.LEAF, ItemVariant.MUSHROOM, ItemVariant.STICK]
-	var random_variant = randi() % len(variants)
-	return variants[random_variant]
+	if randf() < stick_spawn_probability:
+		return ItemVariant.STICK
+	else:
+		var food_variants = [ItemVariant.LEAF, ItemVariant.MUSHROOM, ItemVariant.STICK]
+		return food_variants[randi() % len(food_variants)]
 
 func _on_item_spawn_timer_timeout() -> void:
 	spawn_item(get_random_variant(), get_random_valid_position())

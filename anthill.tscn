@@ -16,22 +16,24 @@ texture = ExtResource("1_6cc8v")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_p4jp4")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-offset_left = -115.0
-offset_top = -102.0
-offset_right = -13.0
-offset_bottom = -31.0
+[node name="AnthillSizeLabel" type="RichTextLabel" parent="."]
+offset_left = -159.0
+offset_top = 101.0
+offset_right = 156.0
+offset_bottom = 172.0
 theme_override_font_sizes/normal_font_size = 40
-text = "0"
+bbcode_enabled = true
+text = "[center]Anthill size: 0[/center]"
 
 [node name="AntSpawnTimer" type="Timer" parent="."]
 wait_time = 2.0
 
 [node name="AntsCountLabel" type="RichTextLabel" parent="."]
-offset_left = -111.0
-offset_top = 109.0
-offset_right = 112.0
-offset_bottom = 164.0
+visible = false
+offset_left = -112.0
+offset_top = 169.0
+offset_right = 111.0
+offset_bottom = 224.0
 theme_override_font_sizes/normal_font_size = 40
 bbcode_enabled = true
 text = "[center]0[/center]"

@@ -67,7 +67,7 @@ func _on_body_entered(body: Node2D) -> void:
 			set_ready_ants_count(num_ants_ready + 1)
 		ItemVariant.STICK:
 			anthill_size += 1
-			$RichTextLabel.text = str(anthill_size)
+			$AnthillSizeLabel.text = "[center]Anthill size: %d[/center]" % anthill_size
 
 
 ## Spawn a batch of ants on every timeout
@@ -86,7 +86,7 @@ func _on_ant_spawn_timer_timeout() -> void:
 
 func set_ready_ants_count(count: int) -> void:
 	num_ants_ready = count
-	ants_count_label.text = "[center]%d[/center]" % count
+	ants_count_label.text = "[center]Hatching ants: %d[/center]" % count
 
 
 ## Debug function to spawn a bunch of ants at the start
