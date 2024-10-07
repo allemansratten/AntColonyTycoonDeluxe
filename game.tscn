@@ -55,6 +55,7 @@ script = ExtResource("1_n0r2e")
 
 [node name="SpawnSound" type="AudioStreamPlayer" parent="SceneItemManager"]
 stream = ExtResource("4_0d37m")
+volume_db = -10.0
 
 [node name="ItemSpawnTimer" type="Timer" parent="SceneItemManager"]
 wait_time = 10.0
