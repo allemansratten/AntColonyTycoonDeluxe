@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cs7o50oaokh2e"]
+[gd_scene load_steps=19 format=3 uid="uid://cs7o50oaokh2e"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_f6hxw"]
 [ext_resource type="Script" path="res://scene_item_manager.gd" id="1_n0r2e"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://obstacle_generator.gd" id="10_n5ty1"]
 [ext_resource type="Theme" uid="uid://btv1akpmqnmv8" path="res://resources/themes/default_theme.tres" id="10_sp46i"]
 [ext_resource type="AudioStream" uid="uid://dn31f4gf3wuqb" path="res://resources/sounds/runescape-death-sound.mp3" id="11_1okbk"]
+[ext_resource type="Script" path="res://pause_overlay.gd" id="12_fm3ob"]
 [ext_resource type="Texture2D" uid="uid://cp0ok14rv0p6u" path="res://resources/palettes/sweetie-16.png" id="14_el4de"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nb5i8"]
@@ -191,6 +192,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("12_fm3ob")
 
 [node name="Label" type="Label" parent="UILayer/PauseOverlay"]
 layout_mode = 0
