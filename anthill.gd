@@ -1,7 +1,7 @@
 extends Area2D
 
-@export var pheromone_strength: float = 0.3
-@export var initial_pheromone_strength: float = 15.0
+@export var pheromone_strength: float = 0.15
+@export var initial_pheromone_strength: float = 10.0
 @export var ant_manual_spawn_delay_secs: float = 0.5
 
 @onready var pheromone_layer = get_node("/root/Game/PheromoneLayer")
@@ -34,7 +34,7 @@ func on_game_ready() -> void:
 	for _i in range(5):
 		spawn_ant()
 	
-	pheromone_layer.draw_pheromone_at_position(position, initial_pheromone_strength, true, 1.0)
+	pheromone_layer.draw_pheromone_at_position(position, initial_pheromone_strength, true, 2.0)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

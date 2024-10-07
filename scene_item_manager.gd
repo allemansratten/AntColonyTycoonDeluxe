@@ -11,7 +11,7 @@ var scene_item: PackedScene
 
 func get_random_position() -> Vector2:
 	# Get the viewport size in pixels
-	var viewport_size: Vector2 = get_viewport().size
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
 
 	# Generate a random position within the viewport (screen space)
 	var random_screen_x: float = randf_range(0, viewport_size.x)

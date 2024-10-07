@@ -26,7 +26,7 @@ bbcode_enabled = true
 text = "[center]Anthill size: 0[/center]"
 
 [node name="AntSpawnTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 0.2
 
 [node name="AntsCountLabel" type="RichTextLabel" parent="."]
 visible = false

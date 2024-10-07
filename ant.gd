@@ -26,8 +26,8 @@ enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 @onready var dropped_items_layer = get_node("/root/Game/DroppedItemsLayer")
 @onready var dropped_item_scene = load("res://dropped_item.tscn")
 
-@export var pheromone_creation_when_carrying: float = 0.15
-@export var pheromone_strength_on_death: float = 0.25
+@export var pheromone_creation_when_carrying: float = 0.06
+@export var pheromone_strength_on_death: float = 0.05
 
 ## positive = ants will tend to select directions similar to the ones they have
 ## 0 = they don't care
@@ -103,8 +103,12 @@ func _physics_process(_delta: float):
 			_animated_sprite.stop()
 			start_waiting()
 	
-	if carried_item.variant != ItemVariant.NONE && carried_item.variant != ItemVariant.ANT:
-		pheromone_layer.draw_pheromone_at_position(position, _delta * pheromone_creation_when_carrying, true)
+	if (
+		carried_item.variant != ItemVariant.NONE and
+		carried_item.variant != ItemVariant.ANT and
+		is_moving # Don't draw the pheromone while the ant is picking up the item
+	):
+		pheromone_layer.draw_pheromone_at_position(position, _delta * pheromone_creation_when_carrying, true, 0.2)
 
 ## This method is intended to be overridden by subclasses for unique behaviors
 func perform_special_action():
@@ -154,7 +158,10 @@ func start_new_movement():
 		var target = global_position + direction * random_distance
 		# Scaled between 0 and 1
 		var angular_difference = abs(angle_difference(angle, rotation)) / PI
-		var score = pheromone_layer.get_value_at(target.x, target.y) - (angular_difference * angle_consistency_reward)
+		# More score for pheromones. Using **5 means that lower values get amplified,
+		# which decreases ants crowding in high-pheromone areas
+		var score = pheromone_layer.get_value_at(target.x, target.y) ** 0.5
+		score -= (angular_difference * angle_consistency_reward)
 		if !is_on_screen(target) or collides_with_anything(target):
 			score = -100
 		scores.append(score)
@@ -167,7 +174,6 @@ func start_new_movement():
 
 	target_position = global_position + Vector2(cos(angle), sin(angle)) * random_distance
 	is_moving = true
-
 
 
 func collides_with_anything(point: Vector2) -> bool:
@@ -262,7 +268,7 @@ func drop_carried_item():
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_items_layer.add_child(dropped_item)
 	dropped_item.set_item_properties(
-		carried_item.variant, 
+		carried_item.variant,
 		{
 			'texture': carried_item.texture,
 			'scale': carried_item.scale,
@@ -293,7 +299,7 @@ func drop_dead_ant():
 func die():
 	pheromone_layer.draw_pheromone_at_position(position, pheromone_strength_on_death, true, 1.0)
 	drop_carried_item()
-	if(randf() < dead_ant_drop_item_probability):
+	if (randf() < dead_ant_drop_item_probability):
 		drop_dead_ant()
 	death_sound.play()
 	await get_tree().create_timer(death_sound.stream.get_length()).timeout

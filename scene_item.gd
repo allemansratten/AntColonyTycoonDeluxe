@@ -64,4 +64,4 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		queue_free() # Remove the item from the scene
 
 func _process(delta: float) -> void:
-	pheromone_layer.draw_pheromone_at_position(position, delta * pheromone_strength, true, 0.25)
+	pheromone_layer.draw_pheromone_at_position(position, delta * pheromone_strength, true, 0.5)
