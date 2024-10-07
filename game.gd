@@ -15,6 +15,7 @@ func _ready() -> void:
 	screen_size = get_viewport().get_visible_rect().size
 	anthill.anthill_empty.connect(maybe_game_over)
 	anthill.on_game_ready()
+	$UILayer/PauseOverlay/VolumeSlider.connect("value_changed", Callable(self, "_on_volume_slider_value_changed"))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -79,14 +80,12 @@ func _on_pause_button_pressed() -> void:
 	$UILayer/GameUIOverlay.hide()
 
 
-func _on_mute_button_pressed() -> void:
-	if is_game_muted:
-		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), false)
-		$UILayer/PauseOverlay/MuteButton.text = "Mute"
-	else:
+func _on_volume_slider_value_changed(value: float) -> void:
+	if value <= -50:
 		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), true)
-		$UILayer/PauseOverlay/MuteButton.text = "Unmute"
-	is_game_muted = !is_game_muted
+	else:
+		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), false)
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), value)
 
 
 ## Score milestones to show the player when the game ends
