@@ -3,6 +3,7 @@ extends ColorRect
 const BLUR_SPEED = 0.125
 const DECAY_SPEED = 0.015
 const DECAY_MIN_DELAY_SECS = 0.1
+const MIN_PHEROMONE_FOR_BLUR: float = 0.01
 
 @export var grid_size_coef: int = 8
 @export var grid_size = Vector2(16 * grid_size_coef, 9 * grid_size_coef)
@@ -135,37 +136,46 @@ func draw_pheromone_at_position(
 
 
 func decay_grid(delta: float):
-	var new_grid = []
-	
-	# Softer 3x3 Gaussian kernel for a very soft blur
-	# Properly normalized symmetric 3x3 Gaussian kernel
+	# This kernel will be applied to each cell to blur the pheromone
 	var kernel = [
-		[0.025, 0.05, 0.025], # Weights for neighboring cells
-		[0.05, 0.7, 0.05], # 0.7 for the center cell, ensuring it's dominant
-		[0.025, 0.05, 0.025] # Weights for neighboring cells
+		[0.025, 0.05, 0.025],
+		[0.05, 0.7, 0.05],
+		[0.025, 0.05, 0.025],
 	]
 
+	# Create a new grid of the same size filled with zeroes
+	var new_grid = []
+	for y in range(int(grid_size.y)):
+		new_grid.append([])
+		for x in range(int(grid_size.x)):
+			new_grid[y].append(0.0)
 	
 	# Create a new grid to store the blurred and decayed values
 	for y in range(int(grid_size.y)):
 		new_grid.append([])
 		for x in range(int(grid_size.x)):
-			var sum = 0.0
-			
-			# Apply Gaussian blur around the current cell
-			for ky in range(-1, 2): # Iterate over the 3x3 kernel
+			# Optimization: Blurring matters little for low values. Remember, in
+			# each iteration we're spreading the pheromone from the current cell
+			# to the neighbors, so if it's low, it has little effect.
+			if grid_data[y][x] <= MIN_PHEROMONE_FOR_BLUR:
+				new_grid[y][x] = grid_data[y][x]
+				continue
+
+			# Take the current value and increase the values of its neighbors
+			for ky in range(-1, 2):
 				for kx in range(-1, 2):
-					var grid_x = x + kx
-					var grid_y = y + ky
+					var target_x = x + kx
+					var target_y = y + ky
 					
 					# Ensure that the kernel doesn't go out of bounds
-					if grid_x >= 0 and grid_x < int(grid_size.x) and grid_y >= 0 and grid_y < int(grid_size.y):
+					if (
+						target_x >= 0 and
+						target_x < int(grid_size.x) and
+						target_y >= 0 and
+						target_y < int(grid_size.y)
+					):
 						var weight = kernel[ky + 1][kx + 1]
-						sum += grid_data[grid_y][grid_x] * weight
-			
-			# Calculate the blurred value and apply decay
-			var blurred_value = sum # No need to divide by kernel sum since it is already normalized
-			new_grid[y].append(blurred_value)
+						new_grid[target_y][target_x] += grid_data[y][x] * weight
 	
 	# Replace the old grid with the new one
 	var blur_coef: float = 1.0 - (1.0 - BLUR_SPEED) ** delta
