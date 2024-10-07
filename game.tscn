@@ -15,7 +15,7 @@
 [ext_resource type="Theme" uid="uid://btv1akpmqnmv8" path="res://resources/themes/default_theme.tres" id="10_sp46i"]
 [ext_resource type="AudioStream" uid="uid://dn31f4gf3wuqb" path="res://resources/sounds/runescape-death-sound.mp3" id="11_1okbk"]
 [ext_resource type="Script" path="res://pause_overlay.gd" id="12_fm3ob"]
-[ext_resource type="Texture2D" uid="uid://cp0ok14rv0p6u" path="res://resources/palettes/sweetie-16.png" id="14_el4de"]
+[ext_resource type="Texture2D" uid="uid://dk0nyf04ejb7r" path="res://resources/palettes/my_dither_palette.png" id="16_x13jj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nb5i8"]
 shader = ExtResource("9_luj6i")
@@ -33,7 +33,7 @@ shader_parameter/dither_pixel_size = 1.0
 shader_parameter/dither_pixel_offset = Vector2(0, 0)
 shader_parameter/albedo = Color(1, 1, 1, 1)
 shader_parameter/albedo_strength = 1.0
-shader_parameter/dither_palette = ExtResource("14_el4de")
+shader_parameter/dither_palette = ExtResource("16_x13jj")
 
 [node name="Game" type="Node"]
 script = ExtResource("1_f6hxw")
