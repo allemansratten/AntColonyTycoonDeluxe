@@ -42,6 +42,12 @@ const VARIANT_CONFIGS = {
 
 func _ready():
 	sprite_node = get_node("Sprite2D")
+	# It's important to set the material here and not in the editor
+	# because that way we ensure the shader is not shared between instances.
+	# That would mean applying the same bite effect to all items.
+	sprite_node.material = ShaderMaterial.new()
+	sprite_node.material.shader = preload("res://scene_item.gdshader")
+
 	hide() # Hide initially until variant is set
 
 # Function to set the item type
@@ -68,8 +74,24 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	var did_pickup_item = body.maybe_pickup_item(item_variant)
 	if did_pickup_item:
 		resources_remaining -= 1
+		update_shader()
 	if resources_remaining <= 0:
 		queue_free() # Remove the item from the scene
 
 func _process(delta: float) -> void:
 	pheromone_layer.draw_pheromone_at_position(position, delta * pheromone_strength, true, 0.5)
+
+func update_shader():
+	var max_resources = VARIANT_CONFIGS[item_variant]["resources"]
+	var fraction = float(resources_remaining) / float(max_resources)
+	var masks = [
+		[0.1, preload("res://resources/sprites/bite1.png")],
+		[0.3, preload("res://resources/sprites/bite2.png")],
+		[0.6, preload("res://resources/sprites/bite3.png")],
+		[0.9, preload("res://resources/sprites/bite4.png")],
+	]
+
+	for fraction_and_mask in masks:
+		if fraction <= fraction_and_mask[0]:
+			sprite_node.material.set_shader_parameter("mask", fraction_and_mask[1])
+			break
