@@ -13,8 +13,8 @@ const FoodItems = preload("res://item_variants.gd").foodItemVariants
 @export var wait_probability: float = 0.03
 @export var item_pickup_duration_secs: float = 1.5
 
-@export var lifespan_min_secs: float = 30.0
-@export var lifespan_max_secs: float = 60.0
+@export var lifespan_min_secs: float = 25.0
+@export var lifespan_max_secs: float = 50.0
 ## The probability of dropping a dead ant when it dies.
 ## We don't want this to be 1.0 because ants can be "recycled"
 ## to spawn new ones and then the player couldn't lose.
@@ -36,7 +36,8 @@ const FoodItems = preload("res://item_variants.gd").foodItemVariants
 ## must be strictly >0.
 ## close to 0 = always select the angle that maximizes the score
 ## infinite = select completely at random
-@export var angle_sampling_temperature: float = 0.2
+## Very sensitive, even small changes affect behavior a lot.
+@export var angle_sampling_temperature: float = 0.18
 
 var target_position: Vector2
 var is_moving: bool = false

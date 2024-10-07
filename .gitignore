@@ -9,3 +9,5 @@ scene_item.gd
 resources/sprites/leaf.png.import
 dist/
 dist.zip
+
+.DS_Store

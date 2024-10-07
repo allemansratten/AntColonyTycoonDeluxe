@@ -58,7 +58,7 @@ stream = ExtResource("4_0d37m")
 volume_db = -10.0
 
 [node name="ItemSpawnTimer" type="Timer" parent="SceneItemManager"]
-wait_time = 6.0
+wait_time = 4.5
 autostart = true
 
 [node name="Anthill" parent="." instance=ExtResource("4_cw8q0")]

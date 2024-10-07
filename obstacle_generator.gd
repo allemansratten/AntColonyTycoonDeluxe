@@ -1,5 +1,7 @@
 extends Node
 
+@export var n_obstacles: int = 40
+
 func _ready() -> void:
 	var rock_scene = preload("res://rock.tscn")
 	var anthill = get_node("../Anthill")
@@ -8,7 +10,7 @@ func _ready() -> void:
 	var placed_positions: Array = []
 	randomize()
 
-	for i in range(50):
+	for i in range(n_obstacles):
 		var rock_instance: Node = rock_scene.instantiate()
 		var random_position: Vector2 = generate_random_position(anthill_position, viewport_size, placed_positions)
 		rock_instance.position = random_position

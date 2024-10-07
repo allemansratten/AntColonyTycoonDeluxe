@@ -85,10 +85,10 @@ func update_shader():
 	var max_resources = VARIANT_CONFIGS[item_variant]["resources"]
 	var fraction = float(resources_remaining) / float(max_resources)
 	var masks = [
-		[0.1, preload("res://resources/sprites/bite1.png")],
-		[0.3, preload("res://resources/sprites/bite2.png")],
-		[0.6, preload("res://resources/sprites/bite3.png")],
-		[0.9, preload("res://resources/sprites/bite4.png")],
+		[0.25, preload("res://resources/sprites/bite1.png")],
+		[0.50, preload("res://resources/sprites/bite2.png")],
+		[0.75, preload("res://resources/sprites/bite3.png")],
+		[1.00, preload("res://resources/sprites/bite4.png")],
 	]
 
 	for fraction_and_mask in masks:
