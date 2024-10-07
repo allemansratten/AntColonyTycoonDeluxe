@@ -15,8 +15,10 @@ const FoodItems = preload("res://item_variants.gd").foodItemVariants
 
 @export var lifespan_min_secs: float = 30.0
 @export var lifespan_max_secs: float = 60.0
-## The probability of dropping a dead ant when it dies
-@export var dead_ant_drop_item_probability: float = 0.5
+## The probability of dropping a dead ant when it dies.
+## We don't want this to be 1.0 because ants can be "recycled"
+## to spawn new ones and then the player couldn't lose.
+@export var dead_ant_drop_item_probability: float = 0.3
 
 @onready var _animated_sprite = $AnimatedSprite2D
 @onready var lifespan_timer = get_node("LifespanTimer")
@@ -269,17 +271,20 @@ func drop_dead_ant():
 		},
 		25.0 # decay time
 	)
+	# The death sound is played by the dropped item because
+	# we need to queue_free() the ant and that would also remove the sound.
+	dropped_item.get_node("DeathSound").play()
 
 
 func die():
 	pheromone_layer.draw_pheromone_at_position(position, pheromone_strength_on_death, true, 1.0)
+
 	drop_carried_item()
 	if (randf() < dead_ant_drop_item_probability):
 		drop_dead_ant()
-	death_sound.play()
-	await get_tree().create_timer(death_sound.stream.get_length()).timeout
-	queue_free() # Free the node after the sound finishes playing
 
+	queue_free()
+	
 
 func _on_lifespan_timer_timeout() -> void:
 	die()

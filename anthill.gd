@@ -11,6 +11,7 @@ extends Area2D
 @onready var ants_count_label = get_node("AntsCountLabel")
 @export var pheromone_per_item = 0.0
 @export var ants_per_item = 2
+@export var ants_per_dead_ant = 1
 
 @export var ant_scene: PackedScene
 
@@ -54,8 +55,10 @@ func _on_body_entered(body: Node2D) -> void:
 	pheromone_bar.add(pheromone_per_item)
 	
 	match deposit_result["deposited_item_variant"]:
-		ItemVariant.LEAF, ItemVariant.MUSHROOM, ItemVariant.ANT:
+		ItemVariant.LEAF, ItemVariant.MUSHROOM:
 			set_ready_ants_count(num_ants_ready + ants_per_item)
+		ItemVariant.ANT:
+			set_ready_ants_count(num_ants_ready + ants_per_dead_ant)
 		ItemVariant.STICK:
 			anthill_size += 1
 			$AnthillSizeLabel.text = "[center]Anthill size: %d[/center]" % anthill_size
