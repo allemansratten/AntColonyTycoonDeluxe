@@ -174,8 +174,7 @@ theme = ExtResource("10_sp46i")
 text = "Gather sticks to build the biggest anthill. 
 Don't let your ant colony starve.
 
-Use mouse to pheromone.
-Press [space] to ant."
+Use mouse to pheromone."
 
 [node name="StartGameButton" type="Button" parent="UILayer/StartGameOverlay"]
 layout_mode = 0
