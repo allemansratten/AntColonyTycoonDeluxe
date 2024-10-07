@@ -11,6 +11,35 @@ var sprite_node: Sprite2D = null
 var item_variant: ItemVariant
 var spawn_sound: AudioStreamPlayer
 
+const VARIANT_CONFIGS = {
+	ItemVariant.LEAF: {
+		"textures": [
+			preload("res://resources/sprites/leaf.png"),
+			preload("res://resources/sprites/leaf2.png"),
+		],
+		"can_rotate": true,
+		"resources": 20,
+	},
+	ItemVariant.MUSHROOM: {
+		"textures": [
+			preload("res://resources/sprites/mushroom.png"),
+			preload("res://resources/sprites/mushroom2.png"),
+			preload("res://resources/sprites/mushroom3.png"),
+		],
+		"can_rotate": false,
+		"resources": 30,
+	},
+	ItemVariant.STICK: {
+		"textures": [
+			# do we want to include stick.png too?
+			preload("res://resources/sprites/stick.png"),
+			preload("res://resources/sprites/stick2.png"),
+		],
+		"can_rotate": true,
+		"resources": 30,
+	},
+}
+
 func _ready():
 	sprite_node = get_node("Sprite2D")
 	hide() # Hide initially until variant is set
@@ -18,39 +47,18 @@ func _ready():
 # Function to set the item type
 func set_variant(variant_to_use: ItemVariant):
 	item_variant = variant_to_use
-	match variant_to_use:
-		ItemVariant.LEAF:
-			set_as_leaf()
-		ItemVariant.MUSHROOM:
-			set_as_mushroom()
-		ItemVariant.STICK:
-			set_as_stick()
-		_:
-			print("Unknown variant:", variant_to_use)
-	show() # Show the node after setting the variant
 
-
-# Define how to visually set up the Leaf
-func set_as_leaf():
-	sprite_node.texture = preload("res://resources/sprites/leaf.png")
+	var config = VARIANT_CONFIGS[variant_to_use]
+	sprite_node.texture = config["textures"][randi() % config["textures"].size()]
 	sprite_node.scale = Vector2(0.25, 0.25)
-	sprite_node.rotate(randf_range(-45, 45)) # Random rotation
-	resources_remaining = 20
 
+	resources_remaining = config["resources"]
 
-# Define how to visually set up the Berry
-func set_as_mushroom():
-	sprite_node.texture = preload("res://resources/sprites/mushroom.png")
-	sprite_node.scale = Vector2(0.25, 0.25)
-	resources_remaining = 30
+	if config["can_rotate"]:
+		sprite_node.rotate(randf_range(-45, 45)) # Random rotation
 
-# Define how to visually set up the Stick
-func set_as_stick():
-	sprite_node.texture = preload("res://resources/sprites/stick2.png")
-	sprite_node.scale = Vector2(0.25, 0.25)
-	sprite_node.rotate(randf_range(-45, 45)) # Random rotation
-	resources_remaining = 30
-	
+	show()
+
 
 # Collision detection function
 func _on_area_2d_body_entered(body: Node2D) -> void:
