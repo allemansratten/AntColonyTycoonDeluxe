@@ -2,16 +2,14 @@ extends CharacterBody2D
 
 const ItemVariant = preload("res://item_variants.gd").ItemVariant
 const FoodItems = preload("res://item_variants.gd").foodItemVariants
-enum AntType {HARVESTER, BUILDER, WARRIOR, FARMER, EXPLORER}
 
-@export var ant_type: AntType = AntType.HARVESTER
-@export var min_speed: float = 125.0
-@export var max_speed: float = 200.0
+@export var min_speed: float = 35.0
+@export var max_speed: float = 75.0
 
 @export var min_move_distance: float = 35.
 @export var max_move_distance: float = 50.
-@export var min_wait_time: float = 0.15
-@export var max_wait_time: float = 0.3
+@export var min_wait_time: float = 0.5
+@export var max_wait_time: float = 0.7
 @export var wait_probability: float = 0.03
 @export var item_pickup_duration_secs: float = 1.5
 
@@ -52,7 +50,6 @@ var death_sound: AudioStreamPlayer
 func _ready():
 	randomize()
 	rotation = randf() * 2 * PI
-	set_ant_type_properties(ant_type)
 	add_to_group("ants")
 	lifespan_timer.wait_time = randf_range(lifespan_min_secs, lifespan_max_secs)
 	lifespan_timer.start()
@@ -66,25 +63,6 @@ func _ready():
 	# Start after a random delay to desync them at the beginning
 	await get_tree().create_timer(randf_range(0.0, max_wait_time)).timeout
 	start_new_movement()
-
-## Adjust properties based on the ant type
-func set_ant_type_properties(ant_type_to_Set: AntType):
-	match ant_type_to_Set:
-		AntType.HARVESTER:
-			min_speed = 35.0
-			max_speed = 75.0
-			min_wait_time = 0.5
-			max_wait_time = 0.7
-			_animated_sprite.animation = "harvester"
-		#Other Types have no animation yet
-		AntType.BUILDER:
-			_animated_sprite.animation = "builder"
-		AntType.WARRIOR:
-			_animated_sprite.animation = "warrior"
-		AntType.FARMER:
-			_animated_sprite.animation = "farmer"
-		AntType.EXPLORER:
-			_animated_sprite.animation = "explorer"
 
 func _physics_process(_delta: float):
 	if is_moving:
@@ -106,9 +84,6 @@ func _physics_process(_delta: float):
 	if carried_item.variant != ItemVariant.NONE && carried_item.variant != ItemVariant.ANT:
 		pheromone_layer.draw_pheromone_at_position(position, _delta * pheromone_creation_when_carrying, true)
 
-## This method is intended to be overridden by subclasses for unique behaviors
-func perform_special_action():
-	pass # Each subclass will implement its own action
 
 ## Normalise probability distribution
 func softmax(x: Array) -> Array:

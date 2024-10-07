@@ -61,21 +61,25 @@ scale = Vector2(8, 8)
 
 [node name="FoodPickupSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_e667s")
+volume_db = -15.0
 
 [node name="FoodDepositSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_ijscd")
+volume_db = -13.0
 
 [node name="StickPickupSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_v1lvq")
+volume_db = -15.0
 
 [node name="StickDepositSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_cn6ex")
+volume_db = -15.0
 
 [node name="CarriedItem2" parent="." instance=ExtResource("5_cwwn3")]
 
 [node name="DeathSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_tml1h")
-volume_db = -10.0
+volume_db = -15.0
 pitch_scale = 2.0
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
