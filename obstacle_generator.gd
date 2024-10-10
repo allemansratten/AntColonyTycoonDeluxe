@@ -6,7 +6,7 @@ func _ready() -> void:
 	var rock_scene = preload("res://rock.tscn")
 	var anthill = get_node("../Anthill")
 	var anthill_position = anthill.position
-	var viewport_size = get_viewport().size
+	var viewport_size = get_viewport().get_visible_rect().size
 	var placed_positions: Array = []
 	randomize()
 
