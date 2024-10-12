@@ -128,6 +128,9 @@ func sample_from_scores(scores: Array) -> int:
 var potential_movement_angles = range(0, 360, 10).map(func(x): return deg_to_rad(x))
 
 func start_new_movement():
+	# For an explanation of the algorithm, see:
+	# https://vvolhejn.com/2024/10/09/ant-colony-tycoon-deluxe.html
+
 	var random_distance = randf_range(min_move_distance, max_move_distance)
 
 	var scores = []
